@@ -1,0 +1,9 @@
+body{margin:0;font-family:Arial,sans-serif;background:#090c10;color:#fff}
+.hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+h1{font-size:5rem;margin:0}
+.subtitle{color:#70b7ff}
+.section{padding:80px 10%}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.card{background:#111827;padding:30px;border-radius:16px}
+.btn{display:inline-block;background:#2d8cff;color:#fff;text-decoration:none;padding:14px 24px;border-radius:12px}
+.cta{text-align:center}
