@@ -126,20 +126,24 @@ const rim=new THREE.DirectionalLight(0x8fc6ee,0.6); rim.position.set(-5,3,-4); s
 const fill=new THREE.DirectionalLight(0xffffff,0.4); fill.position.set(0,-3,4); scene.add(fill);
 
 const pivot=new THREE.Group(); scene.add(pivot);
-let model=null;
-new THREE.GLTFLoader().load('box6.glb',g=>{
-  const o=g.scene;
-  const box=new THREE.Box3().setFromObject(o); const s=box.getSize(new THREE.Vector3()); const c=box.getCenter(new THREE.Vector3());
-  o.position.sub(c); const k=2.5/Math.max(s.x,s.y,s.z); o.scale.setScalar(k);
-  pivot.add(o); model=o;
-  const l=document.getElementById('loader'); if(l)l.style.display='none';
-},undefined,()=>{const l=document.getElementById('loader'); if(l)l.textContent='';});
+const FILES=['box6.glb','box5.glb','box2.glb'];
+const models=[]; let anyLoaded=false;
+FILES.forEach((f,i)=>{
+  new THREE.GLTFLoader().load(f,g=>{
+    const o=g.scene;
+    const box=new THREE.Box3().setFromObject(o); const s=box.getSize(new THREE.Vector3()); const c=box.getCenter(new THREE.Vector3());
+    o.position.sub(c); const k=2.5/Math.max(s.x,s.y,s.z); o.scale.setScalar(k); o.visible=(i===0);
+    pivot.add(o); models[i]=o;
+    if(!anyLoaded){anyLoaded=true; const l=document.getElementById('loader'); if(l)l.style.display='none';}
+  },undefined,()=>{});
+});
 
 function S(t){t=t<0?0:t>1?1:t;return t*t*(3-2*t);}
 function lerp(a,b,t){return a+(b-a)*t;}
 let P=0; window.__setP=v=>P=v;
 function frame(){
   const t=performance.now()*0.00025;
+  if(models.length){const idx=Math.min(models.length-1,Math.floor(P*models.length*0.999));models.forEach((m,i)=>{if(m)m.visible=(i===idx);});}
   pivot.rotation.y = t + P*Math.PI*2.4;
   pivot.rotation.x = -0.15 + P*0.5;
   const s4=S((P-0.72)/0.18);
