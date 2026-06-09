@@ -126,7 +126,7 @@ const rim=new THREE.DirectionalLight(0x8fc6ee,0.6); rim.position.set(-5,3,-4); s
 const fill=new THREE.DirectionalLight(0xffffff,0.4); fill.position.set(0,-3,4); scene.add(fill);
 
 const pivot=new THREE.Group(); scene.add(pivot);
-const FILES=['box6.glb','box5.glb','box2.glb'];
+const FILES=['box6.glb','box1.glb','box2.glb','box5.glb'];
 const models=[]; let anyLoaded=false;
 FILES.forEach((f,i)=>{
   new THREE.GLTFLoader().load(f,g=>{
