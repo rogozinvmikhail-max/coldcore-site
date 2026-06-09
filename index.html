@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ColdCore — Temperature-controlled shipping</title>
-<meta name="description" content="ColdCore — temperature-controlled shipping for food, marine, diagnostics and healthcare. Get free samples." />
+<meta name="description" content="ColdCore — temperature-controlled shipping packaging for food, marine, diagnostics and healthcare." />
 <style>
   :root{ --ice:#e8f4fb; --frost:#bfe3f5; --glacier:#3db4e8; --deep:#06151e; --steel:#9fc4d6; }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -22,18 +22,17 @@
   h2{font-size:clamp(30px,6vw,56px);font-weight:800;line-height:1.02}
   p.lead{margin-top:18px;font-size:clamp(16px,4vw,21px);color:#d6ecf6;max-width:460px}
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-  .chip{border:1px solid rgba(61,180,232,.55);background:rgba(6,21,30,.55);backdrop-filter:blur(2px);color:#eaf6fc;padding:8px 14px;border-radius:999px;font-size:14px;font-weight:600}
+  .chip{border:1px solid rgba(61,180,232,.55);background:rgba(6,21,30,.55);color:#eaf6fc;padding:8px 14px;border-radius:999px;font-size:14px;font-weight:600}
   .hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:5;color:var(--steel);font-size:13px;letter-spacing:1px;opacity:.85;animation:bob 1.8s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
   #samples{background:linear-gradient(180deg,rgba(6,21,30,0) 0%,#06151e 24%);z-index:3}
-  .card{width:100%;max-width:460px;background:#0d2734;border:1px solid rgba(61,180,232,.25);border-radius:22px;padding:30px}
+  .card{width:100%;max-width:420px;background:#0d2734;border:1px solid rgba(61,180,232,.25);border-radius:22px;padding:30px}
   .card h2{font-size:30px;text-shadow:none}
   .card p.sub{color:var(--steel);margin-top:8px;font-size:15px}
   label{display:block;font-size:13px;color:var(--steel);margin:16px 0 6px;font-weight:600}
-  input,select{width:100%;background:#06151e;border:1px solid rgba(159,196,214,.3);color:#eaf6fc;border-radius:12px;padding:13px 14px;font-size:15px;outline:none}
-  input:focus,select:focus{border-color:var(--glacier)}
-  .rowf{display:flex;gap:10px}.rowf>*{flex:1}
-  button.primary{width:100%;margin-top:22px;background:var(--glacier);color:#04222e;font-weight:800;font-size:16px;border:none;border-radius:12px;padding:15px;cursor:pointer}
+  input{width:100%;background:#06151e;border:1px solid rgba(159,196,214,.3);color:#eaf6fc;border-radius:12px;padding:14px;font-size:16px;outline:none}
+  input:focus{border-color:var(--glacier)}
+  button.primary{width:100%;margin-top:22px;background:var(--glacier);color:#04222e;font-weight:800;font-size:17px;border:none;border-radius:12px;padding:16px;cursor:pointer}
   button.primary:hover{background:#5cc6f2}
   .muted{color:var(--steel);font-size:12px;margin-top:14px;text-align:center}
   .step{display:none}.step.active{display:block}
@@ -50,7 +49,7 @@
 <body>
 
 <div class="wordmark"><i></i>ColdCore</div>
-<a href="#samples" class="cta-top">Get free samples</a>
+<a href="#samples" class="cta-top">Try ColdCore</a>
 <canvas id="scene"></canvas>
 
 <div id="ukwrap">
@@ -97,15 +96,12 @@
   <section id="samples">
     <div class="card">
       <div class="step active" id="step1">
-        <h2>Get free samples</h2>
-        <p class="sub">Tell us where to send them. A manager follows up by WhatsApp or email.</p>
+        <h2>Try ColdCore</h2>
+        <p class="sub">Leave your details and we will be in touch with pricing and the right box for what you ship.</p>
         <label>Name</label><input id="f_name" placeholder="Your name" />
-        <label>Business type</label>
-        <select id="f_type"><option value="">Select…</option><option>Food &amp; chilled</option><option>Fish &amp; seafood</option><option>Meat &amp; frozen</option><option>Medical &amp; pharma</option><option>Reptiles &amp; live bait</option><option>Diagnostics &amp; samples</option><option>Other</option></select>
-        <label>Contact</label>
-        <div class="rowf"><select id="f_channel"><option>WhatsApp</option><option>Email</option></select><input id="f_contact" placeholder="Phone or email" /></div>
-        <button class="primary" onclick="sendCode()">Send confirmation code</button>
-        <p class="muted">No spam. We use this only to send samples and follow up.</p>
+        <label>Phone or email</label><input id="f_contact" placeholder="Phone or email" />
+        <button class="primary" onclick="sendCode()">Try ColdCore</button>
+        <p class="muted">No spam. We only use this to get in touch.</p>
       </div>
       <div class="step" id="step2">
         <h2>Enter the code</h2>
@@ -115,8 +111,8 @@
         <p class="muted" style="cursor:pointer" onclick="sendCode()">Resend code</p>
       </div>
       <div class="step" id="step3">
-        <div class="ok"><div class="tick">✓</div><h2>Request received</h2>
-          <p class="sub">A manager will be in touch shortly. You will get a personal showroom link tailored to your business.</p></div>
+        <div class="ok"><div class="tick">✓</div><h2>Got it</h2>
+          <p class="sub">Thanks. A manager will be in touch shortly.</p></div>
       </div>
     </div>
   </section>
@@ -133,29 +129,42 @@ const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 const scene=new THREE.Scene();
 const camera=new THREE.PerspectiveCamera(38,1,0.1,100);
-scene.add(new THREE.AmbientLight(0xbfe3f5,0.85));
-const key=new THREE.DirectionalLight(0xffffff,1.05); key.position.set(5,9,7); scene.add(key);
-const rim=new THREE.DirectionalLight(0x3db4e8,0.65); rim.position.set(-6,3,-5); scene.add(rim);
+scene.add(new THREE.AmbientLight(0xcfe8f5,0.9));
+const key=new THREE.DirectionalLight(0xffffff,1.0); key.position.set(5,9,7); scene.add(key);
+const rim=new THREE.DirectionalLight(0x3db4e8,0.55); rim.position.set(-6,3,-5); scene.add(rim);
 
-const W=1.7,D=1.15,H=1.0,T=0.10;
-const mat=new THREE.MeshStandardMaterial({color:0xf3f8fb,roughness:0.85});
-function panel(w,h,d,m){return new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m||mat);}
+// скруглённая коробка (спрямляем вершины сегментированного бокса к скруглённым краям)
+function roundedBox(w,h,d,r,seg){
+  seg=seg||10; r=Math.min(r,Math.min(w,h,d)/2);
+  const g=new THREE.BoxGeometry(w,h,d,seg,seg,seg);
+  const p=g.attributes.position, v=new THREE.Vector3();
+  const hw=w/2-r, hh=h/2-r, hd=d/2-r;
+  for(let i=0;i<p.count;i++){
+    v.fromBufferAttribute(p,i);
+    const cx=Math.max(-hw,Math.min(hw,v.x)), cy=Math.max(-hh,Math.min(hh,v.y)), cz=Math.max(-hd,Math.min(hd,v.z));
+    const dx=v.x-cx, dy=v.y-cy, dz=v.z-cz, L=Math.hypot(dx,dy,dz);
+    if(L>1e-4){const k=r/L; p.setXYZ(i, cx+dx*k, cy+dy*k, cz+dz*k);}
+  }
+  p.needsUpdate=true; g.computeVertexNormals(); return g;
+}
 
-const box=new THREE.Group(); box.position.y=-0.15; box.rotation.x=-0.42; scene.add(box);
-const floor=panel(W,T,D); floor.position.y=-H/2; box.add(floor);
-const backW=panel(W,H,T); backW.position.z=-D/2; box.add(backW);
-const frontW=panel(W,H,T); frontW.position.z=D/2; box.add(frontW);
-const leftW=panel(T,H,D); leftW.position.x=-W/2; box.add(leftW);
-const rightW=panel(T,H,D); rightW.position.x=W/2; box.add(rightW);
+// пропорции коробки 1: 183 x 114 x 128 мм
+const W=1.9, D=1.18, H=1.33;
+const eps=new THREE.MeshStandardMaterial({color:0xf1f4f3, roughness:0.92, metalness:0.0});
+const box=new THREE.Group(); box.position.y=-0.1; scene.add(box);
+
+const baseH=H*0.70, lidH=H*0.30, R=0.085;
+const base=new THREE.Mesh(roundedBox(W,baseH,D,R), eps); base.position.y=-lidH/2; box.add(base);
 // крышка на петле по задней верхней кромке
-const lidPivot=new THREE.Group(); lidPivot.position.set(0,H/2,-D/2); box.add(lidPivot);
-const lid=panel(W+T,T,D+T); lid.position.set(0,0,(D+T)/2); lidPivot.add(lid);
-// содержимое
-const gelMat=new THREE.MeshStandardMaterial({color:0x3db4e8,roughness:0.4});
-const gel1=panel(W*0.36,H*0.55,0.12,gelMat); gel1.position.set(-W*0.24,0,0); box.add(gel1);
-const gel2=panel(W*0.36,H*0.55,0.12,gelMat); gel2.position.set( W*0.24,0,0); box.add(gel2);
-const sensor=panel(0.26,0.16,0.06,new THREE.MeshStandardMaterial({color:0x06151e,emissive:0x0a2b3b})); sensor.position.set(0,H*0.12,D*0.22); box.add(sensor);
-const dot=panel(0.05,0.05,0.03,new THREE.MeshStandardMaterial({color:0x6cf08a,emissive:0x2bd14a})); dot.position.set(0.07,0.04,0.04); sensor.add(dot);
+const lidPivot=new THREE.Group(); lidPivot.position.set(0, baseH/2-lidH/2, -D/2); box.add(lidPivot);
+const lid=new THREE.Mesh(roundedBox(W*1.015, lidH, D*1.015, R), eps); lid.position.set(0, lidH/2, D/2); lidPivot.add(lid);
+
+// содержимое: gel packs + датчик (появляются при открытии)
+const gelMat=new THREE.MeshStandardMaterial({color:0x3db4e8, roughness:0.35});
+const gel1=new THREE.Mesh(roundedBox(W*0.34,baseH*0.6,0.14,0.04), gelMat); gel1.position.set(-W*0.24, baseH*0.1, 0); box.add(gel1);
+const gel2=new THREE.Mesh(roundedBox(W*0.34,baseH*0.6,0.14,0.04), gelMat); gel2.position.set( W*0.24, baseH*0.1, 0); box.add(gel2);
+const sensor=new THREE.Mesh(roundedBox(0.28,0.18,0.07,0.02), new THREE.MeshStandardMaterial({color:0x06151e,emissive:0x0a2b3b})); sensor.position.set(0, baseH*0.18, D*0.2); box.add(sensor);
+const dot=new THREE.Mesh(new THREE.SphereGeometry(0.035,12,12), new THREE.MeshStandardMaterial({color:0x6cf08a,emissive:0x2bd14a})); dot.position.set(0.08,0.05,0.04); sensor.add(dot);
 [gel1,gel2,sensor].forEach(o=>o.scale.setScalar(0.001));
 
 function S(t){t=t<0?0:t>1?1:t;return t*t*(3-2*t);}
@@ -163,22 +172,21 @@ function lerp(a,b,t){return a+(b-a)*t;}
 let P=0;
 window.__setP=function(v){P=v;};
 function frame(){
-  const t=performance.now()*0.0004;
-  box.rotation.y = t + P*1.1;
-  const lidOpen = S((P-0.22)/0.20);
-  lidPivot.rotation.x = -lidOpen*2.25;
-  const show = S((P-0.30)/0.16);
-  const sc = lerp(0.001,1,show);
+  const t=performance.now()*0.00035;
+  box.rotation.x=-0.34;
+  box.rotation.y=t + P*1.0;
+  const lidOpen=S((P-0.22)/0.20);
+  lidPivot.rotation.x=-lidOpen*2.15;
+  const show=S((P-0.32)/0.16);
+  const sc=lerp(0.001,1,show);
   gel1.scale.setScalar(sc); gel2.scale.setScalar(sc); sensor.scale.setScalar(sc); dot.visible=show>0.5;
-  const s4 = S((P-0.72)/0.16);
+  const s4=S((P-0.72)/0.16);
   box.scale.setScalar(lerp(1,0.55,s4));
-  // камера: на мобиле дальше, чтобы коробка влезала и не давила текст
-  const aspect = innerWidth/innerHeight;
-  const dist = aspect<0.75 ? 10.8 : 8.2;
-  camera.position.set(0,0.8,dist); camera.lookAt(0,-0.15,0);
-  canvas.style.opacity = String(1 - S((P-0.9)/0.1));
-  const uk = document.getElementById('ukwrap');
-  if(uk) uk.style.opacity = String(S((P-0.73)/0.12) * (1 - S((P-0.95)/0.05)));
+  const aspect=innerWidth/innerHeight;
+  camera.position.set(0,0.8, aspect<0.75?10.6:8.0); camera.lookAt(0,-0.15,0);
+  canvas.style.opacity=String(1 - S((P-0.9)/0.1));
+  const uk=document.getElementById('ukwrap');
+  if(uk) uk.style.opacity=String(S((P-0.73)/0.12) * (1 - S((P-0.95)/0.05)));
   renderer.render(scene,camera);
   requestAnimationFrame(frame);
 }
@@ -201,7 +209,7 @@ async function sendCode(){
   const contact=document.getElementById('f_contact').value.trim();
   if(!name||!contact){alert('Please enter your name and contact');return;}
   document.getElementById('dest').textContent=contact;
-  try{await fetch('/api/request-code',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,contact,channel:document.getElementById('f_channel').value,type:document.getElementById('f_type').value})});}catch(e){}
+  try{await fetch('/api/request-code',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,contact})});}catch(e){}
   go('step2');
 }
 async function confirmCode(){
