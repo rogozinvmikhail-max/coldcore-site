@@ -10,31 +10,29 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{background:var(--deep);color:#eaf6fc;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  #scene{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;transition:opacity .6s}
-  .wordmark{position:fixed;top:24px;left:28px;z-index:5;font-weight:800;letter-spacing:.5px;font-size:20px;display:flex;align-items:center;gap:8px}
+  #scene{position:fixed;inset:0;width:100vw;height:100vh;z-index:0}
+  .wordmark{position:fixed;top:22px;left:24px;z-index:5;font-weight:800;letter-spacing:.5px;font-size:20px;display:flex;align-items:center;gap:8px}
   .wordmark i{width:12px;height:12px;background:var(--glacier);border-radius:3px;display:inline-block}
-  .cta-top{position:fixed;top:20px;right:28px;z-index:5;background:var(--glacier);color:#04222e;font-weight:700;padding:9px 16px;border-radius:10px;text-decoration:none;font-size:14px}
+  .cta-top{position:fixed;top:18px;right:22px;z-index:5;background:var(--glacier);color:#04222e;font-weight:700;padding:9px 16px;border-radius:10px;text-decoration:none;font-size:14px}
   main{position:relative;z-index:2}
-  section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 28px;max-width:1100px;margin:0 auto}
-  .scene-text{max-width:560px;opacity:0;transform:translateY(30px)}
+  section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 26px;max-width:1100px;margin:0 auto}
+  .scene-text{max-width:560px;opacity:0;transform:translateY(28px);text-shadow:0 2px 24px rgba(6,21,30,.95),0 1px 4px rgba(6,21,30,.9)}
   .eyebrow{color:var(--glacier);text-transform:uppercase;letter-spacing:2px;font-size:13px;font-weight:700;margin-bottom:14px}
-  h1{font-size:clamp(44px,9vw,104px);font-weight:800;line-height:.95;letter-spacing:-1px}
-  h2{font-size:clamp(30px,5vw,56px);font-weight:800;line-height:1.02}
-  p.lead{margin-top:18px;font-size:clamp(16px,2vw,21px);color:var(--steel);max-width:460px}
+  h1{font-size:clamp(46px,12vw,104px);font-weight:800;line-height:.95;letter-spacing:-1px}
+  h2{font-size:clamp(30px,6vw,56px);font-weight:800;line-height:1.02}
+  p.lead{margin-top:18px;font-size:clamp(16px,4vw,21px);color:#d6ecf6;max-width:460px}
   .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-  .chip{border:1px solid rgba(61,180,232,.4);background:rgba(61,180,232,.08);color:#dff3fb;padding:8px 14px;border-radius:999px;font-size:14px;font-weight:600}
-  .hint{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:5;color:var(--steel);font-size:13px;letter-spacing:1px;opacity:.8;animation:bob 1.8s ease-in-out infinite}
+  .chip{border:1px solid rgba(61,180,232,.55);background:rgba(6,21,30,.55);backdrop-filter:blur(2px);color:#eaf6fc;padding:8px 14px;border-radius:999px;font-size:14px;font-weight:600}
+  .hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:5;color:var(--steel);font-size:13px;letter-spacing:1px;opacity:.85;animation:bob 1.8s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
-  /* форма */
-  #samples{background:linear-gradient(180deg,rgba(6,21,30,0) 0%,#06151e 22%);z-index:3}
+  #samples{background:linear-gradient(180deg,rgba(6,21,30,0) 0%,#06151e 24%);z-index:3}
   .card{width:100%;max-width:460px;background:#0d2734;border:1px solid rgba(61,180,232,.25);border-radius:22px;padding:30px}
-  .card h2{font-size:30px}
+  .card h2{font-size:30px;text-shadow:none}
   .card p.sub{color:var(--steel);margin-top:8px;font-size:15px}
   label{display:block;font-size:13px;color:var(--steel);margin:16px 0 6px;font-weight:600}
   input,select{width:100%;background:#06151e;border:1px solid rgba(159,196,214,.3);color:#eaf6fc;border-radius:12px;padding:13px 14px;font-size:15px;outline:none}
   input:focus,select:focus{border-color:var(--glacier)}
-  .row{display:flex;gap:10px}
-  .row > *{flex:1}
+  .rowf{display:flex;gap:10px}.rowf>*{flex:1}
   button.primary{width:100%;margin-top:22px;background:var(--glacier);color:#04222e;font-weight:800;font-size:16px;border:none;border-radius:12px;padding:15px;cursor:pointer}
   button.primary:hover{background:#5cc6f2}
   .muted{color:var(--steel);font-size:12px;margin-top:14px;text-align:center}
@@ -42,9 +40,8 @@
   .ok{text-align:center;padding:8px 0}
   .ok .tick{width:60px;height:60px;border-radius:50%;background:rgba(61,180,232,.15);border:2px solid var(--glacier);color:var(--glacier);font-size:30px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
   footer{position:relative;z-index:3;background:#06151e;color:var(--steel);text-align:center;padding:26px;font-size:13px;border-top:1px solid rgba(61,180,232,.15)}
-  /* UK map overlay сцена 4 */
   #ukwrap{position:fixed;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0}
-  #ukwrap svg{width:min(46vw,520px);height:auto;filter:drop-shadow(0 0 30px rgba(61,180,232,.25))}
+  #ukwrap svg{width:min(54vw,420px);height:auto;filter:drop-shadow(0 0 30px rgba(61,180,232,.3))}
   .flow{stroke:var(--glacier);stroke-width:2;fill:none;stroke-dasharray:6 8;animation:dash 1.2s linear infinite}
   @keyframes dash{to{stroke-dashoffset:-28}}
   .node{fill:var(--glacier)}
@@ -54,11 +51,8 @@
 
 <div class="wordmark"><i></i>ColdCore</div>
 <a href="#samples" class="cta-top">Get free samples</a>
-
-<!-- 3D сцена (Three.js рисует сюда) -->
 <canvas id="scene"></canvas>
 
-<!-- UK карта со сценой 4 (SVG overlay, упрощённый силуэт) -->
 <div id="ukwrap">
   <svg viewBox="0 0 300 380" aria-hidden="true">
     <path d="M150 20 L168 60 L150 78 L172 96 L150 120 L190 130 L176 168 L210 190 L182 214 L206 250 L160 250 L176 300 L150 330 L120 300 L138 264 L96 250 L120 220 L92 196 L118 176 L100 140 L138 124 L120 96 L142 80 L126 58 Z"
@@ -66,17 +60,14 @@
     <path class="flow" d="M150 300 C 120 240, 180 180, 150 120"/>
     <path class="flow" d="M150 300 C 200 250, 120 160, 150 120"/>
     <path class="flow" d="M150 300 C 100 230, 210 200, 176 160"/>
-    <circle class="node" cx="150" cy="120" r="5"/>
-    <circle class="node" cx="150" cy="300" r="6"/>
-    <circle class="node" cx="176" cy="160" r="4"/>
-    <circle class="node" cx="120" cy="220" r="4"/>
+    <circle class="node" cx="150" cy="120" r="5"/><circle class="node" cx="150" cy="300" r="6"/>
+    <circle class="node" cx="176" cy="160" r="4"/><circle class="node" cx="120" cy="220" r="4"/>
   </svg>
 </div>
 
 <div class="hint" id="hint">scroll ↓</div>
 
 <main>
-  <!-- Сцена 1 -->
   <section data-scene="1">
     <div class="scene-text" style="opacity:1;transform:none">
       <div class="eyebrow">Temperature-controlled shipping · UK</div>
@@ -84,32 +75,18 @@
       <p class="lead">Cold-chain packaging that keeps it in range, from door to door.</p>
     </div>
   </section>
-
-  <!-- Сцена 2 -->
   <section data-scene="2">
     <div class="scene-text">
       <h2>Engineered to hold.</h2>
-      <div class="chips">
-        <span class="chip">Insulation</span>
-        <span class="chip">Gel packs</span>
-        <span class="chip">Temperature sensor</span>
-      </div>
+      <div class="chips"><span class="chip">Insulation</span><span class="chip">Gel packs</span><span class="chip">Temperature sensor</span></div>
     </div>
   </section>
-
-  <!-- Сцена 3 -->
   <section data-scene="3">
     <div class="scene-text">
       <h2>One box, every cold chain.</h2>
-      <div class="chips">
-        <span class="chip">Food</span>
-        <span class="chip">Marine</span>
-        <span class="chip">Diagnostics</span>
-      </div>
+      <div class="chips"><span class="chip">Food</span><span class="chip">Marine</span><span class="chip">Diagnostics</span></div>
     </div>
   </section>
-
-  <!-- Сцена 4 -->
   <section data-scene="4">
     <div class="scene-text">
       <h2>Delivered across the UK.</h2>
@@ -117,50 +94,29 @@
     </div>
   </section>
 
-  <!-- Форма образцов -->
   <section id="samples">
     <div class="card">
-      <!-- шаг 1 -->
       <div class="step active" id="step1">
         <h2>Get free samples</h2>
         <p class="sub">Tell us where to send them. A manager follows up by WhatsApp or email.</p>
-        <label>Name</label>
-        <input id="f_name" placeholder="Your name" />
+        <label>Name</label><input id="f_name" placeholder="Your name" />
         <label>Business type</label>
-        <select id="f_type">
-          <option value="">Select…</option>
-          <option>Food &amp; chilled</option>
-          <option>Fish &amp; seafood</option>
-          <option>Meat &amp; frozen</option>
-          <option>Medical &amp; pharma</option>
-          <option>Reptiles &amp; live bait</option>
-          <option>Diagnostics &amp; samples</option>
-          <option>Other</option>
-        </select>
+        <select id="f_type"><option value="">Select…</option><option>Food &amp; chilled</option><option>Fish &amp; seafood</option><option>Meat &amp; frozen</option><option>Medical &amp; pharma</option><option>Reptiles &amp; live bait</option><option>Diagnostics &amp; samples</option><option>Other</option></select>
         <label>Contact</label>
-        <div class="row">
-          <select id="f_channel"><option>WhatsApp</option><option>Email</option></select>
-          <input id="f_contact" placeholder="Phone or email" />
-        </div>
+        <div class="rowf"><select id="f_channel"><option>WhatsApp</option><option>Email</option></select><input id="f_contact" placeholder="Phone or email" /></div>
         <button class="primary" onclick="sendCode()">Send confirmation code</button>
         <p class="muted">No spam. We use this only to send samples and follow up.</p>
       </div>
-      <!-- шаг 2 -->
       <div class="step" id="step2">
         <h2>Enter the code</h2>
         <p class="sub">We sent a 4-digit code to <span id="dest"></span>.</p>
-        <label>Confirmation code</label>
-        <input id="f_code" placeholder="1234" maxlength="4" inputmode="numeric" />
+        <label>Confirmation code</label><input id="f_code" placeholder="1234" maxlength="4" inputmode="numeric" />
         <button class="primary" onclick="confirmCode()">Confirm</button>
         <p class="muted" style="cursor:pointer" onclick="sendCode()">Resend code</p>
       </div>
-      <!-- шаг 3 -->
       <div class="step" id="step3">
-        <div class="ok">
-          <div class="tick">✓</div>
-          <h2>Request received</h2>
-          <p class="sub">A manager will be in touch shortly. You will get a personal showroom link tailored to your business.</p>
-        </div>
+        <div class="ok"><div class="tick">✓</div><h2>Request received</h2>
+          <p class="sub">A manager will be in touch shortly. You will get a personal showroom link tailored to your business.</p></div>
       </div>
     </div>
   </section>
@@ -168,128 +124,89 @@
 
 <footer>coldcore.uk · Temperature-controlled shipping · United Kingdom · © 2026 ColdCore</footer>
 
-<!-- libs -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-/* ---------- 3D сцена: процедурная коробка, открывается и раскладывается ---------- */
 const canvas=document.getElementById('scene');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(40,1,0.1,100);
-camera.position.set(0,1.6,6);
-camera.lookAt(0,0,0);
-scene.add(new THREE.AmbientLight(0xbfe3f5,0.8));
-const key=new THREE.DirectionalLight(0xffffff,1.1); key.position.set(4,8,6); scene.add(key);
-const rim=new THREE.DirectionalLight(0x3db4e8,0.7); rim.position.set(-6,2,-4); scene.add(rim);
+const camera=new THREE.PerspectiveCamera(38,1,0.1,100);
+scene.add(new THREE.AmbientLight(0xbfe3f5,0.85));
+const key=new THREE.DirectionalLight(0xffffff,1.05); key.position.set(5,9,7); scene.add(key);
+const rim=new THREE.DirectionalLight(0x3db4e8,0.65); rim.position.set(-6,3,-5); scene.add(rim);
 
-const W=2.0,D=1.4,H=1.1,T=0.12;               // размеры коробки и толщина стенки
-const eps=new THREE.MeshStandardMaterial({color:0xf3f8fb,roughness:0.85,metalness:0.0});
-const box=new THREE.Group(); scene.add(box);
+const W=1.7,D=1.15,H=1.0,T=0.10;
+const mat=new THREE.MeshStandardMaterial({color:0xf3f8fb,roughness:0.85});
+function panel(w,h,d,m){return new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m||mat);}
 
-function panel(w,h,d,mat){return new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat||eps);}
-// дно
-const bottom=panel(W,T,D); bottom.position.y=-H/2; box.add(bottom);
-// стенки с пивотами (для раскрытия). каждая стенка = Group(пивот) + меш
-function wall(w,h,px,py,pz,axis){
-  const g=new THREE.Group(); g.position.set(px,py,pz);
-  const m=panel(w,h,T);
-  g.add(m); box.add(g); g.userData.axis=axis; g.userData.mesh=m; return g;
-}
-// передняя/задняя (длина W), левая/правая (длина D)
-const back =wall(W,H,0,0,-D/2,'x');  back.userData.mesh.position.set(0,0,0);
-const front=wall(W,H,0,0, D/2,'x');  front.userData.mesh.position.set(0,0,0);
-const left =wall(D,H,-W/2,0,0,'z');  left.rotation.y=Math.PI/2;
-const right=wall(D,H, W/2,0,0,'z');  right.rotation.y=Math.PI/2;
-// крышка (пивот по задней кромке)
+const box=new THREE.Group(); box.position.y=-0.15; box.rotation.x=-0.42; scene.add(box);
+const floor=panel(W,T,D); floor.position.y=-H/2; box.add(floor);
+const backW=panel(W,H,T); backW.position.z=-D/2; box.add(backW);
+const frontW=panel(W,H,T); frontW.position.z=D/2; box.add(frontW);
+const leftW=panel(T,H,D); leftW.position.x=-W/2; box.add(leftW);
+const rightW=panel(T,H,D); rightW.position.x=W/2; box.add(rightW);
+// крышка на петле по задней верхней кромке
 const lidPivot=new THREE.Group(); lidPivot.position.set(0,H/2,-D/2); box.add(lidPivot);
-const lid=panel(W+T,T,D+T); lid.position.set(0,0,D/2); lidPivot.add(lid);
+const lid=panel(W+T,T,D+T); lid.position.set(0,0,(D+T)/2); lidPivot.add(lid);
+// содержимое
+const gelMat=new THREE.MeshStandardMaterial({color:0x3db4e8,roughness:0.4});
+const gel1=panel(W*0.36,H*0.55,0.12,gelMat); gel1.position.set(-W*0.24,0,0); box.add(gel1);
+const gel2=panel(W*0.36,H*0.55,0.12,gelMat); gel2.position.set( W*0.24,0,0); box.add(gel2);
+const sensor=panel(0.26,0.16,0.06,new THREE.MeshStandardMaterial({color:0x06151e,emissive:0x0a2b3b})); sensor.position.set(0,H*0.12,D*0.22); box.add(sensor);
+const dot=panel(0.05,0.05,0.03,new THREE.MeshStandardMaterial({color:0x6cf08a,emissive:0x2bd14a})); dot.position.set(0.07,0.04,0.04); sensor.add(dot);
+[gel1,gel2,sensor].forEach(o=>o.scale.setScalar(0.001));
 
-// содержимое: gel packs + сенсор (появляются во 2 сцене)
-const gelMat=new THREE.MeshStandardMaterial({color:0x3db4e8,roughness:0.4,transparent:true,opacity:0.9});
-const gel1=panel(W*0.4,H*0.5,0.1,gelMat); gel1.position.set(-W*0.22,0,0); gel1.scale.setScalar(0.01); box.add(gel1);
-const gel2=panel(W*0.4,H*0.5,0.1,gelMat); gel2.position.set( W*0.22,0,0); gel2.scale.setScalar(0.01); box.add(gel2);
-const sensorMat=new THREE.MeshStandardMaterial({color:0x06151e,roughness:0.3,emissive:0x0a2b3b});
-const sensor=panel(0.28,0.18,0.05,sensorMat); sensor.position.set(0,0.1,D*0.25); sensor.scale.setScalar(0.01); box.add(sensor);
-const dotMat=new THREE.MeshStandardMaterial({color:0x6cf08a,emissive:0x2bd14a});
-const dot=panel(0.05,0.05,0.02,dotMat); sensor.add(dot); dot.position.set(0.07,0.04,0.03);
-
-function lerp(a,b,t){return a+(b-a)*Math.max(0,Math.min(1,t));}
-function smooth(t){return t<0?0:t>1?1:t*t*(3-2*t);}
-
-// глобальный прогресс скролла 0..1
+function S(t){t=t<0?0:t>1?1:t;return t*t*(3-2*t);}
+function lerp(a,b,t){return a+(b-a)*t;}
 let P=0;
-function applyState(p){
-  // фаза 1 (0-.2) закрыто+вращение; фаза 2 (.2-.45) открытие+содержимое;
-  // фаза 3 (.45-.7) раскладка в платформу; фаза 4 (.7-1) отъезд
-  const openT  = smooth((p-0.20)/0.22);   // крышка/стенки открываются
-  const unfoldT= smooth((p-0.45)/0.22);   // стенки ложатся в платформу
-  // вращение постоянное + лёгкое по скроллу
-  box.rotation.y = p*Math.PI*2.2 + performance.now()*0.0002;
-  // крышка
-  lidPivot.rotation.x = -lerp(0,2.2,openT);
-  // стенки раскрываются наружу на openT, затем ложатся в платформу на unfoldT
-  const openAng = lerp(0, 0.5, openT);
-  const flatAng = lerp(0, Math.PI/2-0.02, unfoldT);
-  back.rotation.x  =  (openAng+flatAng);
-  front.rotation.x = -(openAng+flatAng);
-  left.rotation.z  = -(openAng+flatAng);
-  right.rotation.z =  (openAng+flatAng);
-  // содержимое появляется во 2 сцене, прячется при раскладке
-  const showIn = smooth((p-0.26)/0.14)*(1-smooth((p-0.45)/0.1));
-  gel1.scale.setScalar(lerp(0.01,1,showIn));
-  gel2.scale.setScalar(lerp(0.01,1,showIn));
-  sensor.scale.setScalar(lerp(0.01,1,showIn));
-  dot.visible = showIn>0.5;
-  // камера чуть отъезжает к финалу
-  camera.position.z = lerp(6,8.4,smooth((p-0.7)/0.3));
-  camera.position.y = lerp(1.6,2.4,smooth((p-0.45)/0.3));
-  camera.lookAt(0,0,0);
-  // прозрачность канваса к форме
-  canvas.style.opacity = String(1-smooth((p-0.9)/0.1));
+window.__setP=function(v){P=v;};
+function frame(){
+  const t=performance.now()*0.0004;
+  box.rotation.y = t + P*1.1;
+  const lidOpen = S((P-0.22)/0.20);
+  lidPivot.rotation.x = -lidOpen*2.25;
+  const show = S((P-0.30)/0.16);
+  const sc = lerp(0.001,1,show);
+  gel1.scale.setScalar(sc); gel2.scale.setScalar(sc); sensor.scale.setScalar(sc); dot.visible=show>0.5;
+  const s4 = S((P-0.72)/0.16);
+  box.scale.setScalar(lerp(1,0.55,s4));
+  // камера: на мобиле дальше, чтобы коробка влезала и не давила текст
+  const aspect = innerWidth/innerHeight;
+  const dist = aspect<0.75 ? 10.8 : 8.2;
+  camera.position.set(0,0.8,dist); camera.lookAt(0,-0.15,0);
+  canvas.style.opacity = String(1 - S((P-0.9)/0.1));
+  const uk = document.getElementById('ukwrap');
+  if(uk) uk.style.opacity = String(S((P-0.73)/0.12) * (1 - S((P-0.95)/0.05)));
+  renderer.render(scene,camera);
+  requestAnimationFrame(frame);
 }
-function resize(){
-  const w=innerWidth,h=innerHeight;
-  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
-}
-addEventListener('resize',resize); resize();
-(function loop(){ applyState(P); renderer.render(scene,camera); requestAnimationFrame(loop); })();
+function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+addEventListener('resize',resize); resize(); frame();
 
-/* ---------- скролл-драйвер + появление текста ---------- */
 if(window.gsap && window.ScrollTrigger){
   gsap.registerPlugin(ScrollTrigger);
-  ScrollTrigger.create({
-    trigger:'body', start:'top top', end:'bottom bottom', scrub:0.6,
-    onUpdate:self=>{ P=self.progress; if(P>0.02){const h=document.getElementById('hint'); if(h)h.style.opacity=0;} }
+  ScrollTrigger.create({trigger:'body',start:'top top',end:'bottom bottom',scrub:0.6,
+    onUpdate:s=>{P=s.progress; if(P>0.02){const h=document.getElementById('hint'); if(h)h.style.opacity=0;}}});
+  gsap.utils.toArray('.scene-text').forEach(el=>{
+    if(getComputedStyle(el).opacity==='1') return;
+    gsap.to(el,{opacity:1,y:0,duration:.6,scrollTrigger:{trigger:el,start:'top 78%',toggleActions:'play none none reverse'}});
   });
-  gsap.utils.toArray('.scene-text').forEach((el)=>{
-    if(getComputedStyle(el).opacity==='1') return; // герой уже видим
-    gsap.to(el,{opacity:1,y:0,duration:.6,scrollTrigger:{trigger:el,start:'top 75%',toggleActions:'play none none reverse'}});
-  });
-  // UK карта во сцене 4
-  gsap.to('#ukwrap',{opacity:1,scrollTrigger:{trigger:'[data-scene="4"]',start:'top 60%',end:'bottom 40%',toggleActions:'play reverse play reverse'}});
 }
 
-/* ---------- форма образцов (фронт: OTP-флоу, бэк подключим) ---------- */
 function go(id){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 async function sendCode(){
   const name=document.getElementById('f_name').value.trim();
   const contact=document.getElementById('f_contact').value.trim();
   if(!name||!contact){alert('Please enter your name and contact');return;}
   document.getElementById('dest').textContent=contact;
-  // TODO: POST на бэкенд ColdCore -> отправка кода по WA/email. Пока фронт-демо.
-  try{
-    await fetch('/api/request-code',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name,contact,channel:document.getElementById('f_channel').value,type:document.getElementById('f_type').value})});
-  }catch(e){}
+  try{await fetch('/api/request-code',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,contact,channel:document.getElementById('f_channel').value,type:document.getElementById('f_type').value})});}catch(e){}
   go('step2');
 }
 async function confirmCode(){
-  const code=document.getElementById('f_code').value.trim();
-  if(code.length<4){alert('Enter the 4-digit code');return;}
-  try{ await fetch('/api/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})}); }catch(e){}
+  if(document.getElementById('f_code').value.trim().length<4){alert('Enter the 4-digit code');return;}
+  try{await fetch('/api/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:document.getElementById('f_code').value.trim()})});}catch(e){}
   go('step3');
 }
 </script>
