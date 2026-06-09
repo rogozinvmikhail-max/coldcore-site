@@ -5,100 +5,158 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ColdCore — Temperature-controlled shipping</title>
 <meta name="description" content="ColdCore — insulated EPS boxes and cold-chain packaging for food, seafood, pharma and diagnostics across the UK." />
-<script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config={theme:{extend:{colors:{glacier:'#3db4e8',deep:'#06151e',steel:'#9fc4d6',ice:'#eef7fc'}}}}</script>
-<style>html{scroll-behavior:smooth}.reveal{opacity:0;transform:translateY(24px);transition:.7s}.reveal.in{opacity:1;transform:none}</style>
+<style>
+  :root{ --glacier:#3db4e8; --deep:#06151e; --steel:#9fc4d6; --ice:#eef7fc; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--deep);color:#eaf6fc;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  #scene{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;transition:opacity .5s}
+  .wordmark{position:fixed;top:20px;left:22px;z-index:6;font-weight:800;font-size:20px;display:flex;align-items:center;gap:8px}
+  .wordmark i{width:12px;height:12px;background:var(--glacier);border-radius:3px;display:inline-block}
+  .cta-top{position:fixed;top:16px;right:20px;z-index:6;background:var(--glacier);color:#04222e;font-weight:700;padding:9px 16px;border-radius:10px;text-decoration:none;font-size:14px}
+  main{position:relative;z-index:2}
+  .hero-sec{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 26px;max-width:1100px;margin:0 auto}
+  .scene-text{max-width:560px;opacity:0;transform:translateY(28px);text-shadow:0 2px 26px rgba(6,21,30,.95)}
+  .eyebrow{color:var(--glacier);text-transform:uppercase;letter-spacing:2px;font-size:13px;font-weight:700;margin-bottom:14px}
+  h1{font-size:clamp(46px,12vw,100px);font-weight:800;line-height:.95;letter-spacing:-1px}
+  h2{font-size:clamp(28px,6vw,52px);font-weight:800}
+  p.lead{margin-top:18px;font-size:clamp(16px,4vw,21px);color:#d6ecf6;max-width:460px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .chip{border:1px solid rgba(61,180,232,.55);background:rgba(6,21,30,.55);color:#eaf6fc;padding:8px 14px;border-radius:999px;font-size:14px;font-weight:600}
+  .hint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:6;color:var(--steel);font-size:13px;letter-spacing:1px;animation:bob 1.8s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+  .panel{position:relative;z-index:3;background:var(--deep)}
+  .wrap{max-width:1100px;margin:0 auto;padding:64px 26px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px;margin-top:36px}
+  .pcard{background:var(--ice);border-radius:18px;padding:18px}
+  .pcard img{width:100%;height:200px;object-fit:contain}
+  .pcard .nm{color:var(--deep);font-weight:700;margin-top:10px}
+  .pcard .pr{color:var(--glacier);font-weight:700;margin-top:4px}
+  .card{max-width:420px;margin:0 auto;background:#0d2734;border:1px solid rgba(61,180,232,.25);border-radius:22px;padding:30px}
+  label{display:block;font-size:13px;color:var(--steel);margin:16px 0 6px;font-weight:600}
+  input{width:100%;background:var(--deep);border:1px solid rgba(159,196,214,.3);color:#eaf6fc;border-radius:12px;padding:14px;font-size:16px;outline:none}
+  input:focus{border-color:var(--glacier)}
+  button.primary{width:100%;margin-top:22px;background:var(--glacier);color:#04222e;font-weight:800;font-size:17px;border:none;border-radius:12px;padding:16px;cursor:pointer}
+  .muted{color:var(--steel);font-size:12px;margin-top:14px;text-align:center}
+  .hide{display:none}
+  footer{position:relative;z-index:3;background:var(--deep);color:var(--steel);text-align:center;padding:26px;font-size:13px;border-top:1px solid rgba(61,180,232,.12)}
+  .loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;color:var(--steel);font-size:14px;letter-spacing:1px;pointer-events:none}
+</style>
 </head>
-<body class="bg-deep text-white antialiased">
+<body>
 
-<header class="sticky top-0 z-30 bg-deep/90 backdrop-blur border-b border-white/10">
-  <nav class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-    <a href="#top" class="flex items-center gap-2 font-extrabold text-xl"><span class="w-3 h-3 rounded-sm bg-glacier inline-block"></span>ColdCore</a>
-    <a href="#try" class="bg-glacier text-deep font-bold px-4 py-2 rounded-lg text-sm">Try ColdCore</a>
-  </nav>
-</header>
+<div class="wordmark"><i></i>ColdCore</div>
+<a href="#try" class="cta-top">Try ColdCore</a>
+<canvas id="scene"></canvas>
+<div class="loader" id="loader">loading…</div>
+<div class="hint" id="hint">scroll ↓</div>
 
-<!-- HERO -->
-<section id="top" class="max-w-6xl mx-auto px-5 pt-16 pb-12 md:pt-24 grid md:grid-cols-2 gap-10 items-center">
-  <div>
-    <p class="text-glacier font-semibold tracking-widest uppercase text-xs mb-4">Temperature-controlled shipping · UK</p>
-    <h1 class="text-5xl md:text-7xl font-extrabold leading-none">Keep it cold,<br>door to door.</h1>
-    <p class="mt-6 text-lg text-steel max-w-md">Insulated EPS boxes and cold-chain packaging for food, seafood, frozen, pharma and diagnostics. From £0.80 per box.</p>
-    <div class="mt-8 flex gap-3">
-      <a href="#try" class="bg-glacier text-deep font-bold px-6 py-3 rounded-xl">Try ColdCore</a>
-      <a href="#boxes" class="border border-glacier text-glacier font-bold px-6 py-3 rounded-xl">See the boxes</a>
+<main>
+  <section class="hero-sec" data-s="1">
+    <div class="scene-text" style="opacity:1;transform:none">
+      <div class="eyebrow">Temperature-controlled shipping · UK</div>
+      <h1>ColdCore</h1>
+      <p class="lead">Insulated boxes that keep it in range, from door to door.</p>
     </div>
-  </div>
-  <div class="rounded-3xl bg-ice p-6 md:p-10 flex items-center justify-center">
-    <img src="img/box2.png" alt="ColdCore insulated box" class="w-full max-w-md object-contain drop-shadow-xl" loading="eager">
-  </div>
-</section>
+  </section>
+  <section class="hero-sec" data-s="2"><div class="scene-text"><h2>Engineered to hold.</h2>
+    <div class="chips"><span class="chip">Insulation</span><span class="chip">Gel packs</span><span class="chip">Temperature sensor</span></div></div></section>
+  <section class="hero-sec" data-s="3"><div class="scene-text"><h2>One box, every cold chain.</h2>
+    <div class="chips"><span class="chip">Food</span><span class="chip">Marine</span><span class="chip">Diagnostics</span></div></div></section>
+  <section class="hero-sec" data-s="4"><div class="scene-text"><h2>Delivered across the UK.</h2>
+    <p class="lead">From £0.80 per box. Next-day delivery anywhere in the country.</p></div></section>
 
-<!-- BOXES -->
-<section id="boxes" class="bg-[#0a2230] py-16">
-  <div class="max-w-6xl mx-auto px-5">
-    <h2 class="text-3xl md:text-4xl font-extrabold">Our insulated boxes</h2>
-    <p class="mt-3 text-steel max-w-xl">Six sizes of high-density EPS boxes, the exact product we ship. Sizes and prices below.</p>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-      <div class="reveal rounded-2xl bg-ice p-5"><img src="img/box1.png" class="w-full h-52 object-contain" alt="ColdCore box 1"><div class="mt-3 text-deep"><div class="font-bold">Box 1 · 183×114×128 mm</div><div class="text-glacier font-semibold mt-1">from £0.80</div></div></div>
-      <div class="reveal rounded-2xl bg-ice p-5"><img src="img/box2.png" class="w-full h-52 object-contain" alt="ColdCore box 2"><div class="mt-3 text-deep"><div class="font-bold">Box 2 · 230×124×150 mm</div><div class="text-glacier font-semibold mt-1">from £0.95</div></div></div>
-      <div class="reveal rounded-2xl bg-ice p-5"><img src="img/box3.png" class="w-full h-52 object-contain" alt="ColdCore box 3"><div class="mt-3 text-deep"><div class="font-bold">Box 3</div><div class="text-glacier font-semibold mt-1">from £1.10</div></div></div>
-      <div class="reveal rounded-2xl bg-ice p-5"><img src="img/box4.png" class="w-full h-52 object-contain" alt="ColdCore box 4"><div class="mt-3 text-deep"><div class="font-bold">Box 4</div><div class="text-glacier font-semibold mt-1">from £1.30</div></div></div>
-      <div class="reveal rounded-2xl bg-ice p-5"><img src="img/box5.png" class="w-full h-52 object-contain" alt="ColdCore box 5"><div class="mt-3 text-deep"><div class="font-bold">Box 5</div><div class="text-glacier font-semibold mt-1">from £1.60</div></div></div>
-      <div class="reveal rounded-2xl bg-ice p-5"><img src="img/box6.png" class="w-full h-52 object-contain" alt="ColdCore box 6"><div class="mt-3 text-deep"><div class="font-bold">Box 6</div><div class="text-glacier font-semibold mt-1">from £1.90</div></div></div>
-    </div>
-    <p class="mt-6 text-steel text-sm">Prices are indicative and depend on volume. We will confirm exact pricing for your order.</p>
-  </div>
-</section>
-
-<!-- INDUSTRIES -->
-<section class="max-w-6xl mx-auto px-5 py-16">
-  <h2 class="text-3xl md:text-4xl font-extrabold">Built for what spoils fastest</h2>
-  <div class="flex flex-wrap gap-3 mt-8">
-    <span class="border border-white/15 bg-white/5 rounded-full px-5 py-2 font-semibold">Food &amp; chilled</span>
-    <span class="border border-white/15 bg-white/5 rounded-full px-5 py-2 font-semibold">Fish &amp; seafood</span>
-    <span class="border border-white/15 bg-white/5 rounded-full px-5 py-2 font-semibold">Meat &amp; frozen</span>
-    <span class="border border-white/15 bg-white/5 rounded-full px-5 py-2 font-semibold">Medical &amp; pharma</span>
-    <span class="border border-white/15 bg-white/5 rounded-full px-5 py-2 font-semibold">Reptiles &amp; live bait</span>
-    <span class="border border-white/15 bg-white/5 rounded-full px-5 py-2 font-semibold">Diagnostics &amp; samples</span>
-  </div>
-</section>
-
-<!-- TRY -->
-<section id="try" class="bg-[#0a2230] py-16">
-  <div class="max-w-md mx-auto px-5">
-    <div class="rounded-3xl bg-deep border border-glacier/25 p-8">
-      <div id="step1">
-        <h2 class="text-3xl font-extrabold">Try ColdCore</h2>
-        <p class="text-steel mt-2 text-sm">Leave your details and we will be in touch with pricing and the right box for what you ship.</p>
-        <label class="block text-steel text-xs font-semibold mt-5 mb-1">Name</label>
-        <input id="f_name" placeholder="Your name" class="w-full bg-deep border border-white/20 rounded-xl px-4 py-3 outline-none focus:border-glacier">
-        <label class="block text-steel text-xs font-semibold mt-4 mb-1">Phone or email</label>
-        <input id="f_contact" placeholder="Phone or email" class="w-full bg-deep border border-white/20 rounded-xl px-4 py-3 outline-none focus:border-glacier">
-        <button onclick="submitLead()" class="w-full mt-6 bg-glacier text-deep font-extrabold py-4 rounded-xl text-lg">Try ColdCore</button>
-        <p class="text-steel text-xs mt-3 text-center">No spam. We only use this to get in touch.</p>
+  <div class="panel">
+    <section class="wrap" id="boxes">
+      <h2>Our insulated boxes</h2>
+      <p style="color:var(--steel);margin-top:8px;max-width:560px">Six sizes of high-density EPS boxes, the exact product we ship.</p>
+      <div class="grid">
+        <div class="pcard"><img src="img/box1.png" alt="box 1"><div class="nm">Box 1 · 183×114×128 mm</div><div class="pr">from £0.80</div></div>
+        <div class="pcard"><img src="img/box2.png" alt="box 2"><div class="nm">Box 2 · 230×124×150 mm</div><div class="pr">from £0.95</div></div>
+        <div class="pcard"><img src="img/box3.png" alt="box 3"><div class="nm">Box 3</div><div class="pr">from £1.10</div></div>
+        <div class="pcard"><img src="img/box4.png" alt="box 4"><div class="nm">Box 4</div><div class="pr">from £1.30</div></div>
+        <div class="pcard"><img src="img/box5.png" alt="box 5"><div class="nm">Box 5</div><div class="pr">from £1.60</div></div>
+        <div class="pcard"><img src="img/box6.png" alt="box 6"><div class="nm">Box 6</div><div class="pr">from £1.90</div></div>
       </div>
-      <div id="step2" class="hidden text-center py-4">
-        <div class="w-16 h-16 rounded-full border-2 border-glacier text-glacier text-3xl flex items-center justify-center mx-auto mb-4">✓</div>
-        <h2 class="text-2xl font-extrabold">Got it</h2>
-        <p class="text-steel mt-2">Thanks. A manager will be in touch shortly.</p>
+      <p style="color:var(--steel);font-size:13px;margin-top:18px">Prices are indicative and depend on volume. We confirm exact pricing for your order.</p>
+    </section>
+
+    <section class="wrap" id="try">
+      <div class="card">
+        <div id="step1">
+          <h2 style="font-size:30px">Try ColdCore</h2>
+          <p class="muted" style="text-align:left;margin-top:8px;color:var(--steel);font-size:14px">Leave your details and we will be in touch with pricing and the right box for what you ship.</p>
+          <label>Name</label><input id="f_name" placeholder="Your name">
+          <label>Phone or email</label><input id="f_contact" placeholder="Phone or email">
+          <button class="primary" onclick="submitLead()">Try ColdCore</button>
+          <p class="muted">No spam. We only use this to get in touch.</p>
+        </div>
+        <div id="step2" class="hide" style="text-align:center;padding:8px 0">
+          <div style="width:60px;height:60px;border-radius:50%;border:2px solid var(--glacier);color:var(--glacier);font-size:30px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">✓</div>
+          <h2 style="font-size:26px">Got it</h2><p style="color:var(--steel);margin-top:8px">Thanks. A manager will be in touch shortly.</p>
+        </div>
       </div>
-    </div>
+    </section>
   </div>
-</section>
+</main>
+<footer>coldcore.uk · Temperature-controlled shipping · United Kingdom · © 2026 ColdCore</footer>
 
-<footer class="text-center text-steel text-sm py-8 border-t border-white/10">coldcore.uk · Temperature-controlled shipping · United Kingdom · © 2026 ColdCore</footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
+const canvas=document.getElementById('scene');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.outputEncoding=THREE.sRGBEncoding;
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(36,1,0.01,100);
+scene.add(new THREE.AmbientLight(0xdfeef8,1.0));
+const key=new THREE.DirectionalLight(0xffffff,1.25); key.position.set(4,8,6); scene.add(key);
+const rim=new THREE.DirectionalLight(0x8fc6ee,0.6); rim.position.set(-5,3,-4); scene.add(rim);
+const fill=new THREE.DirectionalLight(0xffffff,0.4); fill.position.set(0,-3,4); scene.add(fill);
+
+const pivot=new THREE.Group(); scene.add(pivot);
+let model=null;
+new THREE.GLTFLoader().load('box6.glb',g=>{
+  const o=g.scene;
+  const box=new THREE.Box3().setFromObject(o); const s=box.getSize(new THREE.Vector3()); const c=box.getCenter(new THREE.Vector3());
+  o.position.sub(c); const k=2.5/Math.max(s.x,s.y,s.z); o.scale.setScalar(k);
+  pivot.add(o); model=o;
+  const l=document.getElementById('loader'); if(l)l.style.display='none';
+},undefined,()=>{const l=document.getElementById('loader'); if(l)l.textContent='';});
+
+function S(t){t=t<0?0:t>1?1:t;return t*t*(3-2*t);}
+function lerp(a,b,t){return a+(b-a)*t;}
+let P=0; window.__setP=v=>P=v;
+function frame(){
+  const t=performance.now()*0.00025;
+  pivot.rotation.y = t + P*Math.PI*2.4;
+  pivot.rotation.x = -0.15 + P*0.5;
+  const s4=S((P-0.72)/0.18);
+  pivot.scale.setScalar(lerp(1,0.62,s4));
+  const aspect=innerWidth/innerHeight;
+  camera.position.set(0,0.5, aspect<0.75?7.2:5.6); camera.lookAt(0,0,0);
+  canvas.style.opacity=String(1 - S((P-0.9)/0.08));
+  renderer.render(scene,camera);
+  requestAnimationFrame(frame);
+}
+function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
+addEventListener('resize',resize); resize(); frame();
+
+if(window.gsap&&window.ScrollTrigger){
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.create({trigger:'main',start:'top top',end:()=>document.querySelector('.panel').offsetTop,scrub:0.6,
+    onUpdate:s=>{P=s.progress; const h=document.getElementById('hint'); if(h)h.style.opacity=P>0.02?0:1;}});
+  gsap.utils.toArray('.scene-text').forEach(el=>{ if(getComputedStyle(el).opacity==='1')return;
+    gsap.to(el,{opacity:1,y:0,duration:.6,scrollTrigger:{trigger:el,start:'top 78%',toggleActions:'play none none reverse'}});});
+}
 function submitLead(){
   const n=document.getElementById('f_name').value.trim(), c=document.getElementById('f_contact').value.trim();
   if(!n||!c){alert('Please enter your name and contact');return;}
   try{fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,contact:c})});}catch(e){}
-  document.getElementById('step1').classList.add('hidden');
-  document.getElementById('step2').classList.remove('hidden');
+  document.getElementById('step1').classList.add('hide'); document.getElementById('step2').classList.remove('hide');
 }
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.15});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
 </body>
 </html>
