@@ -18,15 +18,10 @@
   /* HERO */
   .hero{position:relative;height:100vh;min-height:600px;overflow:hidden;display:flex;align-items:flex-end}
   .hero-bg{position:absolute;inset:0;z-index:0}
-  .hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;animation:slides 35s infinite}
-  .hero-bg img:nth-child(1){animation-delay:0s}
-  .hero-bg img:nth-child(2){animation-delay:5s}
-  .hero-bg img:nth-child(3){animation-delay:10s}
-  .hero-bg img:nth-child(4){animation-delay:15s}
-  .hero-bg img:nth-child(5){animation-delay:20s}
-  .hero-bg img:nth-child(6){animation-delay:25s}
-  .hero-bg img:nth-child(7){animation-delay:30s}
-  @keyframes slides{0%{opacity:0}3%{opacity:1}14%{opacity:1}17%{opacity:0}100%{opacity:0}}
+  .hero-bg{background:#0a2230}
+  .hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s ease}
+  .hero-bg img.on{opacity:1}
+  h1,.sub{transition:opacity .55s ease}
   .hero-grad{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,21,30,.55) 0%,rgba(6,21,30,.1) 35%,rgba(6,21,30,.35) 70%,rgba(6,21,30,.9) 100%)}
   .hero-inner{position:relative;z-index:2;width:100%;max-width:1180px;margin:0 auto;padding:0 26px 64px}
   .eyebrow{color:#cfeefb;text-transform:uppercase;letter-spacing:2.5px;font-size:12px;font-weight:700;margin-bottom:16px;text-shadow:0 2px 10px rgba(0,0,0,.5)}
@@ -70,14 +65,13 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg">
-    <img src="img/life1.jpg" alt=""><img src="img/life4.jpg" alt=""><img src="img/life3.jpg" alt="">
-    <img src="img/life2.jpg" alt=""><img src="img/life7.jpg" alt=""><img src="img/life5.jpg" alt=""><img src="img/life6.jpg" alt="">
+    <img id="bgA" class="on" src="img/life7.jpg" alt=""><img id="bgB" src="" alt="">
   </div>
   <div class="hero-grad"></div>
   <div class="hero-inner">
     <div class="eyebrow">Temperature-controlled shipping · UK</div>
-    <h1>Keep it cold, door to door.</h1>
-    <p class="sub">Insulated boxes and cold-chain packaging for food, seafood, pharma and diagnostics.</p>
+    <h1 id="h1">Keep it cold, door to door.</h1>
+    <p class="sub" id="sub">Insulated boxes and cold-chain packaging for food, seafood, pharma and diagnostics.</p>
     <div class="hero-cta">
       <a href="#try" class="btn">Try ColdCore</a>
       <a href="#range" class="btn ghost">See the range</a>
@@ -142,6 +136,30 @@
 <footer>coldcore.uk · Temperature-controlled shipping · United Kingdom · © 2026 ColdCore</footer>
 
 <script>
+// слайдшоу героя: фото + свой заголовок, плавная смена, всегда одно фото
+const SLIDES=[
+  {img:'img/life7.jpg', h:'Keep it cold, door to door.'},
+  {img:'img/life3.jpg', h:'Temperature-controlled shipping.'},
+  {img:'img/life6.jpg', h:'Packed cold, delivered cold.'},
+  {img:'img/life1.jpg', h:'Branded packaging, your way.'},
+  {img:'img/life4.jpg', h:'Cold chain, done right.'},
+  {img:'img/life5.jpg', h:'From one box to a pallet.'},
+  {img:'img/life2.jpg', h:'Built for what spoils fastest.'}
+];
+(function(){
+  const bgA=document.getElementById('bgA'), bgB=document.getElementById('bgB'), H=document.getElementById('h1');
+  if(!bgA||!bgB||!H) return;
+  let si=0, top=bgA, bot=bgB;
+  SLIDES.forEach(s=>{const im=new Image(); im.src=s.img;}); // префетч
+  function advance(){
+    si=(si+1)%SLIDES.length;
+    bot.src=SLIDES[si].img;
+    bot.onload=function(){ bot.classList.add('on'); top.classList.remove('on'); const t=top; top=bot; bot=t; };
+    H.style.opacity=0;
+    setTimeout(()=>{ H.textContent=SLIDES[si].h; H.style.opacity=1; }, 450);
+  }
+  setInterval(advance, 4500);
+})();
 function submitLead(){
   const n=document.getElementById('f_name').value.trim(), c=document.getElementById('f_contact').value.trim();
   if(!n||!c){alert('Please enter your name and contact');return;}
