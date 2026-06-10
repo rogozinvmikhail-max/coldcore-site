@@ -55,6 +55,14 @@
   .muted{color:var(--steel);font-size:12px;margin-top:14px;text-align:center}
   .hide{display:none}
   footer{background:#06151e;color:var(--steel);text-align:center;padding:28px;font-size:13px;border-top:1px solid rgba(61,180,232,.12)}
+  /* scroll-reveal коробки */
+  .reveal{position:relative;height:300vh;background:linear-gradient(180deg,#06151e,#0a1a22 50%,#06151e)}
+  .reveal-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #boxframe{max-width:min(92vw,660px);width:100%;height:auto;-webkit-mask-image:radial-gradient(ellipse 78% 82% at 50% 50%,#000 52%,transparent 90%);mask-image:radial-gradient(ellipse 78% 82% at 50% 50%,#000 52%,transparent 90%)}
+  .reveal-cap{position:absolute;bottom:13%;left:0;right:0;text-align:center;padding:0 24px}
+  .reveal-cap b{display:block;color:#fff;font-size:clamp(26px,5vw,46px);font-weight:800;letter-spacing:-.5px}
+  .reveal-cap span{color:var(--steel);font-size:clamp(14px,2.4vw,17px);font-weight:500;display:block;margin-top:8px}
+  .reveal-eyebrow{position:absolute;top:13%;left:0;right:0;text-align:center;color:var(--glacier);text-transform:uppercase;letter-spacing:2.5px;font-size:12px;font-weight:700}
 </style>
 </head>
 <body>
@@ -80,6 +88,15 @@
     </div>
   </div>
   <div class="swipe">Scroll to explore ↓</div>
+</section>
+
+<!-- SCROLL REVEAL: коробка открывается при прокрутке -->
+<section class="reveal" id="reveal">
+  <div class="reveal-sticky">
+    <div class="reveal-eyebrow">See inside</div>
+    <img id="boxframe" src="kbox/f00.jpg" alt="ColdCore insulated box opening">
+    <div class="reveal-cap"><b>Insulated to the core</b><span>High-density EPS walls, gel ice packs, sealed tight for the whole journey.</span></div>
+  </div>
 </section>
 
 <!-- RANGE -->
@@ -161,6 +178,24 @@ const SLIDES=[
     setTimeout(()=>{ H.textContent=SLIDES[si].h; H.style.opacity=1; }, 450);
   }
   setInterval(advance, 4500);
+})();
+// scroll-scrub: коробка открывается по мере прокрутки
+(function(){
+  const FR=28, boxframe=document.getElementById('boxframe'), reveal=document.getElementById('reveal');
+  if(!boxframe||!reveal) return;
+  const imgs=[];
+  for(let i=0;i<FR;i++){const im=new Image(); im.src='kbox/f'+String(i).padStart(2,'0')+'.jpg'; imgs[i]=im;}
+  let cur=-1, ticking=false;
+  function update(){
+    ticking=false;
+    const vh=innerHeight, total=reveal.offsetHeight-vh;
+    const scrolled=Math.min(Math.max(-reveal.getBoundingClientRect().top,0),total);
+    const p=total>0?scrolled/total:0;
+    const idx=Math.min(FR-1,Math.max(0,Math.round(p*(FR-1))));
+    if(idx!==cur){cur=idx; boxframe.src=imgs[idx].src;}
+  }
+  addEventListener('scroll',()=>{if(!ticking){ticking=true; requestAnimationFrame(update);}},{passive:true});
+  addEventListener('resize',update); update();
 })();
 function submitLead(){
   const n=document.getElementById('f_name').value.trim(), c=document.getElementById('f_contact').value.trim();
