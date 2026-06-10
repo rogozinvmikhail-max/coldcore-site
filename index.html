@@ -67,6 +67,65 @@
   .fly{opacity:0;transform:translateY(46px) scale(.98);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
   .fly.in{opacity:1;transform:none}
   @media (prefers-reduced-motion:reduce){.fly{opacity:1;transform:none;transition:none}}
+  /* ===== калькулятор заказа (v5, тёмная тема) ===== */
+  #order{--color-background-primary:#0d2734;--color-background-secondary:#0a2230;--color-text-primary:#eaf6fc;--color-text-secondary:#9fc4d6;--color-text-tertiary:#6b8595;--color-border-secondary:rgba(159,196,214,.28);--color-border-tertiary:rgba(61,180,232,.16);--border-radius-md:10px;--border-radius-lg:16px}
+  #order .cc-wrap{padding:.5rem 0 0}
+  #order .layout{display:grid;grid-template-columns:240px 1fr;gap:22px;align-items:start}
+  #order .left-col{display:flex;flex-direction:column;gap:12px}
+  #order .right-col{display:flex;flex-direction:column;gap:0}
+  #order .preview-card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px;display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid var(--color-border-tertiary)}
+  #order .pi-name{font-size:15px;font-weight:700;color:var(--color-text-primary);text-align:center}
+  #order .pi-dims{font-size:11px;color:var(--color-text-secondary);text-align:center;line-height:1.6}
+  #order .pi-addons{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
+  #order .addon-chip{font-size:10px;padding:2px 7px;border-radius:20px;background:var(--color-background-primary);color:var(--color-text-secondary);border:1px solid var(--color-border-tertiary)}
+  #order .addon-chip.on{background:rgba(61,180,232,.16);color:#bfe8fb;font-weight:600;border-color:#3db4e8}
+  #order .size-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  #order .size-btn{border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;padding:6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+  #order .size-btn:hover{background:var(--color-background-secondary)}
+  #order .size-btn.active{border:2px solid #3db4e8;background:rgba(61,180,232,.16)}
+  #order .size-btn .sz{font-size:12px;font-weight:700;color:var(--color-text-primary)}
+  #order .size-btn .sv{font-size:9px;color:var(--color-text-tertiary)}
+  #order .sec{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin:1rem 0 .4rem}
+  #order .qty-input-row{display:flex;align-items:center;gap:8px;margin-bottom:.5rem;flex-wrap:wrap}
+  #order .qty-input-row label{font-size:13px;color:var(--color-text-secondary)}
+  #order input[type=number]{font-size:14px;padding:6px 11px;border-radius:var(--border-radius-md);border:1px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);height:36px;width:100px}
+  #order .snap-options{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.6rem}
+  #order .snap-btn{border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-secondary)}
+  #order .snap-btn.best{border-color:#3db4e8;color:#bfe8fb;background:rgba(61,180,232,.16)}
+  #order .snap-btn.chosen{outline:2px solid #3db4e8;outline-offset:1px;font-weight:600}
+  #order .qty-result{font-size:11.5px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:6px 10px;margin-bottom:.6rem;line-height:1.6}
+  #order .addon-row{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--color-border-tertiary)}
+  #order .addon-row:last-child{border-bottom:none}
+  #order .addon-row input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#3db4e8;margin-top:2px;flex-shrink:0}
+  #order .addon-row label{font-size:13px;color:var(--color-text-primary);flex:1;cursor:pointer;line-height:1.4}
+  #order .addon-row .ap{font-size:11.5px;color:var(--color-text-tertiary);white-space:nowrap;margin-top:2px}
+  #order .addon-sub{margin-left:23px;padding:6px 0 2px;display:flex;flex-direction:column;gap:8px}
+  #order select{font-size:12px;padding:4px 8px;border-radius:var(--border-radius-md);border:1px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);height:30px}
+  #order .moq-warn{font-size:10.5px;color:#ff9b9b}
+  #order .hidden{display:none}
+  #order .color-section{display:flex;flex-direction:column;gap:5px}
+  #order .color-label{font-size:11px;color:var(--color-text-secondary)}
+  #order .color-swatches{display:flex;gap:5px;flex-wrap:wrap}
+  #order .swatch{width:24px;height:24px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0}
+  #order .swatch:hover{transform:scale(1.15)}
+  #order .swatch.selected{border-color:var(--color-text-primary)}
+  #order .swatch.custom{background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600}
+  #order .color-name{font-size:10.5px;color:var(--color-text-tertiary)}
+  #order .divider{border:none;border-top:1px solid var(--color-border-tertiary);margin:.85rem 0}
+  #order .receipt{background:var(--color-background-secondary);border:1px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem}
+  #order .r-line{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--color-border-tertiary);gap:8px;font-size:12px}
+  #order .r-line:last-child{border-bottom:none}
+  #order .r-lname{color:var(--color-text-primary)}
+  #order .r-lsub{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+  #order .r-lp{font-weight:600;color:var(--color-text-primary);white-space:nowrap}
+  #order .r-sub{display:flex;justify-content:space-between;padding:9px 0 3px;font-size:14px;font-weight:700;border-top:1.5px solid var(--color-border-secondary);margin-top:3px;color:var(--color-text-primary)}
+  #order .r-vat{display:flex;justify-content:space-between;padding:1px 0 7px;font-size:11px;color:var(--color-text-tertiary)}
+  #order .r-grand{display:flex;justify-content:space-between;padding:7px 0 0;font-size:16px;font-weight:800;border-top:1px solid var(--color-border-tertiary);color:#5fc6ef}
+  #order .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:.7rem}
+  #order .met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.6rem .75rem}
+  #order .met-l{font-size:9.5px;color:var(--color-text-secondary);margin-bottom:2px}
+  #order .met-v{font-size:14px;font-weight:700;color:var(--color-text-primary)}
+  @media(max-width:720px){#order .layout{grid-template-columns:1fr}#order .metrics{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -88,7 +147,7 @@
     <p class="sub" id="sub">Insulated boxes and cold-chain packaging for food, seafood, pharma and diagnostics.</p>
     <div class="hero-cta">
       <a href="#try" class="btn">Try ColdCore</a>
-      <a href="#range" class="btn ghost">See the range</a>
+      <a href="#order" class="btn ghost">See the range</a>
     </div>
   </div>
   <div class="swipe">Scroll to explore ↓</div>
@@ -104,18 +163,75 @@
 </section>
 
 <!-- RANGE -->
-<section class="wrap" id="range">
-  <h2>Insulated boxes</h2>
-  <p class="lead">Six sizes of high-density EPS boxes. Choose by internal volume and payload.</p>
-  <div class="grid">
-    <div class="pcard"><img src="img/gem1.jpg" alt="ColdCore XS"><div class="body"><div class="nm">ColdCore XS</div><div class="meta">183×128×114 mm · 1.4 L · up to 1 kg</div><div class="pr">£0.80 <span class="per">/ box</span></div><div class="vol">Pack of 32 £25 · pallet £600</div></div></div>
-    <div class="pcard"><img src="img/gem2.jpg" alt="ColdCore S"><div class="body"><div class="nm">ColdCore S</div><div class="meta">230×150×124 mm · 2.4 L · up to 2 kg</div><div class="pr">£0.95 <span class="per">/ box</span></div><div class="vol">Pack of 20 £18.50 · pallet £439</div></div></div>
-    <div class="pcard"><img src="img/gem3.jpg" alt="ColdCore M"><div class="body"><div class="nm">ColdCore M</div><div class="meta">260×180×120 mm · 3.64 L · up to 3 kg</div><div class="pr">£1.60 <span class="per">/ box</span></div><div class="vol">Pack of 10 £15.50 · pallet £450</div></div></div>
-    <div class="pcard"><img src="img/gem4.jpg" alt="ColdCore L"><div class="body"><div class="nm">ColdCore L</div><div class="meta">310×230×125 mm · 5.6 L · up to 5 kg</div><div class="pr">£1.65 <span class="per">/ box</span></div><div class="vol">Pack of 10 £16 · pallet £348</div></div></div>
-    <div class="pcard"><img src="img/gem5.jpg" alt="ColdCore XL"><div class="body"><div class="nm">ColdCore XL</div><div class="meta">310×230×155 mm · 7.28 L · up to 7 kg</div><div class="pr">£1.75 <span class="per">/ box</span></div><div class="vol">Pack of 8 £13.80 · pallet £272</div></div></div>
-    <div class="pcard"><img src="img/gem6.jpg" alt="ColdCore XXL"><div class="body"><div class="nm">ColdCore XXL</div><div class="meta">400×300×160 mm · 13.99 L · up to 12 kg</div><div class="pr">£3.95 <span class="per">/ box</span></div><div class="vol">Pack of 4 £15 · pallet £296.80</div></div></div>
-  </div>
-  <p class="note">Payload capacity is indicative and depends on product density, packaging configuration, coolant packs and transport requirements.</p>
+<section class="wrap" id="order">
+  <h2>Build your order</h2>
+  <p class="lead">Pick a size, set the quantity, add what you need. Live pricing for single, pack or pallet.</p>
+  <div class="cc-wrap"><div class="layout">
+    <div class="left-col">
+      <div class="preview-card">
+        <canvas id="mainCanvas" width="190" height="190"></canvas>
+        <div class="pi-name" id="pi-name">ColdCore M</div>
+        <div class="pi-dims" id="pi-dims"></div>
+        <div class="pi-addons" id="pi-addons"></div>
+      </div>
+      <div>
+        <div class="sec" style="margin-top:0">Choose size</div>
+        <div class="size-grid" id="sizeGrid"></div>
+      </div>
+    </div>
+    <div class="right-col">
+      <div class="sec" style="margin-top:0">Quantity</div>
+      <div class="qty-input-row">
+        <label>I need approx.</label>
+        <input type="number" id="qtyInput" value="1000" min="1" step="1" oninput="onQtyInput()">
+        <span style="font-size:11px;color:var(--color-text-tertiary)">boxes</span>
+      </div>
+      <div id="snapOpts" class="snap-options"></div>
+      <div class="qty-result" id="qtyResult"></div>
+      <div class="sec">Add-ons</div>
+      <div>
+        <div class="addon-row">
+          <input type="checkbox" id="aIce" onchange="calc()"><label for="aIce">Ice pack set</label><span class="ap" id="ice-price"></span>
+        </div>
+        <div class="addon-row">
+          <input type="checkbox" id="aOuter" onchange="calc()"><label for="aOuter">Corrugated outer</label><span class="ap" id="outer-price"></span>
+        </div>
+        <div class="addon-row" style="flex-wrap:wrap">
+          <input type="checkbox" id="aSleeve" onchange="calc()"><label for="aSleeve">Printed sleeve</label><span class="ap" id="sleeve-price"></span><span class="moq-warn" id="sleeve-warn"></span>
+          <div class="addon-sub hidden" id="sleeveOpts" style="width:100%">
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+              <select id="sleeveType" onchange="calc()"><option value="1c">1-colour print</option><option value="fc">Full colour</option></select>
+            </div>
+            <div class="color-section"><div class="color-label">Sleeve colour</div><div class="color-swatches" id="sleeveSwatches"></div><div class="color-name" id="sleeveColorName"></div></div>
+          </div>
+        </div>
+        <div class="addon-row" style="flex-wrap:wrap">
+          <input type="checkbox" id="aBag" onchange="calc()"><label for="aBag">ColdCarry bag</label><span class="ap" id="bag-price"></span>
+          <div class="addon-sub hidden" id="bagOpts" style="width:100%">
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+              <select id="bagPers" onchange="calc()"><option value="plain">Plain</option><option value="sp">+ Screen print (min 10)</option><option value="em">+ Embroidery (min 20)</option><option value="st">+ Sticker / patch (min 10)</option></select>
+              <span class="moq-warn" id="bag-warn"></span>
+            </div>
+            <div class="color-section"><div class="color-label">Bag colour</div><div class="color-swatches" id="bagSwatches"></div><div class="color-name" id="bagColorName"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="receipt">
+        <div id="rLines"></div>
+        <div class="r-sub"><span>Subtotal (ex-VAT)</span><span id="rSub">£0.00</span></div>
+        <div class="r-vat"><span>VAT 20%</span><span id="rVat">£0.00</span></div>
+        <div class="r-grand"><span>Total inc-VAT</span><span id="rGrand">£0.00</span></div>
+      </div>
+      <div class="metrics">
+        <div class="met"><div class="met-l">Units</div><div class="met-v" id="mQty">—</div></div>
+        <div class="met"><div class="met-l">Tier</div><div class="met-v" id="mTier">—</div></div>
+        <div class="met"><div class="met-l">Box/unit</div><div class="met-v" id="mCpu">—</div></div>
+        <div class="met"><div class="met-l">All-in/unit</div><div class="met-v" id="mAll">—</div></div>
+      </div>
+    </div>
+  </div></div>
+  <p class="note">All prices ex-VAT. Payload is indicative and depends on product density, packaging and coolant configuration.</p>
 
   <h2 style="margin-top:60px">Packaging &amp; accessories</h2>
   <p class="lead">Everything to pack and ship cold, from one supplier.</p>
@@ -208,6 +324,226 @@ const SLIDES=[
   addEventListener('scroll',()=>{if(!ticking){ticking=true; requestAnimationFrame(update);}},{passive:true});
   addEventListener('resize',update); update();
 })();
+/* ===== калькулятор заказа v5 ===== */
+const SIZES={
+  xs:{name:'XS',vol:'1.40 L',pay:'1 kg',ext:'183×128×114',pk:32,pkP:25.00,pal:800,palP:600,sgl:0.80,ice:1.90,out:0.90,slv1:0.65,slvf:0.95,bag:6.50,bsp:2.50,bem:4.50,bst:1.50,w:0.50,h:0.44,d:0.66},
+  s: {name:'S', vol:'2.40 L',pay:'2 kg',ext:'230×150×124',pk:20,pkP:18.50,pal:480,palP:439,sgl:0.95,ice:2.50,out:1.05,slv1:0.70,slvf:1.00,bag:7.50,bsp:2.50,bem:4.50,bst:1.50,w:0.60,h:0.50,d:0.74},
+  m: {name:'M', vol:'3.64 L',pay:'3 kg',ext:'260×180×120',pk:10,pkP:15.50,pal:300,palP:450,sgl:1.60,ice:4.00,out:1.40,slv1:0.75,slvf:1.10,bag:8.50,bsp:3.00,bem:5.00,bst:1.75,w:0.68,h:0.47,d:0.82},
+  l: {name:'L', vol:'5.60 L',pay:'5 kg',ext:'310×230×125',pk:10,pkP:16.00,pal:224,palP:348,sgl:1.65,ice:4.50,out:1.55,slv1:0.80,slvf:1.20,bag:9.50,bsp:3.00,bem:5.00,bst:1.75,w:0.76,h:0.49,d:0.88},
+  xl:{name:'XL',vol:'7.28 L',pay:'7 kg',ext:'310×230×155',pk:8, pkP:13.80,pal:160,palP:272,sgl:1.75,ice:5.00,out:1.95,slv1:0.85,slvf:1.25,bag:12.50,bsp:3.50,bem:5.50,bst:2.00,w:0.76,h:0.60,d:0.88},
+  xxl:{name:'XXL',vol:'13.99 L',pay:'12 kg',ext:'400×300×160',pk:4,pkP:15.00,pal:80,palP:297,sgl:3.95,ice:8.50,out:2.50,slv1:0.95,slvf:1.40,bag:15.50,bsp:3.50,bem:6.00,bst:2.00,w:0.96,h:0.62,d:0.96},
+};
+const BAG_COLORS=[
+  {name:'Stone',hex:'#C8C0B0'},{name:'Navy',hex:'#2C3E50'},{name:'Charcoal',hex:'#4A4A4A'},
+  {name:'Sage',hex:'#8B9E7A'},{name:'Cream',hex:'#F5F0E8'},{name:'Custom',hex:'custom'},
+];
+const SLV_COLORS=[
+  {name:'White',hex:'#FFFFFF',brd:'#ccc'},{name:'Kraft',hex:'#C8A86A',brd:'#a08040'},
+  {name:'Black',hex:'#2C2C2A',brd:'#555'},{name:'Navy',hex:'#2C3E50',brd:'#1a2a38'},
+  {name:'Teal',hex:'#1D9E75',brd:'#0e5a42'},{name:'Custom',hex:'custom',brd:'#999'},
+];
+let sz='m', chosenQty=300, bagCI=0, slvCI=0, animFrame=null, thumbFrames={};
+const f=n=>'£'+n.toFixed(2);
+function drawBoxToCanvas(canvas, vKey, angle, opts={}){
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const v=SIZES[vKey];
+  const scale=opts.scale||55;
+  const bw=v.w*scale, bh=v.h*scale, bd=v.d*scale;
+  const cx=W/2, cy=H/2+(opts.cy||6);
+  const cos=Math.cos(angle)*0.55, sinA=Math.sin(angle)*0.55, iso=0.4;
+  const proj=(x,y,z)=>({px:cx+x*cos-z*sinA, py:cy+x*sinA*iso+z*cos*iso-y});
+  const face=(pts,fill,stroke)=>{
+    ctx.beginPath();ctx.moveTo(pts[0].px,pts[0].py);
+    for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i].px,pts[i].py);
+    ctx.closePath();ctx.fillStyle=fill;ctx.fill();
+    ctx.strokeStyle=stroke||'#b0aca6';ctx.lineWidth=opts.lw||0.8;ctx.stroke();
+  };
+  const hw=bw/2, hd=bd/2, baseH=bh*0.65, lidH=bh*0.35;
+  const eps='#f0ede8', epsd='#c8c4be', epsm='#dcd8d2';
+  face([proj(-hw,0,-hd),proj(hw,0,-hd),proj(hw,0,hd),proj(-hw,0,hd)],eps);
+  face([proj(-hw,0,hd),proj(hw,0,hd),proj(hw,baseH,hd),proj(-hw,baseH,hd)],epsd);
+  face([proj(hw,0,-hd),proj(hw,0,hd),proj(hw,baseH,hd),proj(hw,baseH,-hd)],epsm);
+  face([proj(-hw,baseH,-hd),proj(hw,baseH,-hd),proj(hw,baseH,hd),proj(-hw,baseH,hd)],eps);
+  const s1=proj(-hw,baseH,hd),s2=proj(hw,baseH,hd),s3=proj(hw,baseH,-hd);
+  ctx.beginPath();ctx.moveTo(s1.px,s1.py);ctx.lineTo(s2.px,s2.py);ctx.lineTo(s3.px,s3.py);
+  ctx.strokeStyle='#9a9690';ctx.lineWidth=(opts.lw||0.8)*1.2;ctx.stroke();
+  face([proj(-hw,baseH,hd),proj(hw,baseH,hd),proj(hw,baseH+lidH,hd),proj(-hw,baseH+lidH,hd)],epsd);
+  face([proj(hw,baseH,-hd),proj(hw,baseH,hd),proj(hw,baseH+lidH,hd),proj(hw,baseH+lidH,-hd)],epsm);
+  face([proj(-hw,baseH+lidH,-hd),proj(hw,baseH+lidH,-hd),proj(hw,baseH+lidH,hd),proj(-hw,baseH+lidH,hd)],eps);
+  if(opts.sleeve){
+    const sc=SLV_COLORS[slvCI], sh=sc.hex==='custom'?'#7F77DD':sc.hex;
+    const sy=baseH-8, sth=10;
+    face([proj(-hw,sy,hd),proj(hw,sy,hd),proj(hw,sy+sth,hd),proj(-hw,sy+sth,hd)],sh,sc.brd||sh);
+    face([proj(hw,sy,-hd),proj(hw,sy,hd),proj(hw,sy+sth,hd),proj(hw,sy+sth,-hd)],sh,sc.brd||sh);
+  }
+  if(opts.outer){
+    const off=opts.offPx||4;
+    ctx.strokeStyle='#c8a86a';ctx.lineWidth=(opts.lw||0.8);ctx.setLineDash([3,2]);
+    const of=[proj(-hw-off,-off,hd+off),proj(hw+off,-off,hd+off),proj(hw+off,baseH+lidH+off,hd+off),proj(-hw-off,baseH+lidH+off,hd+off)];
+    ctx.beginPath();ctx.moveTo(of[0].px,of[0].py);of.forEach(p=>ctx.lineTo(p.px,p.py));ctx.closePath();ctx.stroke();
+    const or=[proj(hw+off,-off,-hd-off),proj(hw+off,-off,hd+off),proj(hw+off,baseH+lidH+off,hd+off),proj(hw+off,baseH+lidH+off,-hd-off)];
+    ctx.beginPath();ctx.moveTo(or[0].px,or[0].py);or.forEach(p=>ctx.lineTo(p.px,p.py));ctx.closePath();ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  if(opts.bag){
+    const bc=BAG_COLORS[bagCI], bh2=bc.hex==='custom'?'#7F77DD':bc.hex;
+    const hColor=bh2==='#F5F0E8'?'#8B9E7A':bh2;
+    const topY=baseH+lidH+3;
+    ctx.strokeStyle=hColor;ctx.lineWidth=(opts.lw||0.8)*2.5;ctx.lineCap='round';
+    const lhp=proj(-hw*0.45,topY,0), rhp=proj(hw*0.45,topY,0), mid=proj(0,topY+18,0);
+    ctx.beginPath();ctx.moveTo(lhp.px,lhp.py);ctx.quadraticCurveTo(lhp.px-2,mid.py,mid.px-9,mid.py);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(rhp.px,rhp.py);ctx.quadraticCurveTo(rhp.px+2,mid.py,mid.px+9,mid.py);ctx.stroke();
+  }
+}
+function buildSizeGrid(){
+  const g=document.getElementById('sizeGrid');
+  g.innerHTML='';
+  Object.entries(SIZES).forEach(([k,v])=>{
+    const btn=document.createElement('button');
+    btn.className='size-btn'+(k===sz?' active':'');
+    const c=document.createElement('canvas'); c.width=80;c.height=60; btn.appendChild(c);
+    const szEl=document.createElement('span'); szEl.className='sz'; szEl.textContent=v.name; btn.appendChild(szEl);
+    const svEl=document.createElement('span'); svEl.className='sv'; svEl.textContent=v.vol; btn.appendChild(svEl);
+    btn.onclick=()=>{sz=k;buildSizeGrid();onQtyInput();};
+    g.appendChild(btn);
+    let thumbAngle=0.6;
+    if(thumbFrames[k])cancelAnimationFrame(thumbFrames[k]);
+    const animate=()=>{ thumbAngle+=0.008; drawBoxToCanvas(c,k,thumbAngle,{scale:28,cy:2,lw:0.5}); thumbFrames[k]=requestAnimationFrame(animate); };
+    animate();
+  });
+}
+function buildSwatches(colors,containerId,nameId,selectedIdx,onSelect){
+  const cont=document.getElementById(containerId);
+  cont.innerHTML='';
+  colors.forEach((c,i)=>{
+    const d=document.createElement('div');
+    d.className='swatch'+(i===selectedIdx?' selected':'');
+    if(c.hex==='custom'){d.className+=' custom';d.textContent='+';}
+    else{d.style.background=c.hex;d.style.border=`2px solid ${i===selectedIdx?'var(--color-text-primary)':(c.brd||c.hex)}`;}
+    d.onclick=()=>onSelect(i);
+    cont.appendChild(d);
+  });
+  document.getElementById(nameId).textContent=colors[selectedIdx].name+(colors[selectedIdx].hex==='custom'?' (min 50 pcs)':'');
+}
+function getSnaps(s,target){
+  const v=SIZES[s]; const opts=new Set();
+  if(target<=1)return[1];
+  [Math.floor(target/v.pal)*v.pal, Math.ceil(target/v.pal)*v.pal, Math.floor(target/v.pk)*v.pk, Math.ceil(target/v.pk)*v.pk].forEach(x=>{if(x>0)opts.add(x);});
+  if(target<v.pk)opts.add(1);
+  return[...opts].filter(x=>x>0).sort((a,b)=>Math.abs(a-target)-Math.abs(b-target)).slice(0,4);
+}
+function describeQty(s,q){
+  const v=SIZES[s];
+  const pals=Math.floor(q/v.pal),rem=q%v.pal,pks=Math.floor(rem/v.pk),sgls=rem%v.pk;
+  const parts=[];
+  if(pals>0)parts.push(`${pals} pallet${pals>1?'s':''} (${pals*v.pal} pcs)`);
+  if(pks>0)parts.push(`${pks} pack${pks>1?'s':''} (${pks*v.pk} pcs)`);
+  if(sgls>0)parts.push(`${sgls} pc${sgls>1?'s':''}`);
+  const total=pals*v.palP+pks*v.pkP+sgls*v.sgl;
+  return{text:parts.join(' + '),total,cpu:total/q,tier:pals>0&&rem===0?'Pallet':pals>0?'Pallet+Pack':pks>0?'Pack':'Single'};
+}
+function boxTot(s,q){
+  const v=SIZES[s];
+  const pals=Math.floor(q/v.pal),rem=q%v.pal,pks=Math.floor(rem/v.pk),sgls=rem%v.pk;
+  return pals*v.palP+pks*v.pkP+sgls*v.sgl;
+}
+function onQtyInput(){
+  const raw=parseInt(document.getElementById('qtyInput').value)||1;
+  const snaps=getSnaps(sz,raw);
+  const sd=document.getElementById('snapOpts'); sd.innerHTML='';
+  let first=true;
+  snaps.forEach((q,i)=>{
+    const d=describeQty(sz,q);
+    const diff=q-raw, ds=diff===0?'exact':diff>0?`+${diff}`:`${diff}`;
+    const b=document.createElement('button');
+    b.className='snap-btn'+(i===0?' best chosen':' alt');
+    b.innerHTML=`<strong>${q}</strong> <span style="font-size:10px">${ds} · ${f(d.cpu)}/pc</span>`;
+    b.onclick=()=>{chosenQty=q;document.querySelectorAll('.snap-btn').forEach(x=>x.classList.remove('chosen'));b.classList.add('chosen');calc();};
+    sd.appendChild(b);
+    if(first){chosenQty=q;first=false;}
+  });
+  calc();
+}
+function startMainAnim(){
+  if(animFrame)cancelAnimationFrame(animFrame);
+  const canvas=document.getElementById('mainCanvas');
+  let t0=null;
+  const hasSleeve=()=>document.getElementById('aSleeve').checked;
+  const hasOuter=()=>document.getElementById('aOuter').checked;
+  const hasBag=()=>document.getElementById('aBag').checked;
+  const frame=ts=>{
+    if(!t0)t0=ts;
+    const angle=(ts-t0)/1000*0.7;
+    drawBoxToCanvas(canvas,sz,angle,{scale:68,cy:10,lw:1.0,sleeve:hasSleeve(),outer:hasOuter(),bag:hasBag(),offPx:6});
+    animFrame=requestAnimationFrame(frame);
+  };
+  animFrame=requestAnimationFrame(frame);
+}
+function calc(){
+  const v=SIZES[sz]; const q=chosenQty;
+  const aIce=document.getElementById('aIce').checked;
+  const aOuter=document.getElementById('aOuter').checked;
+  const aSleeve=document.getElementById('aSleeve').checked;
+  const st=document.getElementById('sleeveType').value;
+  const aBag=document.getElementById('aBag').checked;
+  const bp=document.getElementById('bagPers').value;
+  document.getElementById('sleeveOpts').className=aSleeve?'addon-sub':'addon-sub hidden';
+  document.getElementById('bagOpts').className=aBag?'addon-sub':'addon-sub hidden';
+  const slvPc=st==='fc'?v.slvf:v.slv1;
+  document.getElementById('ice-price').textContent=`+${f(v.ice)}/pc`;
+  document.getElementById('outer-price').textContent=`+${f(v.out)}/pc`;
+  document.getElementById('sleeve-price').textContent=`+${f(slvPc)}/pc`;
+  document.getElementById('bag-price').textContent=`+${f(v.bag)}/pc`;
+  document.getElementById('sleeve-warn').textContent=aSleeve&&q<50?'⚠ min 50':'';
+  const bMoq=bp==='em'?20:(bp==='sp'||bp==='st')?10:0;
+  document.getElementById('bag-warn').textContent=aBag&&bMoq>0&&q<bMoq?`⚠ min ${bMoq}`:'';
+  buildSwatches(SLV_COLORS,'sleeveSwatches','sleeveColorName',slvCI,i=>{slvCI=i;calc();});
+  buildSwatches(BAG_COLORS,'bagSwatches','bagColorName',bagCI,i=>{bagCI=i;calc();});
+  const desc=describeQty(sz,q);
+  document.getElementById('qtyResult').textContent=`${q} pcs = ${desc.text} · avg ${f(desc.cpu)}/pc`;
+  const sc=SLV_COLORS[slvCI], bc=BAG_COLORS[bagCI];
+  document.getElementById('pi-name').textContent=`ColdCore ${v.name}`;
+  document.getElementById('pi-dims').innerHTML=`${v.ext} mm &nbsp;·&nbsp; ${v.vol} &nbsp;·&nbsp; up to ${v.pay}`;
+  const chips=[{l:'Box',on:true},{l:'Ice packs',on:aIce},{l:'Outer',on:aOuter},{l:`Sleeve · ${sc.name}`,on:aSleeve},{l:`Bag · ${bc.name}`,on:aBag}];
+  document.getElementById('pi-addons').innerHTML=chips.map(c=>`<span class="addon-chip${c.on?' on':''}">${c.l}</span>`).join('');
+  let lines=[],sub=0;
+  const bt=boxTot(sz,q);sub+=bt;
+  lines.push({n:`ColdCore Box ${v.name}`,s:`${q} pcs · ${desc.tier} · ${f(bt/q)}/pc`,p:bt});
+  if(aIce){const t=v.ice*q;sub+=t;lines.push({n:`Ice pack set ${v.name}`,s:`${q} sets · ${f(v.ice)}/set`,p:t});}
+  if(aOuter){const t=v.out*q;sub+=t;lines.push({n:`Cardboard outer ${v.name}`,s:`${q} pcs · ${f(v.out)}/pc`,p:t});}
+  if(aSleeve){
+    if(q>=50){const t=slvPc*q;sub+=t;lines.push({n:`Sleeve ${v.name} · ${sc.name} · ${st==='fc'?'full colour':'1-colour'}`,s:`${q} pcs · ${f(slvPc)}/pc`,p:t});}
+    else lines.push({n:`Sleeve ${v.name}`,s:'⚠ min 50 pcs — not included',p:0,w:true});
+  }
+  if(aBag){
+    let badd=0,pl='plain';
+    if(bp==='sp'&&q>=10){badd=v.bsp;pl='screen print';}
+    else if(bp==='em'&&q>=20){badd=v.bem;pl='embroidery';}
+    else if(bp==='st'&&q>=10){badd=v.bst;pl='sticker/patch';}
+    else if(bp!=='plain')pl='plain (MOQ not met)';
+    const bu=v.bag+badd,t=bu*q;sub+=t;
+    const cn=bc.hex==='custom'?' · custom Pantone (50 min)':'';
+    lines.push({n:`ColdCarry Bag ${v.name} · ${bc.name}${cn}${pl!=='plain'?' · '+pl:''}`,s:`${q} pcs · ${f(v.bag)}${badd>0?' + '+f(badd)+' personalisation':''} = ${f(bu)}/pc`,p:t});
+  }
+  const vat=sub*0.20,grand=sub+vat;
+  document.getElementById('rLines').innerHTML=lines.map(l=>`<div class="r-line"><div style="flex:1"><div class="r-lname">${l.n}</div><div class="r-lsub${l.w?' moq-warn':''}">${l.s}</div></div><div class="r-lp">${l.p>0?f(l.p):'—'}</div></div>`).join('');
+  document.getElementById('rSub').textContent=f(sub);
+  document.getElementById('rVat').textContent=f(vat);
+  document.getElementById('rGrand').textContent=f(grand);
+  document.getElementById('mQty').textContent=q;
+  document.getElementById('mTier').textContent=desc.tier;
+  document.getElementById('mCpu').textContent=f(bt/q);
+  document.getElementById('mAll').textContent=f(sub/q);
+}
+if(document.getElementById('sizeGrid')){
+  buildSizeGrid();
+  buildSwatches(SLV_COLORS,'sleeveSwatches','sleeveColorName',slvCI,i=>{slvCI=i;calc();});
+  buildSwatches(BAG_COLORS,'bagSwatches','bagColorName',bagCI,i=>{bagCI=i;calc();});
+  onQtyInput();
+  startMainAnim();
+}
 function submitLead(){
   const n=document.getElementById('f_name').value.trim(), c=document.getElementById('f_contact').value.trim();
   if(!n||!c){alert('Please enter your name and contact');return;}
