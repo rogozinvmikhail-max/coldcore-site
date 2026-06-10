@@ -48,6 +48,8 @@
 <div class="wordmark"><i></i>ColdCore</div>
 <a href="#try" class="cta-top">Try ColdCore</a>
 <canvas id="scene"></canvas>
+<div style="position:fixed;left:0;right:0;bottom:0;height:34vh;z-index:1;background:linear-gradient(to top,#06151e 22%,rgba(6,21,30,.4) 60%,rgba(6,21,30,0));pointer-events:none"></div>
+<div style="position:fixed;left:0;right:0;top:0;height:14vh;z-index:1;background:linear-gradient(to bottom,rgba(6,21,30,.7),rgba(6,21,30,0));pointer-events:none"></div>
 <div class="loader" id="loader">loading…</div>
 <div class="hint" id="hint">scroll ↓</div>
 
@@ -139,6 +141,8 @@ const models=[]; let anyLoaded=false;
 FILES.forEach((f,i)=>{
   new THREE.GLTFLoader().load(f,g=>{
     const o=g.scene;
+    // спрятать плоскую широкую землю/тень из TRELLIS-скана
+    o.traverse(m=>{ if(m.isMesh){ const bb=new THREE.Box3().setFromObject(m); const sz=bb.getSize(new THREE.Vector3()); if(sz.y < Math.max(sz.x,sz.z)*0.06) m.visible=false; if(m.material){m.material.envMapIntensity=0.6;} } });
     const box=new THREE.Box3().setFromObject(o); const s=box.getSize(new THREE.Vector3()); const c=box.getCenter(new THREE.Vector3());
     o.position.sub(c); const k=2.5/Math.max(s.x,s.y,s.z); o.scale.setScalar(k); o.visible=(i===0);
     pivot.add(o); models[i]=o;
