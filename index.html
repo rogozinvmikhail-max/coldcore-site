@@ -115,13 +115,17 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 const canvas=document.getElementById('scene');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.15;
 const scene=new THREE.Scene();
+// студийное окружение для отражений (премиум-вид)
+try{ const pmrem=new THREE.PMREMGenerator(renderer); scene.environment=pmrem.fromScene(new THREE.RoomEnvironment(renderer),0.04).texture; }catch(e){}
 const camera=new THREE.PerspectiveCamera(36,1,0.01,100);
 scene.add(new THREE.AmbientLight(0xdfeef8,1.0));
 const key=new THREE.DirectionalLight(0xffffff,1.25); key.position.set(4,8,6); scene.add(key);
@@ -136,7 +140,7 @@ const dust=new THREE.Points(PG,new THREE.PointsMaterial({color:0x4fc3f0,size:0.0
 scene.add(dust);
 
 const pivot=new THREE.Group(); scene.add(pivot);
-const FILES=['box6.glb'];
+const FILES=['box6_clean.glb'];
 const models=[]; let anyLoaded=false;
 FILES.forEach((f,i)=>{
   new THREE.GLTFLoader().load(f,g=>{
