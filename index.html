@@ -63,6 +63,10 @@
   .reveal-cap b{display:block;color:#fff;font-size:clamp(26px,5vw,46px);font-weight:800;letter-spacing:-.5px}
   .reveal-cap span{color:var(--steel);font-size:clamp(14px,2.4vw,17px);font-weight:500;display:block;margin-top:8px}
   .reveal-eyebrow{position:absolute;top:13%;left:0;right:0;text-align:center;color:var(--glacier);text-transform:uppercase;letter-spacing:2.5px;font-size:12px;font-weight:700}
+  /* fly-in при скролле */
+  .fly{opacity:0;transform:translateY(46px) scale(.98);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+  .fly.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.fly{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body>
@@ -104,12 +108,12 @@
   <h2>Insulated boxes</h2>
   <p class="lead">Six sizes of high-density EPS boxes. Choose by internal volume and payload.</p>
   <div class="grid">
-    <div class="pcard"><img src="img/gem1.jpg" alt="ColdCore XS"><div class="body"><div class="nm">ColdCore XS</div><div class="meta">1.4 L · up to 1 kg</div><div class="pr">£0.80 <span class="per">/ box</span></div><div class="vol">Pack of 32 £25 · pallet £600</div></div></div>
-    <div class="pcard"><img src="img/gem2.jpg" alt="ColdCore S"><div class="body"><div class="nm">ColdCore S</div><div class="meta">2.4 L · up to 2 kg</div><div class="pr">£0.95 <span class="per">/ box</span></div><div class="vol">Pack of 20 £18.50 · pallet £439</div></div></div>
-    <div class="pcard"><img src="img/gem3.jpg" alt="ColdCore M"><div class="body"><div class="nm">ColdCore M</div><div class="meta">3.64 L · up to 3 kg</div><div class="pr">£1.60 <span class="per">/ box</span></div><div class="vol">Pack of 10 £15.50 · pallet £450</div></div></div>
-    <div class="pcard"><img src="img/gem4.jpg" alt="ColdCore L"><div class="body"><div class="nm">ColdCore L</div><div class="meta">5.6 L · up to 5 kg</div><div class="pr">£1.65 <span class="per">/ box</span></div><div class="vol">Pack of 10 £16 · pallet £348</div></div></div>
-    <div class="pcard"><img src="img/gem5.jpg" alt="ColdCore XL"><div class="body"><div class="nm">ColdCore XL</div><div class="meta">7.28 L · up to 7 kg</div><div class="pr">£1.75 <span class="per">/ box</span></div><div class="vol">Pack of 8 £13.80 · pallet £272</div></div></div>
-    <div class="pcard"><img src="img/gem6.jpg" alt="ColdCore XXL"><div class="body"><div class="nm">ColdCore XXL</div><div class="meta">13.99 L · up to 12 kg</div><div class="pr">£3.95 <span class="per">/ box</span></div><div class="vol">Pack of 4 £15 · pallet £296.80</div></div></div>
+    <div class="pcard"><img src="img/gem1.jpg" alt="ColdCore XS"><div class="body"><div class="nm">ColdCore XS</div><div class="meta">183×128×114 mm · 1.4 L · up to 1 kg</div><div class="pr">£0.80 <span class="per">/ box</span></div><div class="vol">Pack of 32 £25 · pallet £600</div></div></div>
+    <div class="pcard"><img src="img/gem2.jpg" alt="ColdCore S"><div class="body"><div class="nm">ColdCore S</div><div class="meta">230×150×124 mm · 2.4 L · up to 2 kg</div><div class="pr">£0.95 <span class="per">/ box</span></div><div class="vol">Pack of 20 £18.50 · pallet £439</div></div></div>
+    <div class="pcard"><img src="img/gem3.jpg" alt="ColdCore M"><div class="body"><div class="nm">ColdCore M</div><div class="meta">260×180×120 mm · 3.64 L · up to 3 kg</div><div class="pr">£1.60 <span class="per">/ box</span></div><div class="vol">Pack of 10 £15.50 · pallet £450</div></div></div>
+    <div class="pcard"><img src="img/gem4.jpg" alt="ColdCore L"><div class="body"><div class="nm">ColdCore L</div><div class="meta">310×230×125 mm · 5.6 L · up to 5 kg</div><div class="pr">£1.65 <span class="per">/ box</span></div><div class="vol">Pack of 10 £16 · pallet £348</div></div></div>
+    <div class="pcard"><img src="img/gem5.jpg" alt="ColdCore XL"><div class="body"><div class="nm">ColdCore XL</div><div class="meta">310×230×155 mm · 7.28 L · up to 7 kg</div><div class="pr">£1.75 <span class="per">/ box</span></div><div class="vol">Pack of 8 £13.80 · pallet £272</div></div></div>
+    <div class="pcard"><img src="img/gem6.jpg" alt="ColdCore XXL"><div class="body"><div class="nm">ColdCore XXL</div><div class="meta">400×300×160 mm · 13.99 L · up to 12 kg</div><div class="pr">£3.95 <span class="per">/ box</span></div><div class="vol">Pack of 4 £15 · pallet £296.80</div></div></div>
   </div>
   <p class="note">Payload capacity is indicative and depends on product density, packaging configuration, coolant packs and transport requirements.</p>
 
@@ -178,6 +182,13 @@ const SLIDES=[
     setTimeout(()=>{ H.textContent=SLIDES[si].h; H.style.opacity=1; }, 450);
   }
   setInterval(advance, 4500);
+})();
+// fly-in: элементы влетают при появлении в кадре
+(function(){
+  const els=document.querySelectorAll('.wrap h2, .wrap .lead, .pcard, .reveal-cap, .formsec .card, .wrap [style*="border:1px solid"]');
+  els.forEach((e,i)=>{ e.classList.add('fly'); e.style.transitionDelay=((i%6)*0.06)+'s'; });
+  const io=new IntersectionObserver((ents)=>{ents.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target);} });},{threshold:0.12});
+  document.querySelectorAll('.fly').forEach(e=>io.observe(e));
 })();
 // scroll-scrub: коробка открывается по мере прокрутки
 (function(){
