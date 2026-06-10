@@ -126,6 +126,13 @@ const key=new THREE.DirectionalLight(0xffffff,1.25); key.position.set(4,8,6); sc
 const rim=new THREE.DirectionalLight(0x8fc6ee,0.6); rim.position.set(-5,3,-4); scene.add(rim);
 const fill=new THREE.DirectionalLight(0xffffff,0.4); fill.position.set(0,-3,4); scene.add(fill);
 
+// поле частиц для глубины и премиум-вайба
+const PG=new THREE.BufferGeometry(); const PN=700, ppos=new Float32Array(PN*3);
+for(let i=0;i<PN;i++){ppos[i*3]=(Math.random()-0.5)*46; ppos[i*3+1]=(Math.random()-0.5)*30; ppos[i*3+2]=(Math.random()-0.5)*34-6;}
+PG.setAttribute('position',new THREE.BufferAttribute(ppos,3));
+const dust=new THREE.Points(PG,new THREE.PointsMaterial({color:0x4fc3f0,size:0.07,transparent:true,opacity:0.45,depthWrite:false}));
+scene.add(dust);
+
 const pivot=new THREE.Group(); scene.add(pivot);
 const FILES=['box6.glb'];
 const models=[]; let anyLoaded=false;
@@ -145,6 +152,7 @@ let P=0; window.__setP=v=>P=v;
 function frame(){
   const t=performance.now()*0.00025;
   if(models.length){const idx=Math.min(models.length-1,Math.floor(P*models.length*0.999));models.forEach((m,i)=>{if(m)m.visible=(i===idx);});}
+  dust.rotation.y = t*0.5; dust.rotation.x = t*0.18;
   pivot.rotation.y = t + P*Math.PI*2.4;
   pivot.rotation.x = -0.15 + P*0.5;
   const s4=S((P-0.72)/0.18);
