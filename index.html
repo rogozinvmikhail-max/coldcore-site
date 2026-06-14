@@ -97,7 +97,7 @@
   .fly.in{opacity:1;transform:none}
   @media (prefers-reduced-motion:reduce){.fly{opacity:1;transform:none;transition:none}}
   /* ===== калькулятор заказа (v5, тёмная тема) ===== */
-  #order{--color-background-primary:#0d2734;--color-background-secondary:#0a2230;--color-text-primary:#eaf6fc;--color-text-secondary:#9fc4d6;--color-text-tertiary:#6b8595;--color-border-secondary:rgba(159,196,214,.28);--color-border-tertiary:rgba(61,180,232,.16);--border-radius-md:10px;--border-radius-lg:16px}
+  #order,#cartWrap{--color-background-primary:#0d2734;--color-background-secondary:#0a2230;--color-text-primary:#eaf6fc;--color-text-secondary:#9fc4d6;--color-text-tertiary:#6b8595;--color-border-secondary:rgba(159,196,214,.28);--color-border-tertiary:rgba(61,180,232,.16);--border-radius-md:10px;--border-radius-lg:16px}
   #order .cc-wrap{padding:.5rem 0 0}
   #order .layout{display:grid;grid-template-columns:240px 1fr;gap:22px;align-items:start}
   #order .left-col{display:flex;flex-direction:column;gap:12px}
@@ -156,13 +156,35 @@
   #order .met-l{font-size:9.5px;color:var(--color-text-secondary);margin-bottom:2px}
   #order .met-v{font-size:14px;font-weight:700;color:var(--color-text-primary)}
   @media(max-width:720px){#order .layout{grid-template-columns:1fr}#order .metrics{grid-template-columns:1fr 1fr}}
-  /* checkout */
-  #order .co-row{display:flex;gap:8px;margin-top:.5rem;flex-wrap:wrap}
-  #order .co-input{flex:1;min-width:140px;background:var(--color-background-primary);border:1px solid var(--color-border-secondary);color:var(--color-text-primary);border-radius:var(--border-radius-md);padding:9px 13px;font-size:13px;outline:none}
-  #order .co-input:focus{border-color:#3db4e8}
-  #order .co-post{max-width:130px;flex:none}
-  #order .co-btn{width:100%;margin-top:.65rem;padding:13px;font-size:15px;border-radius:var(--border-radius-lg)}
-  #order .co-note{font-size:11px;color:var(--color-text-tertiary);margin-top:6px;text-align:center}
+  /* checkout (global so reusable in cart section too) */
+  .co-row{display:flex;gap:8px;margin-top:.5rem;flex-wrap:wrap}
+  .co-input{flex:1;min-width:140px;background:var(--color-background-primary);border:1px solid var(--color-border-secondary);color:var(--color-text-primary);border-radius:var(--border-radius-md);padding:9px 13px;font-size:13px;outline:none}
+  .co-input:focus{border-color:#3db4e8}
+  .co-post{max-width:130px;flex:none}
+  .co-btn{width:100%;margin-top:.65rem;padding:13px;font-size:15px;border-radius:var(--border-radius-lg)}
+  .co-note{font-size:11px;color:var(--color-text-tertiary);margin-top:6px;text-align:center}
+  /* cart section */
+  #cartWrap{padding-top:0;padding-bottom:32px}
+  #cartWrap .cart-card{background:var(--color-background-primary);border:1px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.4rem 1.5rem;max-width:680px;margin:0 auto}
+  #cartWrap .cart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+  .cart-count-chip{background:rgba(61,180,232,.15);border:1px solid rgba(61,180,232,.3);color:#3db4e8;font-size:11px;font-weight:700;padding:2px 9px;border-radius:12px;vertical-align:middle;margin-left:8px}
+  .cart-clear{background:none;border:none;font-size:12px;color:#6b8595;cursor:pointer;text-decoration:underline;padding:0}
+  .cart-clear:hover{color:#ff9b9b}
+  .cart-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(61,180,232,.12)}
+  .cart-item:last-child{border-bottom:none}
+  .ci-info{flex:1;min-width:0}
+  .ci-name{font-size:13.5px;font-weight:700;color:#eaf6fc}
+  .ci-detail{font-size:11px;color:#9fc4d6;margin-top:2px;line-height:1.5}
+  .ci-ship{font-size:10.5px;color:#6b8595;margin-top:2px}
+  .ci-price{font-weight:700;color:#3db4e8;font-size:13.5px;white-space:nowrap;padding-top:2px}
+  .ci-remove{background:none;border:none;color:#6b8595;cursor:pointer;font-size:15px;padding:0 4px;flex-shrink:0;transition:color .15s}
+  .ci-remove:hover{color:#ff9b9b}
+  .cs-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:#9fc4d6}
+  .cs-total{display:flex;justify-content:space-between;padding:8px 0 2px;font-size:16px;font-weight:800;border-top:1px solid rgba(61,180,232,.2);color:#5fc6ef;margin-top:4px}
+  #cartWrap .divider{border:none;border-top:1px solid var(--color-border-tertiary);margin:.85rem 0}
+  #cartWrap .sec{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin:1rem 0 .4rem}
+  .cart-add-btn{display:block;width:100%;margin-top:.7rem;padding:9px 14px;font-size:12.5px;font-weight:600;background:rgba(61,180,232,.07);border:1px solid rgba(61,180,232,.28);color:#3db4e8;border-radius:10px;cursor:pointer;transition:background .15s,border-color .15s;text-align:center}
+  .cart-add-btn:hover{background:rgba(61,180,232,.16);border-color:rgba(61,180,232,.5)}
   /* shipping selector */
   #order .ship-opts{display:flex;gap:7px;margin-top:.6rem;flex-wrap:wrap}
   #order .ship-opt{flex:1;min-width:120px;background:var(--color-background-secondary);border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 11px;cursor:pointer;transition:border-color .15s,background .15s;user-select:none}
@@ -337,10 +359,33 @@
       </div>
       <button class="btn co-btn" id="orderBtn" onclick="startCheckout()">Order &amp; Pay</button>
       <p class="co-note">Secure checkout · Powered by Stripe</p>
+      <button class="cart-add-btn" id="cartAddBtn" onclick="addToCart()">＋ Add this size to a multi-size order</button>
     </div>
   </div></div>
   <p class="note">All prices ex-VAT. Payload is indicative and depends on product density, packaging and coolant configuration.</p>
+</section>
 
+<!-- CART: multi-size order -->
+<section class="wrap" id="cartWrap" style="display:none">
+  <div class="cart-card">
+    <div class="cart-hdr">
+      <span style="font-size:14px;font-weight:700;color:#eaf6fc">Order summary<span id="cartCount" class="cart-count-chip"></span></span>
+      <button class="cart-clear" onclick="clearCart()">Clear all</button>
+    </div>
+    <div id="cartItems"></div>
+    <div id="cartSummary" style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(61,180,232,.16)"></div>
+    <div class="divider"></div>
+    <div class="sec">Contact &amp; delivery</div>
+    <div class="co-row">
+      <input type="text" id="cartContact" class="co-input" placeholder="Email or phone">
+      <input type="text" id="cartPost" class="co-input co-post" placeholder="Post code">
+    </div>
+    <button class="btn co-btn" id="cartOrderBtn" onclick="startCartCheckout()">Order &amp; Pay</button>
+    <p class="co-note">Secure checkout · Powered by Stripe</p>
+  </div>
+</section>
+
+<section class="wrap" style="padding-top:0">
   <h2 style="margin-top:60px">Packaging &amp; accessories</h2>
   <p class="lead">Everything to pack and ship cold, from one supplier.</p>
   <div class="grid">
@@ -592,6 +637,7 @@ function selectShipping(m){
   shipMethod=m;
   ['std','exp'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('on',k===m));
   calc();
+  if(cart&&cart.length)renderCart();
 }
 function calc(){
   const v=SIZES[sz]; const q=chosenQty;
@@ -723,8 +769,114 @@ async function startCheckout(){
     const sub=encodeURIComponent('ColdCore order: '+v.name+' × '+q);
     const body=encodeURIComponent(`Contact: ${contact}\nPost code: ${postcode}\nOrder: ColdCore ${v.name} × ${q}\nTotal: £${grand.toFixed(2)}\n\n${desc}`);
     window.location.href=`mailto:order@coldcore.uk?subject=${sub}&body=${body}`;
+  }finally{
+    btn.disabled=false;btn.textContent='Order & Pay';
   }
-  btn.disabled=false;btn.textContent='Order & Pay';
+}
+/* ---- Multi-size cart ---- */
+let cart=[];
+function addToCart(){
+  const v=SIZES[sz]; const q=chosenQty;
+  const aIce=document.getElementById('aIce').checked;
+  const aOuter=document.getElementById('aOuter').checked;
+  const aSleeve=document.getElementById('aSleeve').checked;
+  const st=document.getElementById('sleeveType').value;
+  const aBag=document.getElementById('aBag').checked;
+  const bp=document.getElementById('bagPers').value;
+  let sub=boxTot(sz,q);
+  const addons=[];
+  if(aIce){sub+=v.ice*q;addons.push('ice packs');}
+  if(aOuter){sub+=v.out*q;addons.push('outer box');}
+  if(aSleeve&&q>=50){const slvPc=st==='fc'?v.slvf:v.slv1;sub+=slvPc*q;addons.push('sleeve');}
+  if(aBag){
+    let badd=0;
+    if(bp==='sp'&&q>=10)badd=v.bsp;
+    else if(bp==='em'&&q>=20)badd=v.bem;
+    else if(bp==='st'&&q>=10)badd=v.bst;
+    sub+=(v.bag+badd)*q;addons.push('bag');
+  }
+  const dq=describeQty(sz,q);
+  const pallets=Math.floor(q/v.pal),rem=q%v.pal;
+  const packs=Math.floor(rem/v.pk),singles=rem%v.pk;
+  const parcelCount=packs+(singles>0?1:0);
+  const item={sz,q,
+    name:`ColdCore ${v.name} × ${q}`,
+    detail:`${dq.text}${addons.length?' · '+addons.join(', '):''}`,
+    sub,pallets,parcelCount};
+  const idx=cart.findIndex(c=>c.sz===sz);
+  if(idx>=0)cart.splice(idx,1,item); else cart.push(item);
+  renderCart();
+  document.getElementById('cartWrap').style.display='';
+  document.getElementById('cartWrap').scrollIntoView({behavior:'smooth',block:'start'});
+  const btn=document.getElementById('cartAddBtn');
+  const prev=btn.textContent;
+  btn.textContent='Added ✓';btn.style.background='rgba(61,180,232,.22)';
+  setTimeout(()=>{btn.textContent=prev;btn.style.background='';},1500);
+}
+function removeFromCart(i){
+  cart.splice(i,1);
+  if(!cart.length){document.getElementById('cartWrap').style.display='none';}
+  else renderCart();
+}
+function clearCart(){
+  cart=[];
+  document.getElementById('cartWrap').style.display='none';
+}
+function renderCart(){
+  if(!cart.length)return;
+  const rate=shipMethod==='exp'?9.95:4.95;
+  let totalSub=0,totalShip=0;
+  const itemsHtml=cart.map((item,i)=>{
+    const shipEx=item.pallets*80+item.parcelCount*rate;
+    totalSub+=item.sub; totalShip+=shipEx;
+    const parts=[];
+    if(item.pallets>0)parts.push(`${item.pallets} pallet${item.pallets>1?'s':''}×£80`);
+    if(item.parcelCount>0)parts.push(`${item.parcelCount} parcel${item.parcelCount>1?'s':''}×£${rate.toFixed(2)}`);
+    return `<div class="cart-item">
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-detail">${item.detail}</div>
+        <div class="ci-ship">Delivery: ${parts.join(' + ')||'—'}</div>
+      </div>
+      <div class="ci-price">${f(item.sub)}</div>
+      <button class="ci-remove" onclick="removeFromCart(${i})">✕</button>
+    </div>`;
+  }).join('');
+  document.getElementById('cartItems').innerHTML=itemsHtml;
+  document.getElementById('cartCount').textContent=`${cart.length} size${cart.length>1?'s':''}`;
+  const vat=(totalSub+totalShip)*0.20, grand=totalSub+totalShip+vat;
+  document.getElementById('cartSummary').innerHTML=
+    `<div class="cs-row"><span>Products (ex-VAT)</span><span>${f(totalSub)}</span></div>`+
+    `<div class="cs-row"><span>Delivery (ex-VAT)</span><span>${f(totalShip)}</span></div>`+
+    `<div class="cs-row"><span>VAT 20%</span><span>${f(vat)}</span></div>`+
+    `<div class="cs-total"><span>Total inc-VAT</span><span>${f(grand)}</span></div>`;
+}
+async function startCartCheckout(){
+  const contact=document.getElementById('cartContact').value.trim();
+  const postcode=document.getElementById('cartPost').value.trim();
+  if(!contact){alert('Please enter your email or phone');return;}
+  if(!postcode){alert('Please enter your post code');return;}
+  if(!cart.length){alert('No items in order');return;}
+  const btn=document.getElementById('cartOrderBtn');
+  btn.disabled=true;btn.textContent='Processing…';
+  const rate=shipMethod==='exp'?9.95:4.95;
+  let totalSub=0,totalShip=0;
+  const lines=cart.map(item=>{const se=item.pallets*80+item.parcelCount*rate;totalSub+=item.sub;totalShip+=se;return item.name+': '+item.detail;});
+  const grand=(totalSub+totalShip)*1.20;
+  const payload={contact,postcode,shipping_method:shipMethod,multi_size:true,line_count:cart.length,
+    description:lines.join(' | ').substring(0,500),amount_pence:Math.round(grand*100)};
+  try{
+    const r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const d=await r.json();
+    if(d.url){window.location.href=d.url;return;}
+    throw new Error(d.error||'No URL');
+  }catch(e){
+    const sub=encodeURIComponent(`ColdCore order (${cart.length} sizes)`);
+    const body=encodeURIComponent(`Contact: ${contact}\nPost code: ${postcode}\n\n${lines.join('\n')}\n\nTotal: £${grand.toFixed(2)}`);
+    window.location.href=`mailto:order@coldcore.uk?subject=${sub}&body=${body}`;
+  }finally{
+    btn.disabled=false;btn.textContent='Order & Pay';
+  }
 }
 /* ---- Policies ---- */
 const POLICIES={
