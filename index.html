@@ -205,7 +205,7 @@
   <div class="cc-wrap"><div class="layout">
     <div class="left-col">
       <div class="preview-card">
-        <canvas id="mainCanvas" width="190" height="190"></canvas>
+        <img id="mainImg" src="" alt="ColdCore box" style="width:190px;height:190px;object-fit:contain;display:block">
         <div class="pi-name" id="pi-name">ColdCore M</div>
         <div class="pi-dims" id="pi-dims"></div>
         <div class="pi-addons" id="pi-addons"></div>
@@ -420,77 +420,9 @@ const SLV_COLORS=[
   {name:'Teal',hex:'#1D9E75',brd:'#0e5a42'},{name:'Custom',hex:'custom',brd:'#999'},
 ];
 const BOX_IMG={xs:'xsc',s:'sc',m:'mc',l:'lc',xl:'xlc',xxl:'xxlc'};
-let sz='m', chosenQty=300, bagCI=0, slvCI=0, animFrame=null, thumbFrames={};
+let sz='m', chosenQty=300, bagCI=0, slvCI=0;
 const f=n=>'£'+n.toFixed(2);
-function drawBoxToCanvas(canvas, vKey, angle, opts={}){
-  const ctx=canvas.getContext('2d');
-  const W=canvas.width, H=canvas.height;
-  ctx.clearRect(0,0,W,H);
-  const v=SIZES[vKey];
-  const scale=opts.scale||55;
-  const bw=v.w*scale, bh=v.h*scale, bd=v.d*scale;
-  const cx=W/2, cy=H/2+(opts.cy||8);
-  const cos=Math.cos(angle)*0.55, sinA=Math.sin(angle)*0.55, iso=0.4;
-  const proj=(x,y,z)=>({px:cx+x*cos-z*sinA, py:cy-y+(x*sinA+z*cos)*iso});
-  const lw=opts.lw||0.9;
-  const face=(pts,fill,stroke)=>{
-    ctx.beginPath();ctx.moveTo(pts[0].px,pts[0].py);
-    for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i].px,pts[i].py);
-    ctx.closePath();ctx.fillStyle=fill;ctx.fill();
-    if(stroke!==false){ctx.strokeStyle=stroke||'#a09890';ctx.lineWidth=lw;ctx.stroke();}
-  };
-  const hw=bw/2, hd=bd/2;
-  // Solid closed box: bottom, front, right side, top
-  face([proj(-hw,0,-hd),proj(hw,0,-hd),proj(hw,0,hd),proj(-hw,0,hd)],'#dedad3');
-  face([proj(-hw,0,hd),proj(hw,0,hd),proj(hw,bh,hd),proj(-hw,bh,hd)],'#c9c5be');
-  face([proj(hw,0,-hd),proj(hw,0,hd),proj(hw,bh,hd),proj(hw,bh,-hd)],'#dedad3');
-  face([proj(-hw,bh,-hd),proj(hw,bh,-hd),proj(hw,bh,hd),proj(-hw,bh,hd)],'#edeae4');
-  // Subtle lid seam line
-  ctx.strokeStyle='#9a9690';ctx.lineWidth=lw*1.2;ctx.beginPath();
-  const ls=proj(-hw,bh*0.7,hd),le=proj(hw,bh*0.7,hd),lr=proj(hw,bh*0.7,-hd);
-  ctx.moveTo(ls.px,ls.py);ctx.lineTo(le.px,le.py);ctx.lineTo(lr.px,lr.py);ctx.stroke();
 
-  // Sleeve: wraps the full front face (боковинки остаются цветом коробки)
-  if(opts.sleeve){
-    const sc=SLV_COLORS[slvCI], sh=sc.hex==='custom'?'#7F77DD':sc.hex;
-    face([proj(-hw,bh*0.04,hd),proj(hw,bh*0.04,hd),proj(hw,bh*0.96,hd),proj(-hw,bh*0.96,hd)],sh,sc.brd||sh);
-    // Sleeve wraps top too (visible from above)
-    face([proj(-hw,bh,-hd*0.8),proj(hw,bh,-hd*0.8),proj(hw,bh,hd),proj(-hw,bh,hd)],sh,sc.brd||sh);
-  }
-
-  // Outer box: solid semi-transparent cardboard around the inner box
-  if(opts.outer){
-    const off=opts.offPx||5;
-    const ow=hw+off, od=hd+off, oh=bh+off*0.7;
-    face([proj(-ow,-off*0.5,od),proj(ow,-off*0.5,od),proj(ow,oh,od),proj(-ow,oh,od)],'rgba(200,168,106,0.45)','#c8a86a');
-    face([proj(ow,-off*0.5,-od),proj(ow,-off*0.5,od),proj(ow,oh,od),proj(ow,oh,-od)],'rgba(200,168,106,0.35)','#c8a86a');
-    face([proj(-ow,oh,-od),proj(ow,oh,-od),proj(ow,oh,od),proj(-ow,oh,od)],'rgba(200,168,106,0.55)','#c8a86a');
-    // Handle cutout on side face
-    ctx.strokeStyle='#a07040';ctx.lineWidth=lw*1.2;
-    const hcx=(proj(ow,-off*0.5,-od).px+proj(ow,oh,-od).px)/2;
-    const hcy=(proj(ow,-off*0.5,-od).py+proj(ow,oh,-od).py)/2 - 6;
-    ctx.beginPath();ctx.arc(hcx, hcy, 8, Math.PI, 0);ctx.stroke();
-  }
-
-  // Bag: two loop handles arching above the box
-  if(opts.bag){
-    const bc=BAG_COLORS[bagCI], bh2=bc.hex==='custom'?'#7F77DD':bc.hex;
-    const hColor=bh2==='#F5F0E8'?'#8B9E7A':bh2;
-    const topY=bh+3;
-    ctx.strokeStyle=hColor;ctx.lineWidth=lw*2.6;ctx.lineCap='round';ctx.setLineDash([]);
-    // Left handle loop
-    const la=proj(-hw*0.42,topY,hd*0.2), lb=proj(-hw*0.42,topY+24,hd*0.2);
-    ctx.beginPath();ctx.moveTo(la.px,la.py);
-    ctx.bezierCurveTo(la.px-13,la.py-8,lb.px-13,lb.py+4,lb.px,lb.py);ctx.stroke();
-    // Right handle loop
-    const ra=proj(hw*0.42,topY,hd*0.2), rb=proj(hw*0.42,topY+24,hd*0.2);
-    ctx.beginPath();ctx.moveTo(ra.px,ra.py);
-    ctx.bezierCurveTo(ra.px+13,ra.py-8,rb.px+13,rb.py+4,rb.px,rb.py);ctx.stroke();
-    // Connecting bar
-    ctx.lineWidth=lw*1.8;
-    ctx.beginPath();ctx.moveTo(lb.px,lb.py);ctx.lineTo(rb.px,rb.py);ctx.stroke();
-  }
-}
 function buildSizeGrid(){
   const g=document.getElementById('sizeGrid');
   g.innerHTML='';
@@ -559,21 +491,7 @@ function onQtyInput(){
   });
   calc();
 }
-function startMainAnim(){
-  if(animFrame)cancelAnimationFrame(animFrame);
-  const canvas=document.getElementById('mainCanvas');
-  let t0=null;
-  const hasSleeve=()=>document.getElementById('aSleeve').checked;
-  const hasOuter=()=>document.getElementById('aOuter').checked;
-  const hasBag=()=>document.getElementById('aBag').checked;
-  const frame=ts=>{
-    if(!t0)t0=ts;
-    const angle=(ts-t0)/1000*0.7;
-    drawBoxToCanvas(canvas,sz,angle,{scale:68,cy:10,lw:1.0,sleeve:hasSleeve(),outer:hasOuter(),bag:hasBag(),offPx:6});
-    animFrame=requestAnimationFrame(frame);
-  };
-  animFrame=requestAnimationFrame(frame);
-}
+
 function calc(){
   const v=SIZES[sz]; const q=chosenQty;
   const aIce=document.getElementById('aIce').checked;
@@ -597,6 +515,7 @@ function calc(){
   const desc=describeQty(sz,q);
   document.getElementById('qtyResult').textContent=`${q} pcs = ${desc.text} · avg ${f(desc.cpu)}/pc`;
   const sc=SLV_COLORS[slvCI], bc=BAG_COLORS[bagCI];
+  document.getElementById('mainImg').src='img/'+(BOX_IMG[sz]||sz+'c')+'.png';
   document.getElementById('pi-name').textContent=`ColdCore ${v.name}`;
   document.getElementById('pi-dims').innerHTML=`${v.ext} mm &nbsp;·&nbsp; ${v.vol} &nbsp;·&nbsp; up to ${v.pay}`;
   const chips=[{l:'Box',on:true},{l:'Ice packs',on:aIce},{l:'Outer',on:aOuter},{l:`Sleeve · ${sc.name}`,on:aSleeve},{l:`Bag · ${bc.name}`,on:aBag}];
@@ -635,7 +554,6 @@ if(document.getElementById('sizeGrid')){
   buildSwatches(SLV_COLORS,'sleeveSwatches','sleeveColorName',slvCI,i=>{slvCI=i;calc();});
   buildSwatches(BAG_COLORS,'bagSwatches','bagColorName',bagCI,i=>{bagCI=i;calc();});
   onQtyInput();
-  startMainAnim();
 }
 /* 3x2 окошки товара (range) */
 (function(){
