@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ColdCore — Temperature-controlled shipping</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2306151e'/%3E%3Cpath d='M26 5H6v22h20' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M21 10h-9v12h9' fill='none' stroke='%233db4e8' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <meta name="description" content="ColdCore — insulated boxes and cold-chain packaging for food, seafood, pharma and diagnostics across the UK." />
 <style>
   :root{ --glacier:#3db4e8; --deep:#06151e; --steel:#9fc4d6; --ice:#eef7fc; }
@@ -12,7 +13,7 @@
   body{background:var(--deep);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   /* NAV */
   header{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:20px 26px}
-  .wordmark{font-weight:800;font-size:20px;letter-spacing:.3px;display:flex;align-items:center;gap:0;text-shadow:0 2px 10px rgba(0,0,0,.4)}
+  .wordmark{font-weight:900;font-size:24px;letter-spacing:-.3px;display:flex;align-items:center;gap:0;text-shadow:0 2px 10px rgba(0,0,0,.4)}
   .wordmark i{width:12px;height:12px;background:var(--glacier);border-radius:3px;display:inline-block}
   .cta-top{background:#fff;color:#06151e;font-weight:700;padding:10px 18px;border-radius:999px;text-decoration:none;font-size:14px}
   /* HERO */
@@ -49,7 +50,7 @@
   /* RANGE: 3x2 окошки товара */
   .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
   .rbox{background:#0d2734;border:1px solid rgba(61,180,232,.18);border-radius:20px;padding:22px 18px;color:#fff;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px}
-  .rbox .box-img{width:160px;height:116px;object-fit:contain;margin-bottom:4px}
+  .rbox .box-img{width:208px;height:151px;object-fit:contain;margin-bottom:4px}
   .rbox .bn{font-weight:800;font-size:21px}
   .rbox .bd{color:var(--steel);font-size:12.5px;line-height:1.6}
   .rbox .bp{margin-top:6px;font-weight:800;font-size:19px}
@@ -142,7 +143,7 @@
 <body>
 
 <header>
-  <div class="wordmark"><svg width="24" height="24" viewBox="0 0 28 28" style="margin-right:9px"><path d="M24 4 H4 V24 H24" fill="none" stroke="#fff" stroke-width="3"/><path d="M19 9 H10 V19 H19" fill="none" stroke="#3db4e8" stroke-width="3"/></svg><span>Cold</span><span style="color:#3db4e8">Core</span></div>
+  <div class="wordmark"><svg width="28" height="28" viewBox="0 0 28 28" style="margin-right:5px"><path d="M24 4 H4 V24 H24" fill="none" stroke="#fff" stroke-width="3.5"/><path d="M19 9 H10 V19 H19" fill="none" stroke="#3db4e8" stroke-width="3.5"/></svg><span>Cold</span><span style="color:#3db4e8">Core</span></div>
   <a href="#try" class="cta-top">Try ColdCore</a>
 </header>
 
@@ -202,7 +203,7 @@
       <div class="sec">Add-ons</div>
       <div>
         <div class="addon-row">
-          <input type="checkbox" id="aIce" onchange="calc()"><label for="aIce">Ice pack set</label><span class="ap" id="ice-price"></span>
+          <input type="checkbox" id="aIce" onchange="calc()"><label for="aIce">Ice packs &amp; filling set</label><span class="ap" id="ice-price"></span>
         </div>
         <div class="addon-row">
           <input type="checkbox" id="aOuter" onchange="calc()"><label for="aOuter">Corrugated outer</label><span class="ap" id="outer-price"></span>
@@ -247,10 +248,10 @@
   <h2 style="margin-top:60px">Packaging &amp; accessories</h2>
   <p class="lead">Everything to pack and ship cold, from one supplier.</p>
   <div class="grid">
-    <div class="pcard"><img src="img/cardboard.jpg" alt=""><div class="body"><div class="nm">Cardboard outers</div><div class="meta">Courier-ready outer boxes</div></div></div>
-    <div class="pcard"><img src="img/icepack.jpg" alt=""><div class="body"><div class="nm">Ice packs</div><div class="meta">Gel coolant packs</div></div></div>
-    <div class="pcard"><img src="img/foilbag.jpg" alt=""><div class="body"><div class="nm">Thermal foil bags</div><div class="meta">Insulated liners</div></div></div>
-    <div class="pcard"><img src="img/carrybag.jpg" alt=""><div class="body"><div class="nm">Branded carry bags</div><div class="meta">Reusable, your logo</div></div></div>
+    <div class="pcard"><img src="img/cartbox.png" alt=""><div class="body"><div class="nm">Cardboard outers</div><div class="meta">Courier-ready outer boxes</div></div></div>
+    <div class="pcard"><img src="img/ice.png" alt=""><div class="body"><div class="nm">Ice packs</div><div class="meta">Gel coolant and filling packs</div></div></div>
+    <div class="pcard"><img src="img/sleave.png" alt=""><div class="body"><div class="nm">Sleeves</div><div class="meta">Insulated liners</div></div></div>
+    <div class="pcard"><img src="img/bag.png" alt=""><div class="body"><div class="nm">Branded carry bags</div><div class="meta">Reusable, your logo</div></div></div>
   </div>
 </section>
 
@@ -426,15 +427,14 @@ function buildSizeGrid(){
   Object.entries(SIZES).forEach(([k,v])=>{
     const btn=document.createElement('button');
     btn.className='size-btn'+(k===sz?' active':'');
-    const c=document.createElement('canvas'); c.width=80;c.height=60; btn.appendChild(c);
+    const img=document.createElement('img');
+    img.src='img/'+(BOX_IMG[k]||k+'c')+'.png'; img.alt=v.name;
+    img.style.cssText='width:80px;height:60px;object-fit:contain';
+    btn.appendChild(img);
     const szEl=document.createElement('span'); szEl.className='sz'; szEl.textContent=v.name; btn.appendChild(szEl);
     const svEl=document.createElement('span'); svEl.className='sv'; svEl.textContent=v.vol; btn.appendChild(svEl);
     btn.onclick=()=>{sz=k;buildSizeGrid();onQtyInput();};
     g.appendChild(btn);
-    let thumbAngle=0.6;
-    if(thumbFrames[k])cancelAnimationFrame(thumbFrames[k]);
-    const animate=()=>{ thumbAngle+=0.008; drawBoxToCanvas(c,k,thumbAngle,{scale:28,cy:2,lw:0.5}); thumbFrames[k]=requestAnimationFrame(animate); };
-    animate();
   });
 }
 function buildSwatches(colors,containerId,nameId,selectedIdx,onSelect){
@@ -534,7 +534,7 @@ function calc(){
   let lines=[],sub=0;
   const bt=boxTot(sz,q);sub+=bt;
   lines.push({n:`ColdCore Box ${v.name}`,s:`${q} pcs · ${desc.tier} · ${f(bt/q)}/pc`,p:bt});
-  if(aIce){const t=v.ice*q;sub+=t;lines.push({n:`Ice pack set ${v.name}`,s:`${q} sets · ${f(v.ice)}/set`,p:t});}
+  if(aIce){const t=v.ice*q;sub+=t;lines.push({n:`Ice packs & filling set ${v.name}`,s:`${q} sets · ${f(v.ice)}/set`,p:t});}
   if(aOuter){const t=v.out*q;sub+=t;lines.push({n:`Cardboard outer ${v.name}`,s:`${q} pcs · ${f(v.out)}/pc`,p:t});}
   if(aSleeve){
     if(q>=50){const t=slvPc*q;sub+=t;lines.push({n:`Sleeve ${v.name} · ${sc.name} · ${st==='fc'?'full colour':'1-colour'}`,s:`${q} pcs · ${f(slvPc)}/pc`,p:t});}
