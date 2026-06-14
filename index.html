@@ -166,6 +166,7 @@
   #order .ship-opts{display:flex;gap:7px;margin-top:.6rem;flex-wrap:wrap}
   #order .ship-opt{flex:1;min-width:120px;background:var(--color-background-secondary);border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 11px;cursor:pointer;transition:border-color .15s,background .15s;user-select:none}
   #order .ship-opt.on{border-color:#3db4e8;background:rgba(61,180,232,.08)}
+  #order .ship-opt.disabled{opacity:.38;cursor:not-allowed;pointer-events:none}
   #order .ship-opt .sn{font-size:12px;font-weight:700;color:var(--color-text-primary)}
   #order .ship-opt .sd{font-size:10px;color:var(--color-text-tertiary);margin-top:1px;line-height:1.3}
   #order .ship-opt .sp{font-size:12px;font-weight:700;color:#3db4e8;margin-top:4px}
@@ -187,16 +188,15 @@
   .pmodal-body th,.pmodal-body td{text-align:left;padding:7px 10px;border:1px solid rgba(61,180,232,.15);font-size:12.5px}
   .pmodal-body th{color:#c8dfe8;font-weight:700;background:rgba(61,180,232,.06)}
   /* gallery lightbox */
-  .gbox{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .22s}
+  .gbox{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(3,12,20,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .22s}
   .gbox.open{opacity:1;pointer-events:all}
-  .gbox-close{position:fixed;top:18px;right:18px;background:rgba(255,255,255,.15);border:none;color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;z-index:201;transition:background .15s}
-  .gbox-close:hover{background:rgba(255,255,255,.3)}
-  .gbox-arr{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.13);border:none;color:#fff;width:52px;height:52px;border-radius:50%;cursor:pointer;font-size:28px;line-height:1;z-index:201;transition:background .15s}
+  .gbox-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.14);border:none;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:19px;line-height:1;transition:background .15s}
+  .gbox-close:hover{background:rgba(255,255,255,.28)}
+  .gbox-wrap{display:flex;align-items:center;gap:12px;max-width:min(94vw,780px);width:100%}
+  .gbox-arr{background:rgba(255,255,255,.13);border:none;color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:26px;line-height:1;flex-shrink:0;transition:background .15s}
   .gbox-arr:hover{background:rgba(255,255,255,.28)}
-  .gbox-arr.prev{left:18px}
-  .gbox-arr.next{right:18px}
-  .gbox-inner{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:min(78vw,660px);width:100%}
-  .gbox-img{width:100%;height:62vh;object-fit:contain;display:block;border-radius:14px}
+  .gbox-inner{display:flex;flex-direction:column;align-items:center;gap:10px;flex:1;min-width:0}
+  .gbox-img{width:100%;height:58vh;object-fit:contain;display:block;border-radius:12px;background:#e4f0f7}
   .gbox-title{font-size:15px;font-weight:700;color:#eaf6fc}
   .gbox-caption{font-size:13px;color:#9fc4d6;text-align:center;line-height:1.5;min-height:2em;max-width:520px}
   .gbox-dots{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
@@ -325,18 +325,18 @@
       <div class="ship-opts">
         <div class="ship-opt on" id="shipStd" onclick="selectShipping('std')">
           <div class="sn">Standard</div>
-          <div class="sd">Royal Mail 48 · 2–3 days</div>
-          <div class="sp">£5.94 inc VAT</div>
+          <div class="sd">Royal Mail 48 · per parcel · 2–3 days</div>
+          <div class="sp">£4.95 ex-VAT</div>
         </div>
         <div class="ship-opt" id="shipExp" onclick="selectShipping('exp')">
           <div class="sn">Express</div>
-          <div class="sd">Special Delivery · next day</div>
-          <div class="sp">£11.94 inc VAT</div>
+          <div class="sd">Special Delivery · per parcel · next day</div>
+          <div class="sp">£9.95 ex-VAT</div>
         </div>
         <div class="ship-opt" id="shipPal" onclick="selectShipping('pal')">
           <div class="sn">Pallet</div>
           <div class="sd">2–4 days · bulk orders</div>
-          <div class="sp">£96.00 inc VAT</div>
+          <div class="sp">£80.00 ex-VAT</div>
         </div>
       </div>
       <button class="btn co-btn" id="orderBtn" onclick="startCheckout()">Order &amp; Pay</button>
@@ -412,14 +412,16 @@
 <!-- Gallery lightbox -->
 <div class="gbox" id="galleryBox" onclick="if(event.target===this)closeGallery()">
   <button class="gbox-close" onclick="closeGallery()">✕</button>
-  <button class="gbox-arr prev" onclick="gNav(-1)">‹</button>
-  <div class="gbox-inner">
-    <div class="gbox-title" id="gboxTitle"></div>
-    <img class="gbox-img" id="gboxImg" src="" alt="">
-    <div class="gbox-caption" id="gboxCaption"></div>
-    <div class="gbox-dots" id="gboxDots"></div>
+  <div class="gbox-wrap">
+    <button class="gbox-arr prev" onclick="gNav(-1)">‹</button>
+    <div class="gbox-inner">
+      <div class="gbox-title" id="gboxTitle"></div>
+      <img class="gbox-img" id="gboxImg" src="" alt="">
+      <div class="gbox-caption" id="gboxCaption"></div>
+      <div class="gbox-dots" id="gboxDots"></div>
+    </div>
+    <button class="gbox-arr next" onclick="gNav(1)">›</button>
   </div>
-  <button class="gbox-arr next" onclick="gNav(1)">›</button>
 </div>
 
 <script>
@@ -589,8 +591,8 @@ const SHIPPING={
 };
 let shipMethod='std';
 function selectShipping(m){
-  if(m==='pal'&&chosenQty<24){
-    alert('Pallet delivery is for orders of 24+ boxes. Please increase your quantity or choose Standard or Express delivery.');
+  if((m==='std'||m==='exp')&&chosenQty>5){
+    alert('Standard and Express are per-parcel rates for small orders (up to 5 boxes). Please use Pallet delivery for larger quantities.');
     return;
   }
   shipMethod=m;
@@ -644,6 +646,11 @@ function calc(){
     const cn=bc.hex==='custom'?' · custom Pantone (50 min)':'';
     lines.push({n:`ColdCarry Bag ${v.name} · ${bc.name}${cn}${pl!=='plain'?' · '+pl:''}`,s:`${q} pcs · ${f(v.bag)}${badd>0?' + '+f(badd)+' personalisation':''} = ${f(bu)}/pc`,p:t});
   }
+  if((shipMethod==='std'||shipMethod==='exp')&&q>5){
+    shipMethod='pal';
+    ['std','exp','pal'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('on',k==='pal'));
+  }
+  ['std','exp'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('disabled',q>5));
   const sh=SHIPPING[shipMethod];
   const fullEx=sub+sh.exvat, vat=fullEx*0.20, grand=fullEx+vat;
   document.getElementById('rLines').innerHTML=lines.map(l=>`<div class="r-line"><div style="flex:1"><div class="r-lname">${l.n}</div><div class="r-lsub${l.w?' moq-warn':''}">${l.s}</div></div><div class="r-lp">${l.p>0?f(l.p):'—'}</div></div>`).join('');
@@ -727,12 +734,12 @@ const POLICIES={
     body:`<p>Last updated: June 2026</p>
 <p>ColdCore delivers within the <strong>United Kingdom only</strong>. For wholesale or international enquiries please contact us directly.</p>
 <h3>Delivery options</h3>
-<table><tr><th>Service</th><th>Delivery time</th><th>Cost (ex-VAT)</th></tr>
-<tr><td>Standard · Royal Mail 48 Tracked</td><td>2–3 working days</td><td>£4.95</td></tr>
-<tr><td>Express · Special Delivery</td><td>Next working day (order before 1pm)</td><td>£9.95</td></tr>
-<tr><td>Pallet delivery</td><td>2–4 working days</td><td>£80.00</td></tr>
+<table><tr><th>Service</th><th>Delivery time</th><th>Cost (ex-VAT)</th><th>Per</th></tr>
+<tr><td>Standard · Royal Mail 48 Tracked</td><td>2–3 working days</td><td>£4.95</td><td>per parcel</td></tr>
+<tr><td>Express · Special Delivery</td><td>Next working day (order before 1pm)</td><td>£9.95</td><td>per parcel</td></tr>
+<tr><td>Pallet delivery</td><td>2–4 working days</td><td>£80.00</td><td>per order</td></tr>
 </table>
-<p>All delivery prices are exclusive of VAT (20%). Pallet delivery covers an unlimited number of pallets per order. Ground-level delivery only — tail-lift not available.</p>
+<p>All delivery prices are exclusive of VAT (20%). Standard and Express rates apply per parcel (single shipment, suitable for orders up to 5 boxes). Pallet delivery covers an unlimited number of pallets per order. Ground-level delivery only — tail-lift not available.</p>
 <h3>Tracking</h3>
 <p>Standard and Express orders are fully tracked. You will receive a tracking number once your order is dispatched.</p>
 <h3>Processing time</h3>
@@ -818,9 +825,8 @@ const POLICIES={
 <table>
   <tr><th>Email</th><td><a href="mailto:hello@coldcore.uk">hello@coldcore.uk</a></td></tr>
   <tr><th>Orders</th><td><a href="mailto:order@coldcore.uk">order@coldcore.uk</a></td></tr>
-  <tr><th>Phone</th><td>01494 611 112</td></tr>
-  <tr><th>Address</th><td>8 Chandos Close, Amersham, Bucks HP6 6PJ, United Kingdom</td></tr>
-  <tr><th>VAT number</th><td>GB 387048074</td></tr>
+  <tr><th>Phone</th><td>+44 7366 318000</td></tr>
+  <tr><th>Address</th><td>85 Great Portland Street, London, England, W1W 7LT</td></tr>
 </table>
 <h3>Opening hours</h3>
 <p>Monday–Friday, 9am–5pm GMT. Orders can be placed online 24/7.</p>
