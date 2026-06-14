@@ -53,7 +53,8 @@
   /* RANGE: 3x2 окошки товара */
   .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
   .rbox{background:#0d2734;border:1px solid rgba(61,180,232,.18);border-radius:20px;padding:22px 18px;color:#fff;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;overflow:hidden}
-  .rbox .box-img{object-fit:contain;height:auto;margin-bottom:4px;max-width:100%;display:block}
+  .rbox .box-img-wrap{height:210px;display:flex;align-items:center;justify-content:center;width:100%}
+  .rbox .box-img{object-fit:contain;max-width:100%;max-height:210px;display:block}
   .rbox .bn{font-weight:800;font-size:21px}
   .rbox .bd{color:var(--steel);font-size:12.5px;line-height:1.6}
   .rbox .bp{margin-top:6px;font-weight:800;font-size:19px}
@@ -170,7 +171,7 @@
   #order .ship-opt .sn{font-size:12px;font-weight:700;color:var(--color-text-primary)}
   #order .ship-opt .sd{font-size:10px;color:var(--color-text-tertiary);margin-top:1px;line-height:1.3}
   #order .ship-opt .sp{font-size:12px;font-weight:700;color:#3db4e8;margin-top:4px}
-  #order .r-ship{display:flex;justify-content:space-between;padding:4px 0;font-size:12.5px;color:var(--color-text-secondary)}
+  #order .r-ship{display:flex;justify-content:space-between;align-items:flex-start;padding:4px 0;font-size:12.5px;color:var(--color-text-secondary)}
   /* policy modal */
   .pmodal{position:fixed;inset:0;z-index:300;background:rgba(4,18,28,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
   .pmodal.open{opacity:1;pointer-events:all}
@@ -306,7 +307,7 @@
       <div class="receipt">
         <div id="rLines"></div>
         <div class="r-sub"><span>Subtotal (ex-VAT)</span><span id="rSub">£0.00</span></div>
-        <div class="r-ship"><span id="rShipName">Delivery · Standard</span><span id="rShip">£4.95</span></div>
+        <div class="r-ship"><div style="flex:1"><div id="rShipName">Delivery</div><div id="rShipDetail" class="r-lsub"></div></div><span id="rShip">£0.00</span></div>
         <div class="r-vat"><span>VAT 20%</span><span id="rVat">£0.00</span></div>
         <div class="r-grand"><span>Total inc-VAT</span><span id="rGrand">£0.00</span></div>
       </div>
@@ -325,18 +326,13 @@
       <div class="ship-opts">
         <div class="ship-opt on" id="shipStd" onclick="selectShipping('std')">
           <div class="sn">Standard</div>
-          <div class="sd">Royal Mail 48 · per parcel · 2–3 days</div>
-          <div class="sp">£4.95 ex-VAT</div>
+          <div class="sd">Royal Mail 48 · £4.95/parcel · 2–3 days</div>
+          <div class="sp">£4.95 ex-VAT per parcel</div>
         </div>
         <div class="ship-opt" id="shipExp" onclick="selectShipping('exp')">
           <div class="sn">Express</div>
-          <div class="sd">Special Delivery · per parcel · next day</div>
-          <div class="sp">£9.95 ex-VAT</div>
-        </div>
-        <div class="ship-opt" id="shipPal" onclick="selectShipping('pal')">
-          <div class="sn">Pallet</div>
-          <div class="sd" id="shipPalDetail">2–4 days · bulk orders</div>
-          <div class="sp" id="shipPalPrice">£80.00 ex-VAT</div>
+          <div class="sd">Special Delivery · £9.95/parcel · next day</div>
+          <div class="sp">£9.95 ex-VAT per parcel</div>
         </div>
       </div>
       <button class="btn co-btn" id="orderBtn" onclick="startCheckout()">Order &amp; Pay</button>
@@ -566,7 +562,9 @@ function boxTot(s,q){
   const pals=Math.floor(q/v.pal),rem=q%v.pal,pks=Math.floor(rem/v.pk),sgls=rem%v.pk;
   return pals*v.palP+pks*v.pkP+sgls*v.sgl;
 }
-function onQtyInput(){
+let _qtyTimer;
+function onQtyInput(){clearTimeout(_qtyTimer);_qtyTimer=setTimeout(_doQtyInput,400);}
+function _doQtyInput(){
   const raw=parseInt(document.getElementById('qtyInput').value)||1;
   const snaps=getSnaps(sz,raw);
   const sd=document.getElementById('snapOpts'); sd.innerHTML='';
@@ -591,12 +589,8 @@ const SHIPPING={
 };
 let shipMethod='std';
 function selectShipping(m){
-  if((m==='std'||m==='exp')&&chosenQty>5){
-    alert('Standard and Express are per-parcel rates for small orders (up to 5 boxes). Please use Pallet delivery for larger quantities.');
-    return;
-  }
   shipMethod=m;
-  ['std','exp','pal'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('on',k===m));
+  ['std','exp'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('on',k===m));
   calc();
 }
 function calc(){
@@ -646,29 +640,19 @@ function calc(){
     const cn=bc.hex==='custom'?' · custom Pantone (50 min)':'';
     lines.push({n:`ColdCarry Bag ${v.name} · ${bc.name}${cn}${pl!=='plain'?' · '+pl:''}`,s:`${q} pcs · ${f(v.bag)}${badd>0?' + '+f(badd)+' personalisation':''} = ${f(bu)}/pc`,p:t});
   }
-  if((shipMethod==='std'||shipMethod==='exp')&&q>5){
-    shipMethod='pal';
-    ['std','exp','pal'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('on',k==='pal'));
-  }
-  ['std','exp'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('disabled',q>5));
-  // Calculate delivery: parcel for ≤5 boxes, otherwise ceil(q/palletSize) × £80
-  let shipEx, shipLabel;
-  if(q<=5){
-    const sh=SHIPPING[shipMethod];
-    shipEx=sh.exvat;
-    shipLabel='Delivery · '+sh.name.split(' · ')[0];
-    document.getElementById('shipPalDetail').textContent='2–4 days · bulk orders';
-    document.getElementById('shipPalPrice').textContent='£80.00 ex-VAT';
-  } else {
-    const numPal=Math.ceil(q/v.pal);
-    shipEx=numPal*80;
-    shipLabel=numPal===1?'Pallet delivery · 1 pallet':`Pallet delivery · ${numPal} pallets × £80.00`;
-    document.getElementById('shipPalDetail').textContent=`${numPal} pallet${numPal>1?'s':''} · 2–4 working days`;
-    document.getElementById('shipPalPrice').textContent=`£${(shipEx).toFixed(2)} ex-VAT`;
-  }
+  // Optimal shipping: full pallets × £80 + remaining packs/singles as parcels
+  const pallets=Math.floor(q/v.pal), rem=q%v.pal;
+  const packs=Math.floor(rem/v.pk), singles=rem%v.pk;
+  const parcelCount=packs+(singles>0?1:0);
+  const parcelRate=shipMethod==='exp'?9.95:4.95;
+  const shipEx=pallets*80+parcelCount*parcelRate;
+  const shipParts=[];
+  if(pallets>0)shipParts.push(`${pallets} pallet${pallets>1?'s':''} × £80.00`);
+  if(parcelCount>0)shipParts.push(`${parcelCount} parcel${parcelCount>1?'s':''} × £${parcelRate.toFixed(2)}`);
   const fullEx=sub+shipEx, vat=fullEx*0.20, grand=fullEx+vat;
   document.getElementById('rLines').innerHTML=lines.map(l=>`<div class="r-line"><div style="flex:1"><div class="r-lname">${l.n}</div><div class="r-lsub${l.w?' moq-warn':''}">${l.s}</div></div><div class="r-lp">${l.p>0?f(l.p):'—'}</div></div>`).join('');
-  document.getElementById('rShipName').textContent=shipLabel;
+  document.getElementById('rShipName').textContent='Delivery';
+  document.getElementById('rShipDetail').textContent=shipParts.join(' + ');
   document.getElementById('rShip').textContent=f(shipEx);
   document.getElementById('rSub').textContent=f(sub);
   document.getElementById('rVat').textContent=f(vat);
@@ -682,7 +666,7 @@ if(document.getElementById('sizeGrid')){
   buildSizeGrid();
   buildSwatches(SLV_COLORS,'sleeveSwatches','sleeveColorName',slvCI,i=>{slvCI=i;calc();});
   buildSwatches(BAG_COLORS,'bagSwatches','bagColorName',bagCI,i=>{bagCI=i;calc();});
-  onQtyInput();
+  _doQtyInput();
 }
 /* 3x2 окошки товара (range) */
 (function(){
@@ -690,10 +674,11 @@ if(document.getElementById('sizeGrid')){
   if(!g||typeof SIZES==='undefined')return;
   Object.entries(SIZES).forEach(([k,v])=>{
     const card=document.createElement('div'); card.className='rbox fly';
+    const imgWrap=document.createElement('div'); imgWrap.className='box-img-wrap';
     const img=document.createElement('img');
     img.className='box-img'; img.src='img/'+(BOX_IMG[k]||k+'c')+'.png'; img.alt='ColdCore '+v.name;
     img.style.width=Math.round(260*Math.pow(v.w/0.96,1.5))+'px';
-    card.appendChild(img);
+    imgWrap.appendChild(img); card.appendChild(imgWrap);
     const nm=document.createElement('div'); nm.className='bn'; nm.innerHTML='Cold<span style="color:#3db4e8">Core</span> '+v.name; card.appendChild(nm);
     const bd=document.createElement('div'); bd.className='bd'; bd.innerHTML=v.ext+' mm<br>'+v.vol+' · up to '+v.pay; card.appendChild(bd);
     const fromP=(v.palP/v.pal); const bp=document.createElement('div'); bp.className='bp'; bp.style.color='#3db4e8'; bp.innerHTML='from £'+fromP.toFixed(2)+' <span class="bpe" style="color:#9fc4d6">per box</span>'; card.appendChild(bp);
@@ -724,7 +709,7 @@ async function startCheckout(){
     contact, postcode,
     size:v.name, qty:q,
     shipping_method:shipMethod,
-    shipping_label:document.getElementById('rShipName').textContent,
+    shipping_label:document.getElementById('rShipDetail').textContent||'Delivery',
     description:`ColdCore ${v.name} × ${q}${desc?': '+desc:''}`,
     amount_pence:Math.round(grand*100),
   };
