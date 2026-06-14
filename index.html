@@ -612,7 +612,12 @@ async function startCheckout(){
 /* ---- Gallery ---- */
 // Photos per box — populate with actual images when ready
 const BOX_GALLERY={
-  xs:[], s:[], m:[], l:[], xl:[], xxl:[]
+  xs:['img/xsc.png','img/xso.png','img/sleave.png','img/cartbox.png','img/bag.png'],
+  s: ['img/sc.png','img/so.png','img/sleave.png','img/cartbox.png','img/bag.png'],
+  m: ['img/mc.png','img/mo.png'],
+  l: ['img/lc.png','img/lo.png'],
+  xl:['img/xlc.png','img/xlo.png'],
+  xxl:['img/xxlc.png','img/xxlo.png'],
 };
 let gKey='m', gIdx=0;
 function openGallery(key){
