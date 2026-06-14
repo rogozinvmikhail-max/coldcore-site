@@ -50,7 +50,7 @@
   /* RANGE: 3x2 окошки товара */
   .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
   .rbox{background:#0d2734;border:1px solid rgba(61,180,232,.18);border-radius:20px;padding:22px 18px;color:#fff;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px}
-  .rbox .box-img{width:390px;height:282px;object-fit:contain;margin-bottom:4px}
+  .rbox .box-img{object-fit:contain;height:auto;margin-bottom:4px;max-width:100%}
   .rbox .bn{font-weight:800;font-size:21px}
   .rbox .bd{color:var(--steel);font-size:12.5px;line-height:1.6}
   .rbox .bp{margin-top:6px;font-weight:800;font-size:19px}
@@ -431,7 +431,7 @@ function buildSizeGrid(){
     btn.className='size-btn'+(k===sz?' active':'');
     const img=document.createElement('img');
     img.src='img/'+(BOX_IMG[k]||k+'c')+'.png'; img.alt=v.name;
-    img.style.cssText='width:96px;height:72px;object-fit:contain';
+    img.style.cssText='width:'+Math.round(110*v.w/0.96)+'px;height:auto;object-fit:contain';
     btn.appendChild(img);
     const szEl=document.createElement('span'); szEl.className='sz'; szEl.textContent=v.name; btn.appendChild(szEl);
     const svEl=document.createElement('span'); svEl.className='sv'; svEl.textContent=v.vol; btn.appendChild(svEl);
@@ -577,6 +577,7 @@ if(document.getElementById('sizeGrid')){
     const card=document.createElement('div'); card.className='rbox fly';
     const img=document.createElement('img');
     img.className='box-img'; img.src='img/'+(BOX_IMG[k]||k+'c')+'.png'; img.alt='ColdCore '+v.name;
+    img.style.width=Math.round(430*v.w/0.96)+'px';
     card.appendChild(img);
     const nm=document.createElement('div'); nm.className='bn'; nm.innerHTML='Cold<span style="color:#3db4e8">Core</span> '+v.name; card.appendChild(nm);
     const bd=document.createElement('div'); bd.className='bd'; bd.innerHTML=v.ext+' mm<br>'+v.vol+' · up to '+v.pay; card.appendChild(bd);
