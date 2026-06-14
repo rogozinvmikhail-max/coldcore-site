@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ColdCore — Temperature-controlled shipping</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2306151e'/%3E%3Cpath d='M26 9 L26 6 L5 6 L5 26 L26 26 L26 23' fill='none' stroke='%23ffffff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M21 13 L21 11 L10 11 L10 21 L21 21 L21 19' fill='none' stroke='%233db4e8' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M30 8 L30 2 L2 2 L2 30 L30 30 L30 24' fill='none' stroke='%23ffffff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M23 13 L23 9 L9 9 L9 23 L23 23 L23 19' fill='none' stroke='%233db4e8' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <meta name="description" content="ColdCore — insulated boxes and cold-chain packaging for food, seafood, pharma and diagnostics across the UK." />
 <style>
   :root{ --glacier:#3db4e8; --deep:#06151e; --steel:#9fc4d6; --ice:#eef7fc; }
@@ -160,6 +160,7 @@
   .gbox-dots{display:flex;gap:7px}
   .gbox-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .18s}
   .gbox-dot.on{background:#3db4e8}
+  .gbox-caption{font-size:13px;color:#9fc4d6;text-align:center;max-width:520px;line-height:1.5;min-height:1.5em}
   .rbox{cursor:pointer;transition:border-color .2s,transform .2s}
   .rbox:hover{border-color:rgba(61,180,232,.55);transform:translateY(-2px)}
 </style>
@@ -331,6 +332,7 @@
     <button class="gbox-close" onclick="closeGallery()">✕</button>
     <div class="gbox-title" id="gboxTitle"></div>
     <img class="gbox-img" id="gboxImg" src="" alt="">
+    <div class="gbox-caption" id="gboxCaption"></div>
     <div class="gbox-nav">
       <button class="gbox-btn" onclick="gNav(-1)">‹</button>
       <div class="gbox-dots" id="gboxDots"></div>
@@ -612,12 +614,51 @@ async function startCheckout(){
 /* ---- Gallery ---- */
 // Photos per box — populate with actual images when ready
 const BOX_GALLERY={
-  xs:['img/xsc.png','img/xso.png','img/sleave.png','img/cartbox.png','img/bag.png'],
-  s: ['img/sc.png','img/so.png','img/sleave.png','img/cartbox.png','img/bag.png'],
-  m: ['img/mc.png','img/mo.png'],
-  l: ['img/lc.png','img/lo.png'],
-  xl:['img/xlc.png','img/xlo.png'],
-  xxl:['img/xxlc.png','img/xxlo.png','img/xxlbag_shed.png'],
+  xs: ['img/xsc.png','img/xso.png','img/xsf.png','img/xspr2.png','img/xsmar2.png','img/xsmed2.png','img/xssboard.png','img/sleeve2.png','img/cartbox.png','img/bag.png'],
+  s:  ['img/sc.png','img/so.png','img/sf.png','img/sleeve2.png','img/cartbox.png','img/bag.png'],
+  m:  ['img/mc.png','img/mo.png','img/mf.png','img/mpr.png','img/mmar.png','img/mmed.png','img/mbag.png','img/msleeve.png','img/cartbox.png','img/bag.png'],
+  l:  ['img/lc.png','img/lo.png','img/lf.png','img/lprod.png','img/lmed.png','img/cartbox.png','img/bag.png'],
+  xl: ['img/xlc.png','img/xlo.png','img/xlf.png','img/cartbox.png','img/bag.png'],
+  xxl:['img/xxlc.png','img/xxlo.png','img/xxlf.png','img/xxlbag.png','img/xxlbag_shed.png','img/xxlmed.png','img/cartbox.png'],
+};
+const GALLERY_CAPTIONS={
+  'img/xsc.png':'XS · 1.40 L · up to 1 kg. Compact EPS insulated box — ideal for samples, single portions, small B2C orders.',
+  'img/xso.png':'Open view · 183×128×114 mm interior. Thick EPS walls maintain 0–4 °C for 24+ hours.',
+  'img/xsf.png':'Flat-packed · ships nested to reduce inbound freight. Ready to use in seconds.',
+  'img/xspr2.png':'Product shot · custom sleeve option available from 50 pcs in any colour.',
+  'img/xsmar2.png':'On-shelf appeal — branded sleeve turns a plain box into a premium customer touchpoint.',
+  'img/xsmed2.png':'Medical & diagnostics · pharma-grade EPS, suitable for specimen and reagent transport.',
+  'img/xssboard.png':'Full accessory range for XS — outer, sleeve, ice pack, and ColdCarry bag all available.',
+  'img/sc.png':'S · 2.40 L · up to 2 kg. Perfect for meal kits, two-portion seafood, or pharma samples.',
+  'img/so.png':'Open view · 230×150×124 mm. Deep enough for a whole fillet or two meal-kit portions.',
+  'img/sf.png':'S flat · clean exterior finish. Add a printed sleeve to turn it into branded packaging.',
+  'img/mc.png':'M · 3.64 L · up to 3 kg. Our best-seller — fits a mixed hamper, salmon fillet, or diagnostic kit.',
+  'img/mo.png':'Open view · 260×180×120 mm. Wide format suits flat-packed products and multi-item orders.',
+  'img/mf.png':'M flat · uniform EPS construction, no weak points, consistent wall thickness throughout.',
+  'img/mpr.png':'Ready to ship — add a corrugated outer for extra protection on longer courier routes.',
+  'img/mmar.png':'Branded M box — printed sleeve in your brand colours. Min 50 pcs, 1-colour or full colour.',
+  'img/mmed.png':'Pharma & diagnostics · M size is the most common for hospital supply and lab specimen transport.',
+  'img/mbag.png':'M with ColdCarry Bag — reusable branded carrier in 6 colours. Add screen print or embroidery.',
+  'img/msleeve.png':'Printed sleeve · wraps the full front face. Bespoke design, your logo, your message.',
+  'img/lc.png':'L · 5.60 L · up to 5 kg. Built for serious cold chain — whole joints, multi-portion seafood, pharma supply kits.',
+  'img/lo.png':'Open view · 310×230×125 mm. Generous interior with full-depth EPS insulation on all six sides.',
+  'img/lf.png':'L flat · wide format suits whole fish, large cuts, and multi-item meal kits.',
+  'img/lprod.png':'L with accessories — corrugated outer gives a clean, courier-ready appearance.',
+  'img/lmed.png':'L · medical use · trusted by NHS suppliers and veterinary logistics. Temperature-stable for 48 hours.',
+  'img/xlc.png':'XL · 7.28 L · up to 7 kg. When volume matters — whole sides, bulk portions, multi-vial diagnostics.',
+  'img/xlo.png':'Open view · 310×230×155 mm. Extra depth handles bulky cuts, shellfish beds, or hospital supply runs.',
+  'img/xlf.png':'XL flat · same footprint as L, deeper — maximises pallet fill efficiency.',
+  'img/xxlc.png':'XXL · 13.99 L · up to 12 kg. Full pallet economics — 80 per pallet at £3.71/box. Best unit cost.',
+  'img/xxlo.png':'Open view · 400×300×160 mm. Our largest size — whole salmon, premium hampers, hospital supply in bulk.',
+  'img/xxlf.png':'XXL flat · designed to nest flat for easy storage. Assemble in under 10 seconds.',
+  'img/xxlbag.png':'XXL with ColdCarry Bag — perfect for premium hamper deliveries or catering supply runs.',
+  'img/xxlbag_shed.png':'ColdCarry Bag on XXL box — reusable, your logo, available in 6 colours including custom Pantone.',
+  'img/xxlmed.png':'XXL · medical & hospital supply. Used by NHS trusts for bulk diagnostic reagent and organ transport.',
+  'img/sleeve2.png':'Printed sleeve — full-wrap branding covers the front face completely. Bespoke branded, your design.',
+  'img/cartbox.png':'Corrugated outer — courier-ready cardboard sized for each ColdCore box. Clean exterior for B2C deliveries.',
+  'img/ice.png':'Gel ice packs + filling packs — maintain 0–4 °C for 24–48 h. Sized to fit snugly in every ColdCore box.',
+  'img/sleave.png':'Printed sleeve — 1-colour or full-colour print, min 50 pcs. Turns your cold box into brand packaging.',
+  'img/bag.png':'ColdCarry Bag — reusable insulated carrier in 6 colours. Add screen print, embroidery, or patch from 10 pcs.',
 };
 let gKey='m', gIdx=0;
 function openGallery(key){
@@ -627,8 +668,9 @@ function openGallery(key){
   const v=SIZES[key];
   document.getElementById('gboxTitle').textContent='ColdCore '+v.name+' · '+v.ext+' mm';
   if(!imgs||imgs.length===0){
-    // No photos yet — show the product image
-    document.getElementById('gboxImg').src='img/'+(BOX_IMG[key]||key+'c')+'.png';
+    const src='img/'+(BOX_IMG[key]||key+'c')+'.png';
+    document.getElementById('gboxImg').src=src;
+    document.getElementById('gboxCaption').textContent=GALLERY_CAPTIONS[src]||'';
     document.getElementById('gboxDots').innerHTML='';
   }else{
     gShowImg();
@@ -640,7 +682,9 @@ function openGallery(key){
 function gShowImg(){
   const imgs=BOX_GALLERY[gKey];
   if(!imgs||!imgs.length)return;
-  document.getElementById('gboxImg').src=imgs[gIdx];
+  const src=imgs[gIdx];
+  document.getElementById('gboxImg').src=src;
+  document.getElementById('gboxCaption').textContent=GALLERY_CAPTIONS[src]||'';
   document.querySelectorAll('.gbox-dot').forEach((d,i)=>d.classList.toggle('on',i===gIdx));
 }
 function buildDots(n){
