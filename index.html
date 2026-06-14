@@ -335,8 +335,8 @@
         </div>
         <div class="ship-opt" id="shipPal" onclick="selectShipping('pal')">
           <div class="sn">Pallet</div>
-          <div class="sd">2–4 days · bulk orders</div>
-          <div class="sp">£80.00 ex-VAT</div>
+          <div class="sd" id="shipPalDetail">2–4 days · bulk orders</div>
+          <div class="sp" id="shipPalPrice">£80.00 ex-VAT</div>
         </div>
       </div>
       <button class="btn co-btn" id="orderBtn" onclick="startCheckout()">Order &amp; Pay</button>
@@ -651,11 +651,25 @@ function calc(){
     ['std','exp','pal'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('on',k==='pal'));
   }
   ['std','exp'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('disabled',q>5));
-  const sh=SHIPPING[shipMethod];
-  const fullEx=sub+sh.exvat, vat=fullEx*0.20, grand=fullEx+vat;
+  // Calculate delivery: parcel for ≤5 boxes, otherwise ceil(q/palletSize) × £80
+  let shipEx, shipLabel;
+  if(q<=5){
+    const sh=SHIPPING[shipMethod];
+    shipEx=sh.exvat;
+    shipLabel='Delivery · '+sh.name.split(' · ')[0];
+    document.getElementById('shipPalDetail').textContent='2–4 days · bulk orders';
+    document.getElementById('shipPalPrice').textContent='£80.00 ex-VAT';
+  } else {
+    const numPal=Math.ceil(q/v.pal);
+    shipEx=numPal*80;
+    shipLabel=numPal===1?'Pallet delivery · 1 pallet':`Pallet delivery · ${numPal} pallets × £80.00`;
+    document.getElementById('shipPalDetail').textContent=`${numPal} pallet${numPal>1?'s':''} · 2–4 working days`;
+    document.getElementById('shipPalPrice').textContent=`£${(shipEx).toFixed(2)} ex-VAT`;
+  }
+  const fullEx=sub+shipEx, vat=fullEx*0.20, grand=fullEx+vat;
   document.getElementById('rLines').innerHTML=lines.map(l=>`<div class="r-line"><div style="flex:1"><div class="r-lname">${l.n}</div><div class="r-lsub${l.w?' moq-warn':''}">${l.s}</div></div><div class="r-lp">${l.p>0?f(l.p):'—'}</div></div>`).join('');
-  document.getElementById('rShipName').textContent='Delivery · '+sh.name.split(' · ')[0];
-  document.getElementById('rShip').textContent=f(sh.exvat);
+  document.getElementById('rShipName').textContent=shipLabel;
+  document.getElementById('rShip').textContent=f(shipEx);
   document.getElementById('rSub').textContent=f(sub);
   document.getElementById('rVat').textContent=f(vat);
   document.getElementById('rGrand').textContent=f(grand);
@@ -710,7 +724,7 @@ async function startCheckout(){
     contact, postcode,
     size:v.name, qty:q,
     shipping_method:shipMethod,
-    shipping_label:SHIPPING[shipMethod].name,
+    shipping_label:document.getElementById('rShipName').textContent,
     description:`ColdCore ${v.name} × ${q}${desc?': '+desc:''}`,
     amount_pence:Math.round(grand*100),
   };
