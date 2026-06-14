@@ -100,18 +100,19 @@
   #order .size-btn .sv{font-size:9px;color:var(--color-text-tertiary)}
   #order .sec{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin:1rem 0 .4rem}
   #order .qty-input-row{display:flex;align-items:center;gap:8px;margin-bottom:.5rem;flex-wrap:wrap}
-  #order .qty-input-row label{font-size:13px;color:var(--color-text-secondary)}
+  #order .qty-input-row label{font-size:13px;color:var(--color-text-secondary);display:inline;margin:0}
   #order input[type=number]{font-size:14px;padding:6px 11px;border-radius:var(--border-radius-md);border:1px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);height:36px;width:100px}
   #order .snap-options{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.6rem}
   #order .snap-btn{border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-secondary)}
   #order .snap-btn.best{border-color:#3db4e8;color:#bfe8fb;background:rgba(61,180,232,.16)}
   #order .snap-btn.chosen{outline:2px solid #3db4e8;outline-offset:1px;font-weight:600}
   #order .qty-result{font-size:11.5px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:6px 10px;margin-bottom:.6rem;line-height:1.6}
-  #order .addon-row{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--color-border-tertiary)}
-  #order .addon-row:last-child{border-bottom:none}
-  #order .addon-row input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#3db4e8;margin-top:2px;flex-shrink:0}
-  #order .addon-row label{font-size:13px;color:var(--color-text-primary);flex:1;cursor:pointer;line-height:1.4}
-  #order .addon-row .ap{font-size:11.5px;color:var(--color-text-tertiary);white-space:nowrap;margin-top:2px}
+  #order .addon-block{border-bottom:1px solid var(--color-border-tertiary)}
+  #order .addon-block:last-child{border-bottom:none}
+  #order .addon-row{display:flex;align-items:center;gap:8px;padding:8px 0}
+  #order .addon-row input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#3db4e8;flex-shrink:0}
+  #order .addon-row label{font-size:13px;color:var(--color-text-primary);flex:1;cursor:pointer;line-height:1.4;margin:0;display:block}
+  #order .addon-row .ap{font-size:11.5px;color:var(--color-text-tertiary);white-space:nowrap}
   #order .addon-sub{margin-left:23px;padding:6px 0 2px;display:flex;flex-direction:column;gap:8px}
   #order select{font-size:12px;padding:4px 8px;border-radius:var(--border-radius-md);border:1px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);height:30px}
   #order .moq-warn{font-size:10.5px;color:#ff9b9b}
@@ -139,6 +140,28 @@
   #order .met-l{font-size:9.5px;color:var(--color-text-secondary);margin-bottom:2px}
   #order .met-v{font-size:14px;font-weight:700;color:var(--color-text-primary)}
   @media(max-width:720px){#order .layout{grid-template-columns:1fr}#order .metrics{grid-template-columns:1fr 1fr}}
+  /* checkout */
+  #order .co-row{display:flex;gap:8px;margin-top:.5rem;flex-wrap:wrap}
+  #order .co-input{flex:1;min-width:140px;background:var(--color-background-primary);border:1px solid var(--color-border-secondary);color:var(--color-text-primary);border-radius:var(--border-radius-md);padding:9px 13px;font-size:13px;outline:none}
+  #order .co-input:focus{border-color:#3db4e8}
+  #order .co-post{max-width:130px;flex:none}
+  #order .co-btn{width:100%;margin-top:.65rem;padding:13px;font-size:15px;border-radius:var(--border-radius-lg)}
+  #order .co-note{font-size:11px;color:var(--color-text-tertiary);margin-top:6px;text-align:center}
+  /* gallery lightbox */
+  .gbox{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.9);opacity:0;pointer-events:none;transition:opacity .22s}
+  .gbox.open{opacity:1;pointer-events:all}
+  .gbox-inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:min(92vw,680px)}
+  .gbox-img{max-width:100%;max-height:70vh;border-radius:16px;object-fit:contain;background:#0d2734}
+  .gbox-nav{display:flex;gap:14px;align-items:center}
+  .gbox-btn{background:rgba(255,255,255,.12);border:none;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;transition:background .15s}
+  .gbox-btn:hover{background:rgba(255,255,255,.26)}
+  .gbox-close{position:absolute;top:-16px;right:-16px;background:rgba(255,255,255,.14);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:17px;line-height:1}
+  .gbox-title{font-size:15px;font-weight:700;color:#eaf6fc}
+  .gbox-dots{display:flex;gap:7px}
+  .gbox-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .18s}
+  .gbox-dot.on{background:#3db4e8}
+  .rbox{cursor:pointer;transition:border-color .2s,transform .2s}
+  .rbox:hover{border-color:rgba(61,180,232,.55);transform:translateY(-2px)}
 </style>
 </head>
 <body>
@@ -203,27 +226,34 @@
       <div class="qty-result" id="qtyResult"></div>
       <div class="sec">Add-ons</div>
       <div>
-        <div class="addon-row">
-          <input type="checkbox" id="aIce" onchange="calc()"><label for="aIce">Ice packs &amp; filling set</label><span class="ap" id="ice-price"></span>
+        <div class="addon-block">
+          <div class="addon-row">
+            <input type="checkbox" id="aIce" onchange="calc()"><label for="aIce">Ice packs &amp; filling set</label><span class="ap" id="ice-price"></span>
+          </div>
         </div>
-        <div class="addon-row">
-          <input type="checkbox" id="aOuter" onchange="calc()"><label for="aOuter">Corrugated outer</label><span class="ap" id="outer-price"></span>
+        <div class="addon-block">
+          <div class="addon-row">
+            <input type="checkbox" id="aOuter" onchange="calc()"><label for="aOuter">Corrugated outer</label><span class="ap" id="outer-price"></span>
+          </div>
         </div>
-        <div class="addon-row" style="flex-wrap:wrap">
-          <input type="checkbox" id="aSleeve" onchange="calc()"><label for="aSleeve">Printed sleeve</label><span class="ap" id="sleeve-price"></span><span class="moq-warn" id="sleeve-warn"></span>
-          <div class="addon-sub hidden" id="sleeveOpts" style="width:100%">
+        <div class="addon-block">
+          <div class="addon-row">
+            <input type="checkbox" id="aSleeve" onchange="calc()"><label for="aSleeve">Printed sleeve</label><span class="ap" id="sleeve-price"></span><span class="moq-warn" id="sleeve-warn" style="margin-left:4px"></span>
+          </div>
+          <div class="addon-sub hidden" id="sleeveOpts">
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
               <select id="sleeveType" onchange="calc()"><option value="1c">1-colour print</option><option value="fc">Full colour</option></select>
             </div>
             <div class="color-section"><div class="color-label">Sleeve colour</div><div class="color-swatches" id="sleeveSwatches"></div><div class="color-name" id="sleeveColorName"></div></div>
           </div>
         </div>
-        <div class="addon-row" style="flex-wrap:wrap">
-          <input type="checkbox" id="aBag" onchange="calc()"><label for="aBag">ColdCarry bag</label><span class="ap" id="bag-price"></span>
-          <div class="addon-sub hidden" id="bagOpts" style="width:100%">
+        <div class="addon-block">
+          <div class="addon-row">
+            <input type="checkbox" id="aBag" onchange="calc()"><label for="aBag">ColdCarry bag</label><span class="ap" id="bag-price"></span><span class="moq-warn" id="bag-warn" style="margin-left:4px"></span>
+          </div>
+          <div class="addon-sub hidden" id="bagOpts">
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
               <select id="bagPers" onchange="calc()"><option value="plain">Plain</option><option value="sp">+ Screen print (min 10)</option><option value="em">+ Embroidery (min 20)</option><option value="st">+ Sticker / patch (min 10)</option></select>
-              <span class="moq-warn" id="bag-warn"></span>
             </div>
             <div class="color-section"><div class="color-label">Bag colour</div><div class="color-swatches" id="bagSwatches"></div><div class="color-name" id="bagColorName"></div></div>
           </div>
@@ -242,6 +272,14 @@
         <div class="met"><div class="met-l">Box/unit</div><div class="met-v" id="mCpu">—</div></div>
         <div class="met"><div class="met-l">All-in/unit</div><div class="met-v" id="mAll">—</div></div>
       </div>
+      <div class="divider"></div>
+      <div class="sec" style="margin-top:.2rem">Contact &amp; delivery</div>
+      <div class="co-row">
+        <input type="text" id="coContact" class="co-input" placeholder="Email or phone">
+        <input type="text" id="coPost" class="co-input co-post" placeholder="Post code">
+      </div>
+      <button class="btn co-btn" id="orderBtn" onclick="startCheckout()">Order &amp; Pay</button>
+      <p class="co-note">Secure checkout · Powered by Stripe</p>
     </div>
   </div></div>
   <p class="note">All prices ex-VAT. Payload is indicative and depends on product density, packaging and coolant configuration.</p>
@@ -286,6 +324,20 @@
 </div></div></section>
 
 <footer>coldcore.uk · Temperature-controlled shipping · United Kingdom · © 2026 ColdCore</footer>
+
+<!-- Gallery lightbox -->
+<div class="gbox" id="galleryBox" onclick="closeGallery(event)">
+  <div class="gbox-inner">
+    <button class="gbox-close" onclick="closeGallery()">✕</button>
+    <div class="gbox-title" id="gboxTitle"></div>
+    <img class="gbox-img" id="gboxImg" src="" alt="">
+    <div class="gbox-nav">
+      <button class="gbox-btn" onclick="gNav(-1)">‹</button>
+      <div class="gbox-dots" id="gboxDots"></div>
+      <button class="gbox-btn" onclick="gNav(1)">›</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // слайдшоу героя: фото + свой заголовок, плавная смена, всегда одно фото
@@ -377,50 +429,66 @@ function drawBoxToCanvas(canvas, vKey, angle, opts={}){
   const v=SIZES[vKey];
   const scale=opts.scale||55;
   const bw=v.w*scale, bh=v.h*scale, bd=v.d*scale;
-  const cx=W/2, cy=H/2+(opts.cy||6);
+  const cx=W/2, cy=H/2+(opts.cy||8);
   const cos=Math.cos(angle)*0.55, sinA=Math.sin(angle)*0.55, iso=0.4;
-  const proj=(x,y,z)=>({px:cx+x*cos-z*sinA, py:cy+x*sinA*iso+z*cos*iso-y});
+  const proj=(x,y,z)=>({px:cx+x*cos-z*sinA, py:cy-y+(x*sinA+z*cos)*iso});
+  const lw=opts.lw||0.9;
   const face=(pts,fill,stroke)=>{
     ctx.beginPath();ctx.moveTo(pts[0].px,pts[0].py);
     for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i].px,pts[i].py);
     ctx.closePath();ctx.fillStyle=fill;ctx.fill();
-    ctx.strokeStyle=stroke||'#b0aca6';ctx.lineWidth=opts.lw||0.8;ctx.stroke();
+    if(stroke!==false){ctx.strokeStyle=stroke||'#a09890';ctx.lineWidth=lw;ctx.stroke();}
   };
-  const hw=bw/2, hd=bd/2, baseH=bh*0.65, lidH=bh*0.35;
-  const eps='#f0ede8', epsd='#c8c4be', epsm='#dcd8d2';
-  face([proj(-hw,0,-hd),proj(hw,0,-hd),proj(hw,0,hd),proj(-hw,0,hd)],eps);
-  face([proj(-hw,0,hd),proj(hw,0,hd),proj(hw,baseH,hd),proj(-hw,baseH,hd)],epsd);
-  face([proj(hw,0,-hd),proj(hw,0,hd),proj(hw,baseH,hd),proj(hw,baseH,-hd)],epsm);
-  face([proj(-hw,baseH,-hd),proj(hw,baseH,-hd),proj(hw,baseH,hd),proj(-hw,baseH,hd)],eps);
-  const s1=proj(-hw,baseH,hd),s2=proj(hw,baseH,hd),s3=proj(hw,baseH,-hd);
-  ctx.beginPath();ctx.moveTo(s1.px,s1.py);ctx.lineTo(s2.px,s2.py);ctx.lineTo(s3.px,s3.py);
-  ctx.strokeStyle='#9a9690';ctx.lineWidth=(opts.lw||0.8)*1.2;ctx.stroke();
-  face([proj(-hw,baseH,hd),proj(hw,baseH,hd),proj(hw,baseH+lidH,hd),proj(-hw,baseH+lidH,hd)],epsd);
-  face([proj(hw,baseH,-hd),proj(hw,baseH,hd),proj(hw,baseH+lidH,hd),proj(hw,baseH+lidH,-hd)],epsm);
-  face([proj(-hw,baseH+lidH,-hd),proj(hw,baseH+lidH,-hd),proj(hw,baseH+lidH,hd),proj(-hw,baseH+lidH,hd)],eps);
+  const hw=bw/2, hd=bd/2;
+  // Solid closed box: bottom, front, right side, top
+  face([proj(-hw,0,-hd),proj(hw,0,-hd),proj(hw,0,hd),proj(-hw,0,hd)],'#dedad3');
+  face([proj(-hw,0,hd),proj(hw,0,hd),proj(hw,bh,hd),proj(-hw,bh,hd)],'#c9c5be');
+  face([proj(hw,0,-hd),proj(hw,0,hd),proj(hw,bh,hd),proj(hw,bh,-hd)],'#dedad3');
+  face([proj(-hw,bh,-hd),proj(hw,bh,-hd),proj(hw,bh,hd),proj(-hw,bh,hd)],'#edeae4');
+  // Subtle lid seam line
+  ctx.strokeStyle='#9a9690';ctx.lineWidth=lw*1.2;ctx.beginPath();
+  const ls=proj(-hw,bh*0.7,hd),le=proj(hw,bh*0.7,hd),lr=proj(hw,bh*0.7,-hd);
+  ctx.moveTo(ls.px,ls.py);ctx.lineTo(le.px,le.py);ctx.lineTo(lr.px,lr.py);ctx.stroke();
+
+  // Sleeve: wraps the full front face (боковинки остаются цветом коробки)
   if(opts.sleeve){
     const sc=SLV_COLORS[slvCI], sh=sc.hex==='custom'?'#7F77DD':sc.hex;
-    const sy=baseH-8, sth=10;
-    face([proj(-hw,sy,hd),proj(hw,sy,hd),proj(hw,sy+sth,hd),proj(-hw,sy+sth,hd)],sh,sc.brd||sh);
-    face([proj(hw,sy,-hd),proj(hw,sy,hd),proj(hw,sy+sth,hd),proj(hw,sy+sth,-hd)],sh,sc.brd||sh);
+    face([proj(-hw,bh*0.04,hd),proj(hw,bh*0.04,hd),proj(hw,bh*0.96,hd),proj(-hw,bh*0.96,hd)],sh,sc.brd||sh);
+    // Sleeve wraps top too (visible from above)
+    face([proj(-hw,bh,-hd*0.8),proj(hw,bh,-hd*0.8),proj(hw,bh,hd),proj(-hw,bh,hd)],sh,sc.brd||sh);
   }
+
+  // Outer box: solid semi-transparent cardboard around the inner box
   if(opts.outer){
-    const off=opts.offPx||4;
-    ctx.strokeStyle='#c8a86a';ctx.lineWidth=(opts.lw||0.8);ctx.setLineDash([3,2]);
-    const of=[proj(-hw-off,-off,hd+off),proj(hw+off,-off,hd+off),proj(hw+off,baseH+lidH+off,hd+off),proj(-hw-off,baseH+lidH+off,hd+off)];
-    ctx.beginPath();ctx.moveTo(of[0].px,of[0].py);of.forEach(p=>ctx.lineTo(p.px,p.py));ctx.closePath();ctx.stroke();
-    const or=[proj(hw+off,-off,-hd-off),proj(hw+off,-off,hd+off),proj(hw+off,baseH+lidH+off,hd+off),proj(hw+off,baseH+lidH+off,-hd-off)];
-    ctx.beginPath();ctx.moveTo(or[0].px,or[0].py);or.forEach(p=>ctx.lineTo(p.px,p.py));ctx.closePath();ctx.stroke();
-    ctx.setLineDash([]);
+    const off=opts.offPx||5;
+    const ow=hw+off, od=hd+off, oh=bh+off*0.7;
+    face([proj(-ow,-off*0.5,od),proj(ow,-off*0.5,od),proj(ow,oh,od),proj(-ow,oh,od)],'rgba(200,168,106,0.45)','#c8a86a');
+    face([proj(ow,-off*0.5,-od),proj(ow,-off*0.5,od),proj(ow,oh,od),proj(ow,oh,-od)],'rgba(200,168,106,0.35)','#c8a86a');
+    face([proj(-ow,oh,-od),proj(ow,oh,-od),proj(ow,oh,od),proj(-ow,oh,od)],'rgba(200,168,106,0.55)','#c8a86a');
+    // Handle cutout on side face
+    ctx.strokeStyle='#a07040';ctx.lineWidth=lw*1.2;
+    const hcx=(proj(ow,-off*0.5,-od).px+proj(ow,oh,-od).px)/2;
+    const hcy=(proj(ow,-off*0.5,-od).py+proj(ow,oh,-od).py)/2 - 6;
+    ctx.beginPath();ctx.arc(hcx, hcy, 8, Math.PI, 0);ctx.stroke();
   }
+
+  // Bag: two loop handles arching above the box
   if(opts.bag){
     const bc=BAG_COLORS[bagCI], bh2=bc.hex==='custom'?'#7F77DD':bc.hex;
     const hColor=bh2==='#F5F0E8'?'#8B9E7A':bh2;
-    const topY=baseH+lidH+3;
-    ctx.strokeStyle=hColor;ctx.lineWidth=(opts.lw||0.8)*2.5;ctx.lineCap='round';
-    const lhp=proj(-hw*0.45,topY,0), rhp=proj(hw*0.45,topY,0), mid=proj(0,topY+18,0);
-    ctx.beginPath();ctx.moveTo(lhp.px,lhp.py);ctx.quadraticCurveTo(lhp.px-2,mid.py,mid.px-9,mid.py);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(rhp.px,rhp.py);ctx.quadraticCurveTo(rhp.px+2,mid.py,mid.px+9,mid.py);ctx.stroke();
+    const topY=bh+3;
+    ctx.strokeStyle=hColor;ctx.lineWidth=lw*2.6;ctx.lineCap='round';ctx.setLineDash([]);
+    // Left handle loop
+    const la=proj(-hw*0.42,topY,hd*0.2), lb=proj(-hw*0.42,topY+24,hd*0.2);
+    ctx.beginPath();ctx.moveTo(la.px,la.py);
+    ctx.bezierCurveTo(la.px-13,la.py-8,lb.px-13,lb.py+4,lb.px,lb.py);ctx.stroke();
+    // Right handle loop
+    const ra=proj(hw*0.42,topY,hd*0.2), rb=proj(hw*0.42,topY+24,hd*0.2);
+    ctx.beginPath();ctx.moveTo(ra.px,ra.py);
+    ctx.bezierCurveTo(ra.px+13,ra.py-8,rb.px+13,rb.py+4,rb.px,rb.py);ctx.stroke();
+    // Connecting bar
+    ctx.lineWidth=lw*1.8;
+    ctx.beginPath();ctx.moveTo(lb.px,lb.py);ctx.lineTo(rb.px,rb.py);ctx.stroke();
   }
 }
 function buildSizeGrid(){
@@ -431,7 +499,7 @@ function buildSizeGrid(){
     btn.className='size-btn'+(k===sz?' active':'');
     const img=document.createElement('img');
     img.src='img/'+(BOX_IMG[k]||k+'c')+'.png'; img.alt=v.name;
-    img.style.cssText='width:'+Math.round(78*v.w/0.96)+'px;height:auto;object-fit:contain;display:block;margin:0 auto';
+    img.style.cssText='width:'+Math.round(78*Math.pow(v.w/0.96,1.5))+'px;height:auto;object-fit:contain;display:block;margin:0 auto';
     btn.appendChild(img);
     const szEl=document.createElement('span'); szEl.className='sz'; szEl.textContent=v.name; btn.appendChild(szEl);
     const svEl=document.createElement('span'); svEl.className='sv'; svEl.textContent=v.vol; btn.appendChild(svEl);
@@ -577,11 +645,12 @@ if(document.getElementById('sizeGrid')){
     const card=document.createElement('div'); card.className='rbox fly';
     const img=document.createElement('img');
     img.className='box-img'; img.src='img/'+(BOX_IMG[k]||k+'c')+'.png'; img.alt='ColdCore '+v.name;
-    img.style.width=Math.round(260*v.w/0.96)+'px';
+    img.style.width=Math.round(260*Math.pow(v.w/0.96,1.5))+'px';
     card.appendChild(img);
     const nm=document.createElement('div'); nm.className='bn'; nm.innerHTML='Cold<span style="color:#3db4e8">Core</span> '+v.name; card.appendChild(nm);
     const bd=document.createElement('div'); bd.className='bd'; bd.innerHTML=v.ext+' mm<br>'+v.vol+' · up to '+v.pay; card.appendChild(bd);
     const fromP=(v.palP/v.pal); const bp=document.createElement('div'); bp.className='bp'; bp.style.color='#3db4e8'; bp.innerHTML='from £'+fromP.toFixed(2)+' <span class="bpe" style="color:#9fc4d6">per box</span>'; card.appendChild(bp);
+    card.onclick=()=>openGallery(k);
     g.appendChild(card);
   });
   const io2=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io2.unobserve(e.target);} }),{threshold:0.12});
@@ -592,6 +661,83 @@ function submitLead(){
   if(!n||!c){alert('Please enter your name and contact');return;}
   try{fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,contact:c})});}catch(e){}
   document.getElementById('step1').classList.add('hide'); document.getElementById('step2').classList.remove('hide');
+}
+/* ---- Stripe checkout ---- */
+async function startCheckout(){
+  const contact=document.getElementById('coContact').value.trim();
+  const postcode=document.getElementById('coPost').value.trim();
+  if(!contact){alert('Please enter your email or phone');return;}
+  const btn=document.getElementById('orderBtn');
+  btn.disabled=true;btn.textContent='Processing…';
+  const v=SIZES[sz], q=chosenQty;
+  const grand=parseFloat(document.getElementById('rGrand').textContent.replace('£',''))||0;
+  const desc=document.getElementById('rLines').innerText.replace(/\n/g,' | ').substring(0,250);
+  const payload={
+    contact, postcode,
+    size:v.name, qty:q,
+    description:`ColdCore ${v.name} × ${q}${desc?': '+desc:''}`,
+    amount_pence:Math.round(grand*100),
+  };
+  try{
+    const r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const d=await r.json();
+    if(d.url){window.location.href=d.url;return;}
+    throw new Error(d.error||'No checkout URL');
+  }catch(e){
+    // Fallback: mailto with order details until backend is live
+    const sub=encodeURIComponent('ColdCore order: '+v.name+' × '+q);
+    const body=encodeURIComponent(`Contact: ${contact}\nPost code: ${postcode}\nOrder: ColdCore ${v.name} × ${q}\nTotal: £${grand.toFixed(2)}\n\n${desc}`);
+    window.location.href=`mailto:order@coldcore.uk?subject=${sub}&body=${body}`;
+  }
+  btn.disabled=false;btn.textContent='Order & Pay';
+}
+/* ---- Gallery ---- */
+// Photos per box — populate with actual images when ready
+const BOX_GALLERY={
+  xs:[], s:[], m:[], l:[], xl:[], xxl:[]
+};
+let gKey='m', gIdx=0;
+function openGallery(key){
+  gKey=key; gIdx=0;
+  const imgs=BOX_GALLERY[key];
+  const box=document.getElementById('galleryBox');
+  const v=SIZES[key];
+  document.getElementById('gboxTitle').textContent='ColdCore '+v.name+' · '+v.ext+' mm';
+  if(!imgs||imgs.length===0){
+    // No photos yet — show the product image
+    document.getElementById('gboxImg').src='img/'+(BOX_IMG[key]||key+'c')+'.png';
+    document.getElementById('gboxDots').innerHTML='';
+  }else{
+    gShowImg();
+    buildDots(imgs.length);
+  }
+  box.classList.add('open');
+  document.addEventListener('keydown',gKey_handler);
+}
+function gShowImg(){
+  const imgs=BOX_GALLERY[gKey];
+  if(!imgs||!imgs.length)return;
+  document.getElementById('gboxImg').src=imgs[gIdx];
+  document.querySelectorAll('.gbox-dot').forEach((d,i)=>d.classList.toggle('on',i===gIdx));
+}
+function buildDots(n){
+  const c=document.getElementById('gboxDots'); c.innerHTML='';
+  for(let i=0;i<n;i++){const d=document.createElement('div');d.className='gbox-dot'+(i===0?' on':'');d.onclick=()=>{gIdx=i;gShowImg();};c.appendChild(d);}
+}
+function gNav(dir){
+  const imgs=BOX_GALLERY[gKey];
+  if(!imgs||!imgs.length)return;
+  gIdx=(gIdx+dir+imgs.length)%imgs.length; gShowImg();
+}
+function closeGallery(e){
+  if(e&&e.target!==document.getElementById('galleryBox')&&!e.target.classList.contains('gbox-close'))return;
+  document.getElementById('galleryBox').classList.remove('open');
+  document.removeEventListener('keydown',gKey_handler);
+}
+function gKey_handler(e){
+  if(e.key==='Escape')closeGallery({target:document.getElementById('galleryBox')});
+  if(e.key==='ArrowRight')gNav(1);
+  if(e.key==='ArrowLeft')gNav(-1);
 }
 </script>
 </body>
