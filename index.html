@@ -366,6 +366,7 @@ const SLV_COLORS=[
   {name:'Black',hex:'#2C2C2A',brd:'#555'},{name:'Navy',hex:'#2C3E50',brd:'#1a2a38'},
   {name:'Teal',hex:'#1D9E75',brd:'#0e5a42'},{name:'Custom',hex:'custom',brd:'#999'},
 ];
+const BOX_IMG={xs:'xsc',s:'sc',m:'mc',l:'lc',xl:'xlc',xxl:'xxlc'};
 let sz='m', chosenQty=300, bagCI=0, slvCI=0, animFrame=null, thumbFrames={};
 const f=n=>'£'+n.toFixed(2);
 function drawBoxToCanvas(canvas, vKey, angle, opts={}){
@@ -568,7 +569,6 @@ if(document.getElementById('sizeGrid')){
   startMainAnim();
 }
 /* 3x2 окошки товара (range) */
-const BOX_IMG={xs:'xsc',s:'sc',m:'mc',l:'lc',xl:'xlc',xxl:'xxlc'};
 (function(){
   const g=document.getElementById('rangeGrid');
   if(!g||typeof SIZES==='undefined')return;
