@@ -70,7 +70,10 @@
   input:focus{border-color:var(--glacier)}
   .muted{color:var(--steel);font-size:12px;margin-top:14px;text-align:center}
   .hide{display:none}
-  footer{background:#06151e;color:var(--steel);text-align:center;padding:28px;font-size:13px;border-top:1px solid rgba(61,180,232,.12)}
+  footer{background:#06151e;color:var(--steel);text-align:center;padding:24px 24px 32px;font-size:13px;border-top:1px solid rgba(61,180,232,.12)}
+  .footer-links{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+  .footer-links a{color:#4a7a90;font-size:11.5px;text-decoration:none;transition:color .15s}
+  .footer-links a:hover{color:#3db4e8}
   /* scroll-reveal коробки */
   .reveal{position:relative;height:300vh;background:linear-gradient(180deg,#06151e,#0a1a22 50%,#06151e)}
   .reveal-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -150,6 +153,30 @@
   #order .co-post{max-width:130px;flex:none}
   #order .co-btn{width:100%;margin-top:.65rem;padding:13px;font-size:15px;border-radius:var(--border-radius-lg)}
   #order .co-note{font-size:11px;color:var(--color-text-tertiary);margin-top:6px;text-align:center}
+  /* shipping selector */
+  #order .ship-opts{display:flex;gap:7px;margin-top:.6rem;flex-wrap:wrap}
+  #order .ship-opt{flex:1;min-width:120px;background:var(--color-background-secondary);border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 11px;cursor:pointer;transition:border-color .15s,background .15s;user-select:none}
+  #order .ship-opt.on{border-color:#3db4e8;background:rgba(61,180,232,.08)}
+  #order .ship-opt .sn{font-size:12px;font-weight:700;color:var(--color-text-primary)}
+  #order .ship-opt .sd{font-size:10px;color:var(--color-text-tertiary);margin-top:1px;line-height:1.3}
+  #order .ship-opt .sp{font-size:12px;font-weight:700;color:#3db4e8;margin-top:4px}
+  #order .r-ship{display:flex;justify-content:space-between;padding:4px 0;font-size:12.5px;color:var(--color-text-secondary)}
+  /* policy modal */
+  .pmodal{position:fixed;inset:0;z-index:300;background:rgba(5,16,24,.97);opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
+  .pmodal.open{opacity:1;pointer-events:all}
+  .pmodal-close{position:fixed;top:18px;right:18px;background:rgba(255,255,255,.12);border:none;color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;z-index:301;transition:background .15s}
+  .pmodal-close:hover{background:rgba(255,255,255,.28)}
+  .pmodal-inner{max-width:700px;margin:0 auto;padding:60px 24px 100px}
+  .pmodal-title{font-size:24px;font-weight:800;color:#eaf6fc;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid rgba(61,180,232,.2)}
+  .pmodal-body{color:#9fc4d6;line-height:1.8;font-size:13.5px}
+  .pmodal-body h3{color:#c8dfe8;font-size:14px;font-weight:700;margin:22px 0 6px}
+  .pmodal-body p{margin:0 0 10px}
+  .pmodal-body ul{padding-left:20px;margin:0 0 10px}
+  .pmodal-body li{margin-bottom:4px}
+  .pmodal-body a{color:#3db4e8}
+  .pmodal-body table{width:100%;border-collapse:collapse;margin:10px 0}
+  .pmodal-body th,.pmodal-body td{text-align:left;padding:7px 10px;border:1px solid rgba(61,180,232,.15);font-size:12.5px}
+  .pmodal-body th{color:#c8dfe8;font-weight:700;background:rgba(61,180,232,.06)}
   /* gallery lightbox */
   .gbox{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.88);opacity:0;pointer-events:none;transition:opacity .22s}
   .gbox.open{opacity:1;pointer-events:all}
@@ -270,6 +297,7 @@
       <div class="receipt">
         <div id="rLines"></div>
         <div class="r-sub"><span>Subtotal (ex-VAT)</span><span id="rSub">£0.00</span></div>
+        <div class="r-ship"><span id="rShipName">Delivery · Standard</span><span id="rShip">£4.95</span></div>
         <div class="r-vat"><span>VAT 20%</span><span id="rVat">£0.00</span></div>
         <div class="r-grand"><span>Total inc-VAT</span><span id="rGrand">£0.00</span></div>
       </div>
@@ -284,6 +312,23 @@
       <div class="co-row">
         <input type="text" id="coContact" class="co-input" placeholder="Email or phone">
         <input type="text" id="coPost" class="co-input co-post" placeholder="Post code">
+      </div>
+      <div class="ship-opts">
+        <div class="ship-opt on" id="shipStd" onclick="selectShipping('std')">
+          <div class="sn">Standard</div>
+          <div class="sd">Royal Mail 48 · 2–3 days</div>
+          <div class="sp">£5.94 inc VAT</div>
+        </div>
+        <div class="ship-opt" id="shipExp" onclick="selectShipping('exp')">
+          <div class="sn">Express</div>
+          <div class="sd">Special Delivery · next day</div>
+          <div class="sp">£11.94 inc VAT</div>
+        </div>
+        <div class="ship-opt" id="shipPal" onclick="selectShipping('pal')">
+          <div class="sn">Pallet</div>
+          <div class="sd">2–4 days · bulk orders</div>
+          <div class="sp">£96.00 inc VAT</div>
+        </div>
       </div>
       <button class="btn co-btn" id="orderBtn" onclick="startCheckout()">Order &amp; Pay</button>
       <p class="co-note">Secure checkout · Powered by Stripe</p>
@@ -330,7 +375,25 @@
   </div>
 </div></div></section>
 
-<footer>coldcore.uk · Temperature-controlled shipping · United Kingdom · © 2026 <span style="color:#fff;font-weight:700">Cold</span><span style="color:#3db4e8;font-weight:700">Core</span></footer>
+<footer>
+  <div>coldcore.uk · Temperature-controlled shipping · United Kingdom · © 2026 <span style="color:#fff;font-weight:700">Cold</span><span style="color:#3db4e8;font-weight:700">Core</span></div>
+  <div class="footer-links">
+    <a href="#" onclick="openPolicy('shipping');return false">Shipping policy</a>
+    <a href="#" onclick="openPolicy('refund');return false">Refund policy</a>
+    <a href="#" onclick="openPolicy('privacy');return false">Privacy policy</a>
+    <a href="#" onclick="openPolicy('terms');return false">Terms of service</a>
+    <a href="#" onclick="openPolicy('contact');return false">Contact information</a>
+  </div>
+</footer>
+
+<!-- Policy modal -->
+<div class="pmodal" id="policyModal">
+  <button class="pmodal-close" onclick="closePolicy()">✕</button>
+  <div class="pmodal-inner">
+    <div class="pmodal-title" id="policyTitle"></div>
+    <div class="pmodal-body" id="policyBody"></div>
+  </div>
+</div>
 
 <!-- Gallery lightbox -->
 <div class="gbox" id="galleryBox" onclick="if(event.target===this)closeGallery()">
@@ -505,6 +568,17 @@ function onQtyInput(){
   calc();
 }
 
+const SHIPPING={
+  std:{name:'Standard · Royal Mail 48 Tracked',detail:'2–3 working days',exvat:4.95},
+  exp:{name:'Express · Special Delivery',detail:'Next working day (order before 1pm)',exvat:9.95},
+  pal:{name:'Pallet delivery',detail:'2–4 working days · ground level',exvat:80.00},
+};
+let shipMethod='std';
+function selectShipping(m){
+  shipMethod=m;
+  ['std','exp','pal'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('on',k===m));
+  calc();
+}
 function calc(){
   const v=SIZES[sz]; const q=chosenQty;
   const aIce=document.getElementById('aIce').checked;
@@ -552,15 +626,18 @@ function calc(){
     const cn=bc.hex==='custom'?' · custom Pantone (50 min)':'';
     lines.push({n:`ColdCarry Bag ${v.name} · ${bc.name}${cn}${pl!=='plain'?' · '+pl:''}`,s:`${q} pcs · ${f(v.bag)}${badd>0?' + '+f(badd)+' personalisation':''} = ${f(bu)}/pc`,p:t});
   }
-  const vat=sub*0.20,grand=sub+vat;
+  const sh=SHIPPING[shipMethod];
+  const fullEx=sub+sh.exvat, vat=fullEx*0.20, grand=fullEx+vat;
   document.getElementById('rLines').innerHTML=lines.map(l=>`<div class="r-line"><div style="flex:1"><div class="r-lname">${l.n}</div><div class="r-lsub${l.w?' moq-warn':''}">${l.s}</div></div><div class="r-lp">${l.p>0?f(l.p):'—'}</div></div>`).join('');
+  document.getElementById('rShipName').textContent='Delivery · '+sh.name.split(' · ')[0];
+  document.getElementById('rShip').textContent=f(sh.exvat);
   document.getElementById('rSub').textContent=f(sub);
   document.getElementById('rVat').textContent=f(vat);
   document.getElementById('rGrand').textContent=f(grand);
   document.getElementById('mQty').textContent=q;
   document.getElementById('mTier').textContent=desc.tier;
   document.getElementById('mCpu').textContent=f(bt/q);
-  document.getElementById('mAll').textContent=f(sub/q);
+  document.getElementById('mAll').textContent=f(grand/q);
 }
 if(document.getElementById('sizeGrid')){
   buildSizeGrid();
@@ -606,6 +683,8 @@ async function startCheckout(){
   const payload={
     contact, postcode,
     size:v.name, qty:q,
+    shipping_method:shipMethod,
+    shipping_label:SHIPPING[shipMethod].name,
     description:`ColdCore ${v.name} × ${q}${desc?': '+desc:''}`,
     amount_pence:Math.round(grand*100),
   };
@@ -622,6 +701,126 @@ async function startCheckout(){
   }
   btn.disabled=false;btn.textContent='Order & Pay';
 }
+/* ---- Policies ---- */
+const POLICIES={
+  shipping:{
+    title:'Shipping Policy',
+    body:`<p>Last updated: June 2026</p>
+<p>ColdCore delivers within the <strong>United Kingdom only</strong>. For wholesale or international enquiries please contact us directly.</p>
+<h3>Delivery options</h3>
+<table><tr><th>Service</th><th>Delivery time</th><th>Cost (ex-VAT)</th></tr>
+<tr><td>Standard · Royal Mail 48 Tracked</td><td>2–3 working days</td><td>£4.95</td></tr>
+<tr><td>Express · Special Delivery</td><td>Next working day (order before 1pm)</td><td>£9.95</td></tr>
+<tr><td>Pallet delivery</td><td>2–4 working days</td><td>£80.00</td></tr>
+</table>
+<p>All delivery prices are exclusive of VAT (20%). Pallet delivery covers an unlimited number of pallets per order. Ground-level delivery only — tail-lift not available.</p>
+<h3>Tracking</h3>
+<p>Standard and Express orders are fully tracked. You will receive a tracking number once your order is dispatched.</p>
+<h3>Processing time</h3>
+<p>Orders are processed Monday–Friday. Orders placed after 1pm or on weekends are processed the next working day.</p>
+<h3>Damages & missing items</h3>
+<p>Please inspect your delivery on arrival. If items are damaged, defective, or missing, contact us at <a href="mailto:hello@coldcore.uk">hello@coldcore.uk</a> within 48 hours of receipt with photos and your order details.</p>`
+  },
+  refund:{
+    title:'Refund Policy',
+    body:`<p>Last updated: June 2026</p>
+<h3>Returns</h3>
+<p>You have <strong>30 days</strong> from receipt of your order to request a return. Items must be unused, in their original condition and packaging, with proof of purchase.</p>
+<p>To start a return, contact us at <a href="mailto:hello@coldcore.uk">hello@coldcore.uk</a>. Returns sent without prior authorisation will not be accepted.</p>
+<h3>Non-returnable items</h3>
+<ul>
+  <li>Custom or personalised products (printed sleeves, branded bags)</li>
+  <li>Perishable or temperature-sensitive goods</li>
+  <li>Sale items and gift cards</li>
+</ul>
+<h3>Exchanges</h3>
+<p>We do not offer direct exchanges. Return the original item and place a new order for the replacement.</p>
+<h3>EU cooling-off period</h3>
+<p>EU customers have the right to cancel or return within 14 days of receipt, for any reason, without justification.</p>
+<h3>Refund timeline</h3>
+<p>Once your return is inspected and approved, a refund is processed to your original payment method within <strong>10 business days</strong>. Allow additional time for your bank to process the credit. If you haven't received your refund after 15 business days, contact us at <a href="mailto:hello@coldcore.uk">hello@coldcore.uk</a>.</p>`
+  },
+  privacy:{
+    title:'Privacy Policy',
+    body:`<p>Last updated: June 2026</p>
+<p>This policy explains how ColdCore collects, uses and protects your personal information when you use <a href="https://coldcore.uk">coldcore.uk</a> or contact us.</p>
+<h3>Information we collect</h3>
+<ul>
+  <li><strong>You provide:</strong> name, email, phone number, delivery address, order and payment details, and any correspondence with us.</li>
+  <li><strong>Automatically:</strong> browser type, IP address, pages visited, and usage data via cookies and similar technologies.</li>
+  <li><strong>Third parties:</strong> payment processors, analytics providers, and shipping carriers.</li>
+</ul>
+<h3>How we use your information</h3>
+<ul>
+  <li>Processing and fulfilling your orders</li>
+  <li>Communicating about your order and our products</li>
+  <li>Improving our website and services</li>
+  <li>Fraud detection and security</li>
+  <li>Marketing (only where you have consented; you can unsubscribe at any time)</li>
+</ul>
+<h3>Sharing your information</h3>
+<p>We share data with trusted third parties only as needed to operate our business — payment processors (Stripe), shipping carriers, and analytics tools. We do not sell your personal data.</p>
+<h3>Your rights (UK GDPR)</h3>
+<p>You have the right to access, correct, delete, or port your data, and to object to or restrict its processing. To exercise any right, contact <a href="mailto:hello@coldcore.uk">hello@coldcore.uk</a>.</p>
+<h3>Cookies</h3>
+<p>We use essential cookies for site functionality and analytics cookies (with your consent) to understand how visitors use the site. You can manage cookie preferences in your browser settings.</p>
+<h3>Contact</h3>
+<p>For privacy queries: <a href="mailto:hello@coldcore.uk">hello@coldcore.uk</a></p>`
+  },
+  terms:{
+    title:'Terms of Service',
+    body:`<p>Last updated: June 2026</p>
+<p>By visiting coldcore.uk and placing an order, you agree to these terms. Please read them carefully.</p>
+<h3>1 · Use of the site</h3>
+<p>You must be of legal age to purchase. You agree not to use the site for unlawful purposes, to infringe intellectual property rights, or to transmit malicious code.</p>
+<h3>2 · Orders and pricing</h3>
+<p>Prices are subject to change without notice and are shown excluding VAT unless stated. We reserve the right to refuse or cancel any order, limit quantities, and correct pricing errors.</p>
+<h3>3 · Products</h3>
+<p>Product images and descriptions are as accurate as possible. ColdCore boxes are EPS (expanded polystyrene) insulated packaging intended for cold-chain transport of temperature-sensitive goods. Payload capacity and temperature performance are indicative and depend on ambient conditions, coolant configuration, and product density.</p>
+<h3>4 · Payment</h3>
+<p>Payments are processed securely via Stripe. Credit card information is always encrypted in transit. We accept major UK payment methods.</p>
+<h3>5 · Shipping</h3>
+<p>See our <a href="#" onclick="openPolicy('shipping');return false">Shipping Policy</a> for delivery options, timelines, and costs.</p>
+<h3>6 · Returns</h3>
+<p>See our <a href="#" onclick="openPolicy('refund');return false">Refund Policy</a>.</p>
+<h3>7 · Limitation of liability</h3>
+<p>ColdCore is not liable for indirect, incidental, or consequential damages arising from use of our products or services. Our liability is limited to the value of the order in question.</p>
+<h3>8 · Governing law</h3>
+<p>These terms are governed by the laws of England and Wales. Any disputes are subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+<h3>9 · Changes to terms</h3>
+<p>We may update these terms at any time. Continued use of the site following updates constitutes acceptance.</p>
+<h3>10 · Contact</h3>
+<p><a href="mailto:hello@coldcore.uk">hello@coldcore.uk</a></p>`
+  },
+  contact:{
+    title:'Contact Information',
+    body:`<h3>Get in touch</h3>
+<p>We're here to help with orders, product questions, and custom packaging enquiries.</p>
+<table>
+  <tr><th>Email</th><td><a href="mailto:hello@coldcore.uk">hello@coldcore.uk</a></td></tr>
+  <tr><th>Orders</th><td><a href="mailto:order@coldcore.uk">order@coldcore.uk</a></td></tr>
+  <tr><th>Phone</th><td>01494 611 112</td></tr>
+  <tr><th>Address</th><td>8 Chandos Close, Amersham, Bucks HP6 6PJ, United Kingdom</td></tr>
+  <tr><th>VAT number</th><td>GB 387048074</td></tr>
+</table>
+<h3>Opening hours</h3>
+<p>Monday–Friday, 9am–5pm GMT. Orders can be placed online 24/7.</p>
+<h3>Custom orders &amp; wholesale</h3>
+<p>For large volume orders, custom printed sleeves, or wholesale pricing, email <a href="mailto:hello@coldcore.uk">hello@coldcore.uk</a> with your requirements and we'll come back to you with a quote.</p>`
+  },
+};
+function openPolicy(key){
+  const p=POLICIES[key]; if(!p)return;
+  document.getElementById('policyTitle').textContent=p.title;
+  document.getElementById('policyBody').innerHTML=p.body;
+  document.getElementById('policyModal').classList.add('open');
+  document.addEventListener('keydown',pKey_handler);
+}
+function closePolicy(){
+  document.getElementById('policyModal').classList.remove('open');
+  document.removeEventListener('keydown',pKey_handler);
+}
+function pKey_handler(e){if(e.key==='Escape')closePolicy();}
 /* ---- Gallery ---- */
 // Photos per box — populate with actual images when ready
 const BOX_GALLERY={
