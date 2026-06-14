@@ -578,9 +578,9 @@ if(document.getElementById('sizeGrid')){
     const img=document.createElement('img');
     img.className='box-img'; img.src='img/'+(BOX_IMG[k]||k+'c')+'.png'; img.alt='ColdCore '+v.name;
     card.appendChild(img);
-    const nm=document.createElement('div'); nm.className='bn'; nm.textContent='ColdCore '+v.name; card.appendChild(nm);
+    const nm=document.createElement('div'); nm.className='bn'; nm.innerHTML='Cold<span style="color:#3db4e8">Core</span> '+v.name; card.appendChild(nm);
     const bd=document.createElement('div'); bd.className='bd'; bd.innerHTML=v.ext+' mm<br>'+v.vol+' · up to '+v.pay; card.appendChild(bd);
-    const fromP=(v.palP/v.pal); const bp=document.createElement('div'); bp.className='bp'; bp.innerHTML='from £'+fromP.toFixed(2)+' <span class="bpe">per box</span>'; card.appendChild(bp);
+    const fromP=(v.palP/v.pal); const bp=document.createElement('div'); bp.className='bp'; bp.style.color='#3db4e8'; bp.innerHTML='from £'+fromP.toFixed(2)+' <span class="bpe" style="color:#9fc4d6">per box</span>'; card.appendChild(bp);
     g.appendChild(card);
   });
   const io2=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io2.unobserve(e.target);} }),{threshold:0.12});
