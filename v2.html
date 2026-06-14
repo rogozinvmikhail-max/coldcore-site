@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ColdCore - Temperature-controlled shipping</title>
+<meta name="description" content="ColdCore insulated boxes and cold-chain packaging for food, seafood, pharma and diagnostics across the UK." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root{
+  --bg:#050c12;
+  --surface:#091620;
+  --card:#0d1f2e;
+  --accent:#00c4e4;
+  --accent-glow:rgba(0,196,228,0.18);
+  --accent-dim:rgba(0,196,228,0.08);
+  --text:#c4dfe8;
+  --muted:#4e7a91;
+  --border:rgba(0,196,228,0.11);
+  --border-mid:rgba(0,196,228,0.24);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Outfit',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* ── GRAIN overlay (taste/redesign-skill: break digital flatness) ── */
+body::before{
+  content:'';
+  position:fixed;
+  inset:-50%;
+  width:200%;height:200%;
+  z-index:9999;
+  pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  opacity:0.038;
+  mix-blend-mode:overlay;
+}
+
+/* ── FLOATING GLASS NAV (gpt-tasteskill: glass pill) ── */
+header{
+  position:fixed;top:14px;left:50%;
+  transform:translateX(-50%);
+  width:min(960px,calc(100% - 28px));
+  z-index:30;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 18px 11px 14px;
+  background:rgba(5,12,18,0.72);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;
+  box-shadow:0 4px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.wordmark{
+  font-family:'Space Mono',monospace;
+  font-size:13px;font-weight:700;letter-spacing:0.05em;
+  display:flex;align-items:center;gap:9px;
+  color:var(--text);text-decoration:none;
+}
+.wordmark .core{color:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-link{
+  font-size:13px;font-weight:500;color:var(--muted);
+  text-decoration:none;transition:color 0.18s;letter-spacing:0.01em;
+}
+.nav-link:hover{color:var(--text)}
+.cta-top{
+  background:var(--accent);color:#030c14;
+  font-weight:700;font-size:12.5px;letter-spacing:0.04em;
+  padding:9px 18px;border-radius:7px;text-decoration:none;
+  transition:opacity 0.18s;
+}
+.cta-top:hover{opacity:0.82}
+@media(max-width:680px){.nav-links{display:none};header{padding:10px 14px}}
+
+/* ── HERO (gpt-tasteskill: cinematic center, 2-3 lines, no label) ── */
+.hero{position:relative;height:300vh}
+.hero-sticky{
+  position:sticky;top:0;height:100vh;min-height:600px;
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+}
+.hero-bg{position:absolute;inset:0;z-index:0;background:#040b12}
+.hero-bg img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;opacity:0;
+  transition:opacity 1.2s ease;
+  filter:brightness(0.55) saturate(0.7);
+}
+.hero-bg img.on{opacity:1}
+h1,.sub{transition:opacity .5s ease}
+/* Radial glow from center (gpt-tasteskill: ambient radial) */
+.hero-grad{
+  position:absolute;inset:0;z-index:1;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 50%,rgba(0,196,228,0.04) 0%,transparent 65%),
+    radial-gradient(ellipse 100% 100% at 50% 0%,rgba(5,12,18,0.6) 0%,transparent 50%),
+    linear-gradient(180deg,rgba(5,12,18,0.55) 0%,rgba(5,12,18,0.05) 40%,rgba(5,12,18,0.9) 100%);
+}
+.hero-inner{
+  position:relative;z-index:2;
+  text-align:center;
+  padding:0 24px;
+  width:100%;max-width:1100px;margin:0 auto;
+}
+/* gpt-tasteskill: H1 wide container, 2-3 lines, clamp font */
+h1{
+  font-size:clamp(48px,8.5vw,96px);
+  font-weight:800;line-height:0.95;
+  letter-spacing:-0.04em;
+  color:#ffffff;
+  max-width:100%;
+  text-wrap:balance;
+}
+.sub{
+  margin-top:22px;font-size:clamp(16px,2vw,20px);
+  color:#9ac4d4;max-width:44ch;margin-left:auto;margin-right:auto;
+  line-height:1.65;font-weight:400;text-wrap:pretty;
+}
+.hero-cta{
+  margin-top:36px;display:flex;
+  gap:12px;justify-content:center;flex-wrap:wrap;
+}
+.btn{
+  background:var(--accent);color:#030c14;
+  font-weight:700;padding:15px 32px;
+  text-decoration:none;font-size:16px;
+  border:none;cursor:pointer;border-radius:8px;
+  font-family:'Outfit',sans-serif;
+  transition:opacity 0.18s,transform 0.18s;
+}
+.btn:hover{opacity:0.85;transform:translateY(-1px)}
+.btn:active{transform:translateY(0) scale(0.98)}
+.btn.ghost{
+  background:rgba(255,255,255,0.06);color:var(--text);
+  border:1px solid rgba(255,255,255,0.15);
+  padding:14px 32px;
+}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+
+/* ── SECTIONS ── */
+.wrap{max-width:1200px;margin:0 auto;padding:100px 32px}
+/* gpt-tasteskill: no cheap section labels - headlines stand alone */
+.wrap h2{
+  font-size:clamp(30px,4.5vw,50px);
+  font-weight:800;letter-spacing:-0.035em;color:#ffffff;
+  text-wrap:balance;
+}
+.lead{
+  color:var(--muted);margin-top:12px;
+  max-width:54ch;font-size:17px;line-height:1.78;font-weight:400;
+}
+
+/* ── RANGE GRID ── */
+.rgrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  margin-top:48px;
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.rbox{
+  background:var(--surface);
+  padding:32px 22px 26px;
+  color:var(--text);
+  display:flex;flex-direction:column;
+  align-items:center;text-align:center;gap:6px;
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  transition:background 0.25s,box-shadow 0.25s;
+  cursor:default;
+}
+/* redesign-skill: hover physics */
+.rbox:hover{
+  background:var(--card);
+  box-shadow:inset 0 0 0 1px var(--border-mid),0 0 28px var(--accent-glow);
+}
+.rbox:nth-child(3n){border-right:none}
+.rbox:nth-child(n+4){border-bottom:none}
+.rbox canvas{margin-bottom:8px;transition:transform 0.3s ease}
+.rbox:hover canvas{transform:scale(1.04)}
+.rbox .bn{font-weight:700;font-size:20px;letter-spacing:-0.025em;color:#fff}
+.rbox .bd{
+  font-family:'Space Mono',monospace;
+  color:var(--muted);font-size:10.5px;line-height:1.9;letter-spacing:0.03em;
+}
+.rbox .bp{
+  margin-top:10px;font-family:'Space Mono',monospace;
+  font-weight:700;font-size:14px;color:var(--accent);
+}
+.rbox .bpe{color:var(--muted);font-weight:400;font-size:11px}
+
+/* ── SCROLL REVEAL ── */
+.reveal{
+  position:relative;height:300vh;
+  background:linear-gradient(180deg,var(--bg),#0b1f2e 50%,var(--bg));
+}
+.reveal-sticky{
+  position:sticky;top:0;height:100vh;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+#boxframe{
+  max-width:min(90vw,620px);width:100%;height:auto;
+  -webkit-mask-image:radial-gradient(ellipse 78% 82% at 50% 50%,#000 52%,transparent 90%);
+  mask-image:radial-gradient(ellipse 78% 82% at 50% 50%,#000 52%,transparent 90%);
+}
+.reveal-cap{
+  position:absolute;bottom:11%;left:0;right:0;
+  text-align:center;padding:0 24px;
+}
+.reveal-cap b{
+  display:block;color:#fff;
+  font-size:clamp(26px,4.5vw,48px);
+  font-weight:800;letter-spacing:-0.035em;text-wrap:balance;
+}
+.reveal-cap span{
+  font-family:'Space Mono',monospace;
+  color:var(--muted);font-size:clamp(11px,1.8vw,14px);
+  display:block;margin-top:12px;
+  letter-spacing:0.1em;text-transform:uppercase;
+}
+.reveal-eyebrow{
+  position:absolute;top:12%;left:0;right:0;text-align:center;
+  font-family:'Space Mono',monospace;
+  color:var(--accent);text-transform:uppercase;
+  letter-spacing:0.22em;font-size:10px;
+}
+
+/* ── INDUSTRIES: infinite marquee (gpt-tasteskill: no label, marquee) ── */
+.marquee-section{
+  padding:72px 0;border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+  background:var(--surface);
+}
+.marquee-track{overflow:hidden;white-space:nowrap;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-inner{
+  display:inline-flex;align-items:center;gap:0;
+  animation:marquee 28s linear infinite;
+}
+.marquee-inner:hover{animation-play-state:paused}
+.marquee-item{
+  font-size:clamp(18px,2.4vw,26px);font-weight:700;
+  color:var(--text);letter-spacing:-0.01em;
+  padding:0 36px;white-space:nowrap;
+}
+.marquee-dot{
+  display:inline-block;width:5px;height:5px;
+  border-radius:50%;background:var(--accent);
+  opacity:0.7;flex-shrink:0;
+}
+@keyframes marquee{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* ── ACCESSORIES ── */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:1px;margin-top:40px;
+  background:var(--border);
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.pcard{background:var(--surface);overflow:hidden}
+.pcard img{
+  width:100%;height:200px;object-fit:cover;display:block;
+  filter:brightness(0.82) saturate(0.72);
+  transition:filter 0.35s,transform 0.35s;
+  transform:scale(1.02);
+}
+.pcard:hover img{filter:brightness(1) saturate(0.9);transform:scale(1.07)}
+.pcard .body{padding:16px 20px}
+.pcard .nm{color:#fff;font-weight:700;font-size:15px;letter-spacing:-0.01em}
+.pcard .meta{
+  font-family:'Space Mono',monospace;
+  color:var(--muted);font-size:10.5px;margin-top:4px;
+  letter-spacing:0.06em;text-transform:uppercase;
+}
+.note{
+  font-family:'Space Mono',monospace;
+  color:var(--muted);font-size:10.5px;margin-top:20px;letter-spacing:0.04em;
+}
+
+/* ── FORM (gpt-tasteskill: massive high-contrast CTA) ── */
+.formsec{
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+/* ambient glow behind form */
+.formsec::before{
+  content:'';position:absolute;
+  top:-40%;left:50%;transform:translateX(-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,196,228,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.formsec .card{
+  max-width:500px;margin:0 auto;
+  padding:88px 32px;position:relative;z-index:1;
+}
+.formsec .card h2{
+  font-size:clamp(32px,4vw,48px);
+  font-weight:800;letter-spacing:-0.04em;color:#fff;
+  text-wrap:balance;
+}
+.formsec .card p{
+  color:var(--muted);font-size:15px;margin-top:12px;line-height:1.65;
+}
+label{
+  display:block;
+  font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);margin:22px 0 8px;font-weight:400;
+}
+input{
+  width:100%;background:rgba(0,0,0,0.35);
+  border:1px solid var(--border);
+  color:var(--text);padding:15px 16px;
+  font-size:15px;outline:none;border-radius:8px;
+  font-family:'Outfit',sans-serif;
+  transition:border-color 0.18s,box-shadow 0.18s;
+}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+.muted{
+  font-family:'Space Mono',monospace;
+  color:var(--muted);font-size:10px;
+  margin-top:14px;text-align:center;letter-spacing:0.06em;
+}
+.hide{display:none}
+
+/* ── FOOTER ── */
+footer{
+  background:#030a10;color:var(--muted);
+  padding:24px 32px;
+  font-family:'Space Mono',monospace;font-size:11px;
+  border-top:1px solid var(--border);letter-spacing:0.06em;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:10px;
+}
+footer .accent{color:var(--accent)}
+
+/* ── FLY-IN (keep for JS compatibility) ── */
+.fly{
+  opacity:0;transform:translateY(32px);
+  transition:opacity 0.75s ease,transform 0.85s cubic-bezier(.2,.7,.2,1);
+}
+.fly.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .fly{opacity:1;transform:none;transition:none}
+  .marquee-inner{animation:none}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:820px){
+  .rgrid{grid-template-columns:1fr 1fr}
+  .rbox:nth-child(3n){border-right:1px solid var(--border)}
+  .rbox:nth-child(2n){border-right:none}
+  .rbox:nth-child(n+4){border-bottom:none}
+  .rbox:nth-child(3),.rbox:nth-child(4){border-bottom:1px solid var(--border)}
+}
+@media(max-width:520px){
+  .rgrid{grid-template-columns:1fr}
+  .rbox{border-right:none!important}
+  .rbox:last-child{border-bottom:none}
+  .wrap{padding:72px 20px}
+  footer{padding:20px}
+}
+
+/* ── CALCULATOR ── */
+#order{
+  --color-background-primary:#091620;
+  --color-background-secondary:#050c12;
+  --color-text-primary:#c4dfe8;
+  --color-text-secondary:#4e7a91;
+  --color-text-tertiary:#2d5063;
+  --color-border-secondary:rgba(0,196,228,0.16);
+  --color-border-tertiary:rgba(0,196,228,0.09);
+  --border-radius-md:6px;
+  --border-radius-lg:10px;
+}
+#order .cc-wrap{padding:.5rem 0 0}
+#order .layout{display:grid;grid-template-columns:240px 1fr;gap:22px;align-items:start}
+#order .left-col{display:flex;flex-direction:column;gap:12px}
+#order .right-col{display:flex;flex-direction:column;gap:0}
+#order .preview-card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px;display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid var(--color-border-tertiary)}
+#order .pi-name{font-size:15px;font-weight:700;color:var(--color-text-primary);text-align:center}
+#order .pi-dims{font-family:'Space Mono',monospace;font-size:11px;color:var(--color-text-secondary);text-align:center;line-height:1.6}
+#order .pi-addons{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
+#order .addon-chip{font-family:'Space Mono',monospace;font-size:10px;padding:2px 8px;border-radius:4px;background:var(--color-background-primary);color:var(--color-text-secondary);border:1px solid var(--color-border-tertiary)}
+#order .addon-chip.on{background:rgba(0,196,228,0.1);color:#7ae4f8;font-weight:700;border-color:rgba(0,196,228,0.35)}
+#order .size-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+#order .size-btn{border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;padding:6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px;transition:background 0.18s}
+#order .size-btn:hover{background:var(--color-background-secondary)}
+#order .size-btn.active{border:2px solid #00c4e4;background:rgba(0,196,228,0.1)}
+#order .size-btn .sz{font-size:12px;font-weight:700;color:var(--color-text-primary)}
+#order .size-btn .sv{font-family:'Space Mono',monospace;font-size:9px;color:var(--color-text-tertiary)}
+#order .sec{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-tertiary);margin:1rem 0 .4rem}
+#order .qty-input-row{display:flex;align-items:center;gap:8px;margin-bottom:.5rem;flex-wrap:wrap}
+#order .qty-input-row label{font-size:13px;color:var(--color-text-secondary);text-transform:none;letter-spacing:0;margin:0;font-family:'Outfit',sans-serif}
+#order input[type=number]{font-family:'Space Mono',monospace;font-size:14px;padding:6px 11px;border-radius:var(--border-radius-md);border:1px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);height:36px;width:100px}
+#order .snap-options{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.6rem}
+#order .snap-btn{font-family:'Space Mono',monospace;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-secondary);transition:background 0.15s}
+#order .snap-btn.best{border-color:#00c4e4;color:#7ae4f8;background:rgba(0,196,228,0.1)}
+#order .snap-btn.chosen{outline:2px solid #00c4e4;outline-offset:1px;font-weight:700}
+#order .qty-result{font-family:'Space Mono',monospace;font-size:11.5px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:6px 10px;margin-bottom:.6rem;line-height:1.6;border:1px solid var(--color-border-tertiary)}
+#order .addon-row{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--color-border-tertiary)}
+#order .addon-row:last-child{border-bottom:none}
+#order .addon-row input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#00c4e4;margin-top:2px;flex-shrink:0}
+#order .addon-row label{font-size:13px;color:var(--color-text-primary);flex:1;cursor:pointer;line-height:1.4;text-transform:none;letter-spacing:0;margin:0;font-family:'Outfit',sans-serif}
+#order .addon-row .ap{font-family:'Space Mono',monospace;font-size:11.5px;color:var(--color-text-tertiary);white-space:nowrap;margin-top:2px}
+#order .addon-sub{margin-left:23px;padding:6px 0 2px;display:flex;flex-direction:column;gap:8px}
+#order select{font-family:'Space Mono',monospace;font-size:12px;padding:4px 8px;border-radius:var(--border-radius-md);border:1px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);height:30px}
+#order .moq-warn{font-family:'Space Mono',monospace;font-size:10.5px;color:#ff9b9b}
+#order .hidden{display:none}
+#order .color-section{display:flex;flex-direction:column;gap:5px}
+#order .color-label{font-family:'Space Mono',monospace;font-size:11px;color:var(--color-text-secondary)}
+#order .color-swatches{display:flex;gap:5px;flex-wrap:wrap}
+#order .swatch{width:24px;height:24px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;transition:transform 0.15s}
+#order .swatch:hover{transform:scale(1.15)}
+#order .swatch.selected{border-color:var(--color-text-primary)}
+#order .swatch.custom{background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600}
+#order .color-name{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--color-text-tertiary)}
+#order .divider{border:none;border-top:1px solid var(--color-border-tertiary);margin:.85rem 0}
+#order .receipt{background:var(--color-background-secondary);border:1px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem}
+#order .r-line{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--color-border-tertiary);gap:8px;font-size:12px}
+#order .r-line:last-child{border-bottom:none}
+#order .r-lname{color:var(--color-text-primary)}
+#order .r-lsub{font-family:'Space Mono',monospace;font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+#order .r-lp{font-family:'Space Mono',monospace;font-weight:600;color:var(--color-text-primary);white-space:nowrap}
+#order .r-sub{display:flex;justify-content:space-between;padding:9px 0 3px;font-size:14px;font-weight:700;border-top:1.5px solid var(--color-border-secondary);margin-top:3px;color:var(--color-text-primary)}
+#order .r-vat{font-family:'Space Mono',monospace;display:flex;justify-content:space-between;padding:1px 0 7px;font-size:11px;color:var(--color-text-tertiary)}
+#order .r-grand{display:flex;justify-content:space-between;padding:7px 0 0;font-size:16px;font-weight:800;border-top:1px solid var(--color-border-secondary);color:#00c4e4}
+#order .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:.7rem}
+#order .met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.6rem .75rem;border:1px solid var(--color-border-tertiary)}
+#order .met-l{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--color-text-secondary);margin-bottom:2px;text-transform:uppercase;letter-spacing:0.08em}
+#order .met-v{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--color-text-primary)}
+@media(max-width:720px){#order .layout{grid-template-columns:1fr}#order .metrics{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- FLOATING GLASS NAV -->
+<header>
+  <a href="#hero" class="wordmark">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M20 4H4v16h16" stroke="#c4dfe8" stroke-width="1.8"/>
+      <path d="M16 8H8v8h8" stroke="#00c4e4" stroke-width="1.8"/>
+    </svg>
+    <span class="cold">Cold</span><span class="core">Core</span>
+  </a>
+  <div class="nav-links">
+    <a href="#range" class="nav-link">Range</a>
+    <a href="#order" class="nav-link">Pricing</a>
+  </div>
+  <a href="#try" class="cta-top">Get pricing</a>
+</header>
+
+<!-- HERO: cinematic center, no label tag -->
+<section class="hero" id="hero">
+  <div class="hero-sticky">
+    <div class="hero-bg">
+      <img id="bgA" class="on" src="img/life7.jpg" alt="ColdCore cold-chain packaging">
+      <img id="bgB" src="" alt="">
+    </div>
+    <div class="hero-grad"></div>
+    <div class="hero-inner">
+      <h1 id="h1">Keep it cold,<br>door to door.</h1>
+      <p class="sub" id="sub">Insulated boxes and cold-chain packaging for food, seafood, pharma and diagnostics across the UK.</p>
+      <div class="hero-cta">
+        <a href="#try" class="btn">Get pricing</a>
+        <a href="#range" class="btn ghost">View the range</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RANGE: no section label, headline stands alone -->
+<section class="wrap" id="range">
+  <h2>Six sizes. One cold chain.</h2>
+  <p class="lead">From a single parcel to a full pallet. Same insulation, scaled to what you ship.</p>
+  <div class="rgrid" id="rangeGrid"></div>
+</section>
+
+<!-- SCROLL-REVEAL BOX ANIMATION -->
+<section class="reveal" id="reveal">
+  <div class="reveal-sticky">
+    <img id="boxframe" src="kbox/f00.jpg" alt="ColdCore insulated box unfolding">
+    <div class="reveal-eyebrow">Fold-flat · Recyclable · No tools</div>
+    <div class="reveal-cap">
+      <b>Engineered for zero compromise.</b>
+      <span>Interlocking insulated walls. Ships flat. Assembles in seconds.</span>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="wrap" id="order">
+  <h2>Build your order</h2>
+  <p class="lead">Pick a size, set the quantity, add what you need. Live pricing for single, pack or pallet.</p>
+  <div class="cc-wrap">
+    <div class="layout">
+      <div class="left-col">
+        <div class="preview-card">
+          <canvas id="mainCanvas" width="190" height="190"></canvas>
+          <div class="pi-name" id="pi-name">ColdCore M</div>
+          <div class="pi-dims" id="pi-dims"></div>
+          <div class="pi-addons" id="pi-addons"></div>
+        </div>
+        <div>
+          <div class="sec" style="margin-top:0">Choose size</div>
+          <div class="size-grid" id="sizeGrid"></div>
+        </div>
+      </div>
+      <div class="right-col">
+        <div class="sec" style="margin-top:0">Quantity</div>
+        <div class="qty-input-row">
+          <label style="margin:0">I need approx.</label>
+          <input type="number" id="qtyInput" value="1000" min="1" step="1" oninput="onQtyInput()">
+          <span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--color-text-tertiary)">boxes</span>
+        </div>
+        <div id="snapOpts" class="snap-options"></div>
+        <div class="qty-result" id="qtyResult"></div>
+        <div class="sec">Add-ons</div>
+        <div>
+          <div class="addon-row"><input type="checkbox" id="aIce" onchange="calc()"><label for="aIce">Ice pack set</label><span class="ap" id="ice-price"></span></div>
+          <div class="addon-row"><input type="checkbox" id="aOuter" onchange="calc()"><label for="aOuter">Corrugated outer</label><span class="ap" id="outer-price"></span></div>
+          <div class="addon-row" style="flex-wrap:wrap">
+            <input type="checkbox" id="aSleeve" onchange="calc()"><label for="aSleeve">Printed sleeve</label><span class="ap" id="sleeve-price"></span><span class="moq-warn" id="sleeve-warn"></span>
+            <div class="addon-sub hidden" id="sleeveOpts" style="width:100%">
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+                <select id="sleeveType" onchange="calc()"><option value="1c">1-colour print</option><option value="fc">Full colour</option></select>
+              </div>
+              <div class="color-section"><div class="color-label">Sleeve colour</div><div class="color-swatches" id="sleeveSwatches"></div><div class="color-name" id="sleeveColorName"></div></div>
+            </div>
+          </div>
+          <div class="addon-row" style="flex-wrap:wrap">
+            <input type="checkbox" id="aBag" onchange="calc()"><label for="aBag">ColdCarry bag</label><span class="ap" id="bag-price"></span>
+            <div class="addon-sub hidden" id="bagOpts" style="width:100%">
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+                <select id="bagPers" onchange="calc()"><option value="plain">Plain</option><option value="sp">+ Screen print (min 10)</option><option value="em">+ Embroidery (min 20)</option><option value="st">+ Sticker / patch (min 10)</option></select>
+                <span class="moq-warn" id="bag-warn"></span>
+              </div>
+              <div class="color-section"><div class="color-label">Bag colour</div><div class="color-swatches" id="bagSwatches"></div><div class="color-name" id="bagColorName"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="receipt">
+          <div id="rLines"></div>
+          <div class="r-sub"><span>Subtotal (ex-VAT)</span><span id="rSub">£0.00</span></div>
+          <div class="r-vat"><span>VAT 20%</span><span id="rVat">£0.00</span></div>
+          <div class="r-grand"><span>Total inc-VAT</span><span id="rGrand">£0.00</span></div>
+        </div>
+        <div class="metrics">
+          <div class="met"><div class="met-l">Units</div><div class="met-v" id="mQty">-</div></div>
+          <div class="met"><div class="met-l">Tier</div><div class="met-v" id="mTier">-</div></div>
+          <div class="met"><div class="met-l">Box/unit</div><div class="met-v" id="mCpu">-</div></div>
+          <div class="met"><div class="met-l">All-in/unit</div><div class="met-v" id="mAll">-</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:18px">All prices ex-VAT. Payload is indicative and depends on product density and coolant configuration.</p>
+
+  <div style="margin-top:80px">
+    <h2>Packaging and accessories</h2>
+    <p class="lead">Everything to pack and ship cold, from one supplier.</p>
+    <div class="grid">
+      <div class="pcard"><img src="img/cardboard.jpg" alt="Cardboard outers"><div class="body"><div class="nm">Cardboard outers</div><div class="meta">Courier-ready</div></div></div>
+      <div class="pcard"><img src="img/icepack.jpg" alt="Ice packs"><div class="body"><div class="nm">Ice packs</div><div class="meta">Gel coolant</div></div></div>
+      <div class="pcard"><img src="img/foilbag.jpg" alt="Thermal foil bags"><div class="body"><div class="nm">Thermal foil bags</div><div class="meta">Insulated liners</div></div></div>
+      <div class="pcard"><img src="img/carrybag.jpg" alt="Branded carry bags"><div class="body"><div class="nm">Branded carry bags</div><div class="meta">Your logo</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES: infinite marquee, no section title (gpt-tasteskill) -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-inner" aria-hidden="true">
+      <span class="marquee-item">Food and chilled</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item">Fish and seafood</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item">Meat and frozen</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item">Medical and pharma</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item">Diagnostics</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item">Reptiles and live bait</span>
+      <span class="marquee-dot"></span>
+      <!-- duplicate for seamless loop -->
+      <span class="marquee-item">Food and chilled</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item">Fish and seafood</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item">Meat and frozen</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item">Medical and pharma</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item">Diagnostics</span>
+      <span class="marquee-dot"></span>
+      <span class="marquee-item">Reptiles and live bait</span>
+      <span class="marquee-dot"></span>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<section class="formsec" id="try">
+  <div class="card">
+    <div id="step1">
+      <h2>Get pricing</h2>
+      <p>Leave your details and we will be in touch with pricing and the right box for what you ship.</p>
+      <label>Name</label>
+      <input id="f_name" placeholder="Your name">
+      <label>Phone or email</label>
+      <input id="f_contact" placeholder="Phone or email">
+      <button class="btn" style="width:100%;margin-top:26px;padding:17px;font-size:17px" onclick="submitLead()">Get pricing</button>
+      <p class="muted" style="margin-top:14px">No spam. We only use this to get in touch.</p>
+    </div>
+    <div id="step2" class="hide" style="text-align:center;padding:20px 0">
+      <div style="width:56px;height:56px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">&#10003;</div>
+      <h2 style="font-size:32px">Got it.</h2>
+      <p style="color:var(--muted);margin-top:10px;font-size:15px">A manager will be in touch shortly.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div><span class="accent">ColdCore</span> · Temperature-controlled shipping</div>
+  <div>coldcore.uk · United Kingdom · &#169; 2026</div>
+</footer>
+
+<script src="app.js"></script>
+
+<!-- GSAP: hero entrance + scroll-driven card scale (gpt-tasteskill) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// Hero entrance (GSAP timeline on load)
+window.addEventListener('load', function(){
+  gsap.set(['#h1','#sub','.hero-cta'], {opacity:0,y:0});
+  const tl = gsap.timeline({defaults:{ease:'power3.out'}});
+  tl.to('#h1',   {opacity:1, y:0, duration:1,   delay:0.2})
+    .to('#sub',  {opacity:1, y:0, duration:0.8}, '-=0.55')
+    .to('.hero-cta', {opacity:1, y:0, duration:0.7}, '-=0.45');
+});
+
+// Range cards: subtle stagger scale-in on scroll
+ScrollTrigger.batch('.rbox', {
+  onEnter: batch => gsap.from(batch, {
+    opacity:0, y:28, scale:0.96,
+    stagger:0.07, duration:0.8,
+    ease:'power2.out', clearProps:'all'
+  }),
+  start:'top 88%'
+});
+
+// Accessories: image reveal on scroll
+gsap.utils.toArray('.pcard').forEach((el, i) => {
+  gsap.from(el, {
+    scrollTrigger:{trigger:el, start:'top 85%'},
+    opacity:0, y:24, duration:0.75,
+    delay: i * 0.08,
+    ease:'power2.out',
+    clearProps:'all'
+  });
+});
+
+// Calculator section title
+gsap.from('#order h2', {
+  scrollTrigger:{trigger:'#order', start:'top 80%'},
+  opacity:0, x:-20, duration:0.9,
+  ease:'power2.out', clearProps:'all'
+});
+
+// Form section entrance
+gsap.from('.formsec .card', {
+  scrollTrigger:{trigger:'.formsec', start:'top 78%'},
+  opacity:0, y:40, duration:1.0,
+  ease:'power3.out', clearProps:'all'
+});
+</script>
+</body>
+</html>
