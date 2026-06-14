@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ColdCore — Temperature-controlled shipping</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M30 8 L30 2 L2 2 L2 30 L30 30 L30 24' fill='none' stroke='%23ffffff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M23 13 L23 9 L9 9 L9 23 L23 23 L23 19' fill='none' stroke='%233db4e8' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='1' y='27' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='28' fill='white'%3EC%3C/text%3E%3Ctext x='16' y='27' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='28' fill='%233db4e8'%3EC%3C/text%3E%3C/svg%3E">
 <meta name="description" content="ColdCore — insulated boxes and cold-chain packaging for food, seafood, pharma and diagnostics across the UK." />
 <style>
   :root{ --glacier:#3db4e8; --deep:#06151e; --steel:#9fc4d6; --ice:#eef7fc; }
@@ -33,6 +33,9 @@
   .btn{background:var(--glacier);color:#04222e;font-weight:800;padding:15px 26px;border-radius:999px;text-decoration:none;font-size:16px;border:none;cursor:pointer}
   .btn.ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(4px)}
   .swipe{position:absolute;bottom:24px;right:26px;z-index:2;color:#cfeefb;font-size:12px;letter-spacing:1.5px;text-transform:uppercase}
+  .hero-dots{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;display:flex;gap:9px;align-items:center}
+  .hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:none;cursor:pointer;padding:0;transition:background .25s,transform .25s}
+  .hero-dot.on{background:#fff;transform:scale(1.35)}
   /* SECTIONS */
   .wrap{max-width:1180px;margin:0 auto;padding:74px 26px}
   .wrap h2{font-size:clamp(28px,5vw,46px);font-weight:800;letter-spacing:-.5px}
@@ -168,7 +171,7 @@
 <body>
 
 <header>
-  <div class="wordmark"><svg width="50" height="50" viewBox="0 0 28 28" style="margin-right:2px"><path d="M23 7 L23 4 L4 4 L4 24 L23 24 L23 21" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 11 L19 9 L9 9 L9 19 L19 19 L19 17" fill="none" stroke="#3db4e8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Cold</span><span style="color:#3db4e8">Core</span></div>
+  <div class="wordmark"><span>Cold</span><span style="color:#3db4e8">Core</span></div>
   <a href="#try" class="cta-top">Try ColdCore</a>
 </header>
 
@@ -188,6 +191,7 @@
         <a href="#range" class="btn ghost">See the range</a>
       </div>
     </div>
+    <div class="hero-dots" id="heroDots"></div>
     <div class="swipe">Scroll to explore ↓</div>
   </div>
 </section>
@@ -324,7 +328,7 @@
   </div>
 </div></div></section>
 
-<footer>coldcore.uk · Temperature-controlled shipping · United Kingdom · © 2026 ColdCore</footer>
+<footer>coldcore.uk · Temperature-controlled shipping · United Kingdom · © 2026 <span style="color:#fff;font-weight:700">Cold</span><span style="color:#3db4e8;font-weight:700">Core</span></footer>
 
 <!-- Gallery lightbox -->
 <div class="gbox" id="galleryBox" onclick="closeGallery(event)">
@@ -353,18 +357,25 @@ const SLIDES=[
   {img:'img/life2.jpg', h:'Built for what spoils fastest.'}
 ];
 (function(){
-  const bgA=document.getElementById('bgA'), bgB=document.getElementById('bgB'), H=document.getElementById('h1'), hero=document.getElementById('hero');
+  const bgA=document.getElementById('bgA'), bgB=document.getElementById('bgB'), H=document.getElementById('h1'), hero=document.getElementById('hero'), dotsEl=document.getElementById('heroDots');
   if(!bgA||!bgB||!H) return;
-  SLIDES.forEach(s=>{const im=new Image(); im.src=s.img;}); // префетч
-  // фото меняются сами
+  SLIDES.forEach(s=>{const im=new Image(); im.src=s.img;});
   let si=0, top=bgA, bot=bgB;
-  function advanceImg(){
-    si=(si+1)%SLIDES.length;
-    bot.src=SLIDES[si].img;
-    bot.onload=function(){ bot.classList.add('on'); top.classList.remove('on'); const t=top; top=bot; bot=t; };
+  // Build dots
+  const dots=SLIDES.map((_,i)=>{
+    const d=document.createElement('button'); d.className='hero-dot'+(i===0?' on':'');
+    d.onclick=()=>goTo(i); dotsEl.appendChild(d); return d;
+  });
+  function setDot(i){ dots.forEach((d,j)=>d.classList.toggle('on',j===i)); }
+  function showSlide(idx){
+    bot.src=SLIDES[idx].img;
+    bot.onload=function(){ bot.classList.add('on'); top.classList.remove('on'); const t=top; top=bot; bot=t; setDot(idx); };
+    H.style.opacity=0; setTimeout(()=>{ H.textContent=SLIDES[idx].h; H.style.opacity=1; },220);
   }
+  function advanceImg(){ si=(si+1)%SLIDES.length; showSlide(si); }
+  function goTo(idx){ if(idx===si)return; si=idx; showSlide(si); }
   setInterval(advanceImg, 4500);
-  // заголовок переключается скроллом, пока не кончатся — потом уходим вниз
+  // заголовок переключается скроллом
   let hi=-1, ticking=false;
   function updH(){
     ticking=false;
@@ -373,7 +384,7 @@ const SLIDES=[
     const scrolled=Math.min(Math.max(-hero.getBoundingClientRect().top,0),total);
     const p=total>0?scrolled/total:0;
     const idx=Math.min(SLIDES.length-1,Math.floor(p*SLIDES.length));
-    if(idx!==hi){ hi=idx; H.style.opacity=0; setTimeout(()=>{ H.textContent=SLIDES[idx].h; H.style.opacity=1; }, 220); }
+    if(idx!==hi){ hi=idx; H.style.opacity=0; setTimeout(()=>{ H.textContent=SLIDES[idx].h; H.style.opacity=1; },220); setDot(idx); }
   }
   addEventListener('scroll',()=>{ if(!ticking){ ticking=true; requestAnimationFrame(updH);} },{passive:true});
   addEventListener('resize',updH); updH();
@@ -518,7 +529,7 @@ function calc(){
   document.getElementById('qtyResult').textContent=`${q} pcs = ${desc.text} · avg ${f(desc.cpu)}/pc`;
   const sc=SLV_COLORS[slvCI], bc=BAG_COLORS[bagCI];
   document.getElementById('mainImg').src='img/'+(BOX_IMG[sz]||sz+'c')+'.png';
-  document.getElementById('pi-name').textContent=`ColdCore ${v.name}`;
+  document.getElementById('pi-name').innerHTML=`Cold<span style="color:#3db4e8">Core</span> ${v.name}`;
   document.getElementById('pi-dims').innerHTML=`${v.ext} mm &nbsp;·&nbsp; ${v.vol} &nbsp;·&nbsp; up to ${v.pay}`;
   const chips=[{l:'Box',on:true},{l:'Ice packs',on:aIce},{l:'Outer',on:aOuter},{l:`Sleeve · ${sc.name}`,on:aSleeve},{l:`Bag · ${bc.name}`,on:aBag}];
   document.getElementById('pi-addons').innerHTML=chips.map(c=>`<span class="addon-chip${c.on?' on':''}">${c.l}</span>`).join('');
