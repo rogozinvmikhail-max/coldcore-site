@@ -49,7 +49,7 @@
   /* RANGE: 3x2 окошки товара */
   .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
   .rbox{background:#0d2734;border:1px solid rgba(61,180,232,.18);border-radius:20px;padding:22px 18px;color:#fff;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px}
-  .rbox canvas{margin-bottom:4px}
+  .rbox .box-img{width:160px;height:116px;object-fit:contain;margin-bottom:4px}
   .rbox .bn{font-weight:800;font-size:21px}
   .rbox .bd{color:var(--steel);font-size:12.5px;line-height:1.6}
   .rbox .bp{margin-top:6px;font-weight:800;font-size:19px}
@@ -568,17 +568,19 @@ if(document.getElementById('sizeGrid')){
   startMainAnim();
 }
 /* 3x2 окошки товара (range) */
+const BOX_IMG={xs:'xsc',s:'sc',m:'mc',l:'lc',xl:'xlc',xxl:'xxlc'};
 (function(){
   const g=document.getElementById('rangeGrid');
   if(!g||typeof SIZES==='undefined')return;
   Object.entries(SIZES).forEach(([k,v])=>{
     const card=document.createElement('div'); card.className='rbox fly';
-    const c=document.createElement('canvas'); c.width=160;c.height=116; card.appendChild(c);
+    const img=document.createElement('img');
+    img.className='box-img'; img.src='img/'+(BOX_IMG[k]||k+'c')+'.png'; img.alt='ColdCore '+v.name;
+    card.appendChild(img);
     const nm=document.createElement('div'); nm.className='bn'; nm.textContent='ColdCore '+v.name; card.appendChild(nm);
     const bd=document.createElement('div'); bd.className='bd'; bd.innerHTML=v.ext+' mm<br>'+v.vol+' · up to '+v.pay; card.appendChild(bd);
     const bp=document.createElement('div'); bp.className='bp'; bp.innerHTML='from £'+v.sgl.toFixed(2)+' <span class="bpe">per box</span>'; card.appendChild(bp);
     g.appendChild(card);
-    let a=0.5; (function anim(){ a+=0.01; drawBoxToCanvas(c,k,a,{scale:36,cy:6,lw:0.7}); requestAnimationFrame(anim); })();
   });
   const io2=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io2.unobserve(e.target);} }),{threshold:0.12});
   g.querySelectorAll('.fly').forEach((e,i)=>{ e.style.transitionDelay=((i%3)*0.07)+'s'; io2.observe(e); });
