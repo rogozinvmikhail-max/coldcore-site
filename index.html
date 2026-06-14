@@ -50,7 +50,7 @@
   /* RANGE: 3x2 окошки товара */
   .rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
   .rbox{background:#0d2734;border:1px solid rgba(61,180,232,.18);border-radius:20px;padding:22px 18px;color:#fff;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px}
-  .rbox .box-img{width:208px;height:151px;object-fit:contain;margin-bottom:4px}
+  .rbox .box-img{width:312px;height:226px;object-fit:contain;margin-bottom:4px}
   .rbox .bn{font-weight:800;font-size:21px}
   .rbox .bd{color:var(--steel);font-size:12.5px;line-height:1.6}
   .rbox .bp{margin-top:6px;font-weight:800;font-size:19px}
@@ -430,7 +430,7 @@ function buildSizeGrid(){
     btn.className='size-btn'+(k===sz?' active':'');
     const img=document.createElement('img');
     img.src='img/'+(BOX_IMG[k]||k+'c')+'.png'; img.alt=v.name;
-    img.style.cssText='width:80px;height:60px;object-fit:contain';
+    img.style.cssText='width:120px;height:90px;object-fit:contain';
     btn.appendChild(img);
     const szEl=document.createElement('span'); szEl.className='sz'; szEl.textContent=v.name; btn.appendChild(szEl);
     const svEl=document.createElement('span'); svEl.className='sv'; svEl.textContent=v.vol; btn.appendChild(svEl);
