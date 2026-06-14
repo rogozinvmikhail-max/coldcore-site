@@ -151,19 +151,21 @@
   #order .co-btn{width:100%;margin-top:.65rem;padding:13px;font-size:15px;border-radius:var(--border-radius-lg)}
   #order .co-note{font-size:11px;color:var(--color-text-tertiary);margin-top:6px;text-align:center}
   /* gallery lightbox */
-  .gbox{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.9);opacity:0;pointer-events:none;transition:opacity .22s}
+  .gbox{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.88);opacity:0;pointer-events:none;transition:opacity .22s}
   .gbox.open{opacity:1;pointer-events:all}
-  .gbox-inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:min(92vw,680px)}
-  .gbox-img{max-width:100%;max-height:70vh;border-radius:16px;object-fit:contain;background:#0d2734}
-  .gbox-nav{display:flex;gap:14px;align-items:center}
-  .gbox-btn{background:rgba(255,255,255,.12);border:none;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;line-height:1;transition:background .15s}
-  .gbox-btn:hover{background:rgba(255,255,255,.26)}
-  .gbox-close{position:absolute;top:-16px;right:-16px;background:rgba(255,255,255,.14);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:17px;line-height:1}
+  .gbox-close{position:fixed;top:18px;right:18px;background:rgba(255,255,255,.15);border:none;color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;z-index:201;transition:background .15s}
+  .gbox-close:hover{background:rgba(255,255,255,.3)}
+  .gbox-arr{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.13);border:none;color:#fff;width:52px;height:52px;border-radius:50%;cursor:pointer;font-size:28px;line-height:1;z-index:201;transition:background .15s}
+  .gbox-arr:hover{background:rgba(255,255,255,.28)}
+  .gbox-arr.prev{left:18px}
+  .gbox-arr.next{right:18px}
+  .gbox-inner{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:min(78vw,660px);width:100%}
+  .gbox-img{width:100%;height:62vh;object-fit:contain;display:block;border-radius:14px}
   .gbox-title{font-size:15px;font-weight:700;color:#eaf6fc}
-  .gbox-dots{display:flex;gap:7px}
-  .gbox-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .18s}
+  .gbox-caption{font-size:13px;color:#9fc4d6;text-align:center;line-height:1.5;min-height:2em;max-width:520px}
+  .gbox-dots{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+  .gbox-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .18s;border:none;padding:0}
   .gbox-dot.on{background:#3db4e8}
-  .gbox-caption{font-size:13px;color:#9fc4d6;text-align:center;max-width:520px;line-height:1.5;min-height:1.5em}
   .rbox{cursor:pointer;transition:border-color .2s,transform .2s}
   .rbox:hover{border-color:rgba(61,180,232,.55);transform:translateY(-2px)}
 </style>
@@ -331,18 +333,16 @@
 <footer>coldcore.uk · Temperature-controlled shipping · United Kingdom · © 2026 <span style="color:#fff;font-weight:700">Cold</span><span style="color:#3db4e8;font-weight:700">Core</span></footer>
 
 <!-- Gallery lightbox -->
-<div class="gbox" id="galleryBox" onclick="closeGallery(event)">
+<div class="gbox" id="galleryBox" onclick="if(event.target===this)closeGallery()">
+  <button class="gbox-close" onclick="closeGallery()">✕</button>
+  <button class="gbox-arr prev" onclick="gNav(-1)">‹</button>
   <div class="gbox-inner">
-    <button class="gbox-close" onclick="closeGallery()">✕</button>
     <div class="gbox-title" id="gboxTitle"></div>
     <img class="gbox-img" id="gboxImg" src="" alt="">
     <div class="gbox-caption" id="gboxCaption"></div>
-    <div class="gbox-nav">
-      <button class="gbox-btn" onclick="gNav(-1)">‹</button>
-      <div class="gbox-dots" id="gboxDots"></div>
-      <button class="gbox-btn" onclick="gNav(1)">›</button>
-    </div>
+    <div class="gbox-dots" id="gboxDots"></div>
   </div>
+  <button class="gbox-arr next" onclick="gNav(1)">›</button>
 </div>
 
 <script>
@@ -628,9 +628,9 @@ const BOX_GALLERY={
   xs: ['img/xsc.png','img/xso.png','img/xsf.png','img/xspr2.png','img/xsmar2.png','img/xsmed2.png','img/xssboard.png','img/sleeve2.png','img/cartbox.png','img/bag.png'],
   s:  ['img/sc.png','img/so.png','img/sf.png','img/sleeve2.png','img/cartbox.png','img/bag.png'],
   m:  ['img/mc.png','img/mo.png','img/mf.png','img/mpr.png','img/mmar.png','img/mmed.png','img/mbag.png','img/msleeve.png','img/cartbox.png','img/bag.png'],
-  l:  ['img/lc.png','img/lo.png','img/lf.png','img/lprod.png','img/lmed.png','img/cartbox.png','img/bag.png'],
-  xl: ['img/xlc.png','img/xlo.png','img/xlf.png','img/cartbox.png','img/bag.png'],
-  xxl:['img/xxlc.png','img/xxlo.png','img/xxlf.png','img/xxlbag.png','img/xxlbag_shed.png','img/xxlmed.png','img/cartbox.png'],
+  l:  ['img/lc.png','img/lo.png','img/lf.png','img/lprod.png','img/lmed.png','img/msleeve.png','img/cartbox.png','img/bag.png'],
+  xl: ['img/xlc.png','img/xlo.png','img/xlf.png','img/msleeve.png','img/cartbox.png','img/bag.png'],
+  xxl:['img/xxlc.png','img/xxlo.png','img/xxlf.png','img/xxlbag.png','img/xxlbag_shed.png','img/xxlmed.png','img/sleeve2.png','img/cartbox.png','img/bag.png'],
 };
 const GALLERY_CAPTIONS={
   'img/xsc.png':'XS · 1.40 L · up to 1 kg. Compact EPS insulated box — ideal for samples, single portions, small B2C orders.',
@@ -707,13 +707,12 @@ function gNav(dir){
   if(!imgs||!imgs.length)return;
   gIdx=(gIdx+dir+imgs.length)%imgs.length; gShowImg();
 }
-function closeGallery(e){
-  if(e&&e.target!==document.getElementById('galleryBox')&&!e.target.classList.contains('gbox-close'))return;
+function closeGallery(){
   document.getElementById('galleryBox').classList.remove('open');
   document.removeEventListener('keydown',gKey_handler);
 }
 function gKey_handler(e){
-  if(e.key==='Escape')closeGallery({target:document.getElementById('galleryBox')});
+  if(e.key==='Escape')closeGallery();
   if(e.key==='ArrowRight')gNav(1);
   if(e.key==='ArrowLeft')gNav(-1);
 }
