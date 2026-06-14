@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ColdCore — Temperature-controlled shipping</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='1' y='27' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='28' fill='white'%3EC%3C/text%3E%3Ctext x='16' y='27' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='28' fill='%233db4e8'%3EC%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='1' y='27' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='28' fill='white' stroke='%233db4e8' stroke-width='0.6' paint-order='stroke'%3EC%3C/text%3E%3Ctext x='16' y='27' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='28' fill='%233db4e8'%3EC%3C/text%3E%3C/svg%3E">
 <meta name="description" content="ColdCore — insulated boxes and cold-chain packaging for food, seafood, pharma and diagnostics across the UK." />
 <style>
   :root{ --glacier:#3db4e8; --deep:#06151e; --steel:#9fc4d6; --ice:#eef7fc; }
@@ -74,6 +74,15 @@
   .footer-links{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px}
   .footer-links a{color:#4a7a90;font-size:11.5px;text-decoration:none;transition:color .15s}
   .footer-links a:hover{color:#3db4e8}
+  /* FAQ */
+  .faq-list{display:flex;flex-direction:column;gap:0;max-width:720px}
+  .faq-item{border-bottom:1px solid rgba(61,180,232,.14)}
+  .faq-q{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 4px;cursor:pointer;font-size:15px;font-weight:600;color:var(--text);line-height:1.4;user-select:none}
+  .faq-q:hover{color:#3db4e8}
+  .faq-icon{color:#3db4e8;font-size:20px;flex-shrink:0;transition:transform .22s;line-height:1}
+  .faq-item.open .faq-icon{transform:rotate(45deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;font-size:13.5px;color:var(--steel);line-height:1.75;padding:0 4px}
+  .faq-item.open .faq-a{max-height:400px;padding-bottom:16px}
   /* scroll-reveal коробки */
   .reveal{position:relative;height:300vh;background:linear-gradient(180deg,#06151e,#0a1a22 50%,#06151e)}
   .reveal-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -118,7 +127,7 @@
   #order .addon-row{display:flex;align-items:center;gap:8px;padding:8px 0}
   #order .addon-row input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#3db4e8;flex-shrink:0}
   #order .addon-row label{font-size:13px;color:var(--color-text-primary);flex:1;cursor:pointer;line-height:1.4;margin:0;display:block}
-  #order .addon-row .ap{font-size:11.5px;color:var(--color-text-tertiary);white-space:nowrap}
+  #order .addon-row .ap{font-size:11.5px;color:var(--color-text-tertiary);white-space:nowrap;flex-shrink:0;margin-left:auto}
   #order .addon-sub{margin-left:23px;padding:6px 0 2px;display:flex;flex-direction:column;gap:8px}
   #order select{font-size:12px;padding:4px 8px;border-radius:var(--border-radius-md);border:1px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);height:30px}
   #order .moq-warn{font-size:10.5px;color:#ff9b9b}
@@ -162,7 +171,7 @@
   #order .ship-opt .sp{font-size:12px;font-weight:700;color:#3db4e8;margin-top:4px}
   #order .r-ship{display:flex;justify-content:space-between;padding:4px 0;font-size:12.5px;color:var(--color-text-secondary)}
   /* policy modal */
-  .pmodal{position:fixed;inset:0;z-index:300;background:rgba(5,16,24,.97);opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
+  .pmodal{position:fixed;inset:0;z-index:300;background:rgba(4,18,28,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .22s;overflow-y:auto}
   .pmodal.open{opacity:1;pointer-events:all}
   .pmodal-close{position:fixed;top:18px;right:18px;background:rgba(255,255,255,.12);border:none;color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;z-index:301;transition:background .15s}
   .pmodal-close:hover{background:rgba(255,255,255,.28)}
@@ -178,7 +187,7 @@
   .pmodal-body th,.pmodal-body td{text-align:left;padding:7px 10px;border:1px solid rgba(61,180,232,.15);font-size:12.5px}
   .pmodal-body th{color:#c8dfe8;font-weight:700;background:rgba(61,180,232,.06)}
   /* gallery lightbox */
-  .gbox{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.88);opacity:0;pointer-events:none;transition:opacity .22s}
+  .gbox{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .22s}
   .gbox.open{opacity:1;pointer-events:all}
   .gbox-close{position:fixed;top:18px;right:18px;background:rgba(255,255,255,.15);border:none;color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;z-index:201;transition:background .15s}
   .gbox-close:hover{background:rgba(255,255,255,.3)}
@@ -355,12 +364,17 @@
     <div style="border:1px solid rgba(61,180,232,.25);border-radius:14px;padding:18px;font-weight:700">Meat &amp; frozen</div>
     <div style="border:1px solid rgba(61,180,232,.25);border-radius:14px;padding:18px;font-weight:700">Medical &amp; pharma</div>
     <div style="border:1px solid rgba(61,180,232,.25);border-radius:14px;padding:18px;font-weight:700">Reptiles &amp; live bait</div>
-    <div style="border:1px solid rgba(61,180,232,.25);border-radius:14px;padding:18px;font-weight:700">Diagnostics</div>
   </div>
 </section>
 
+<!-- FAQ -->
+<section class="wrap" style="padding-bottom:20px">
+  <h2>Common questions</h2>
+  <div class="faq-list" id="faqList"></div>
+</section>
+
 <!-- TRY -->
-<section class="formsec"><div class="wrap"><div class="card">
+<section class="formsec" id="try"><div class="wrap"><div class="card">
   <div id="step1">
     <h2>Try ColdCore</h2>
     <p style="color:var(--steel);font-size:14px;margin-top:8px">Leave your details and we will be in touch with pricing and the right box for what you ship.</p>
@@ -575,6 +589,10 @@ const SHIPPING={
 };
 let shipMethod='std';
 function selectShipping(m){
+  if(m==='pal'&&chosenQty<24){
+    alert('Pallet delivery is for orders of 24+ boxes. Please increase your quantity or choose Standard or Express delivery.');
+    return;
+  }
   shipMethod=m;
   ['std','exp','pal'].forEach(k=>document.getElementById('ship'+k.charAt(0).toUpperCase()+k.slice(1)).classList.toggle('on',k===m));
   calc();
@@ -675,6 +693,7 @@ async function startCheckout(){
   const contact=document.getElementById('coContact').value.trim();
   const postcode=document.getElementById('coPost').value.trim();
   if(!contact){alert('Please enter your email or phone');return;}
+  if(!postcode){alert('Please enter your post code');return;}
   const btn=document.getElementById('orderBtn');
   btn.disabled=true;btn.textContent='Processing…';
   const v=SIZES[sz], q=chosenQty;
@@ -821,6 +840,25 @@ function closePolicy(){
   document.removeEventListener('keydown',pKey_handler);
 }
 function pKey_handler(e){if(e.key==='Escape')closePolicy();}
+/* ---- FAQ ---- */
+(function(){
+  const FAQ=[
+    {q:'What are ColdCore boxes made of?',a:'EPS — expanded polystyrene — a lightweight rigid foam with excellent thermal insulation and shock absorption. Every box has consistent wall thickness on all six sides for reliable temperature performance.'},
+    {q:'Are they food safe?',a:'Yes. Food-grade EPS is non-toxic and approved for direct contact with food, making it ideal for seafood, meat, dairy, meal kits, and produce.'},
+    {q:'How long do they keep contents cold?',a:'Performance depends on wall thickness, external temperature, and whether ice packs or dry ice are used. As a guide, a well-configured box with ice packs maintains 0–4 °C for 24–48 hours. We always recommend trialling for your specific application.'},
+    {q:'Are the boxes reusable?',a:'Yes. EPS boxes can be reused multiple times when handled with care, especially in closed-loop systems. The ColdCarry bag and corrugated outer protect the box during courier transit, extending its life.'},
+    {q:'Can I get custom branding?',a:'Yes — printed sleeves are available from 50 pcs in 1-colour or full colour, and ColdCarry bags from 10 pcs with screen print, embroidery, or sticker/patch. Standard box sizes are held in stock; bespoke sizes require a lead time.'},
+    {q:'What is the minimum order quantity?',a:'There is no minimum order on the website. Volume pricing tiers start from 1 pc through to full pallets. Wholesale terms are available for orders of 3+ pallets — contact us for pricing.'},
+    {q:'Are they waterproof?',a:'EPS is moisture-resistant and does not absorb water, making it ideal for wet and icy environments such as seafood and chilled meat transport.'},
+    {q:'Do they meet industry standards?',a:'ColdCore boxes comply with HACCP and EU food contact standards and are used across NHS supply, veterinary logistics, and diagnostics cold chain.'},
+  ];
+  const el=document.getElementById('faqList'); if(!el)return;
+  FAQ.forEach(item=>{
+    const d=document.createElement('div'); d.className='faq-item';
+    d.innerHTML=`<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">${item.q}<span class="faq-icon">+</span></div><div class="faq-a">${item.a}</div>`;
+    el.appendChild(d);
+  });
+})();
 /* ---- Gallery ---- */
 // Photos per box — populate with actual images when ready
 const BOX_GALLERY={
