@@ -1,29 +1,36 @@
 async function sendEmail(apiKey, { to, subject, html }) {
-  return fetch('https://api.resend.com/emails', {
+  const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: 'ColdCore Calls <calls@coldcore.uk>', to, subject, html }),
+    body: JSON.stringify({ from: 'ColdCore <onboarding@resend.dev>', to, subject, html }),
   });
+  const body = await res.json().catch(() => ({}));
+  console.log('[RESEND]', res.status, JSON.stringify(body));
+  return res;
 }
 
 export async function onRequestPost(context) {
   const { env, request } = context;
 
-  let body;
-  try { body = await request.json(); } catch { return new Response('ok'); }
+  console.log('[CALL-SUMMARY] called, RESEND_API_KEY exists:', !!env.RESEND_API_KEY);
 
-  // ElevenLabs post-call webhook payload
+  let body;
+  try { body = await request.json(); } catch (e) {
+    console.log('[CALL-SUMMARY] JSON parse error:', e.message);
+    return new Response('ok');
+  }
+
+  console.log('[CALL-SUMMARY] body keys:', Object.keys(body));
+
   const data = body?.data || body;
   const analysis = data?.analysis?.data_collection || {};
-  const callerName   = analysis?.caller_name?.value   || data?.caller_name   || '—';
-  const company      = analysis?.company?.value        || data?.company       || '—';
-  const phoneNumber  = analysis?.phone_number?.value   || data?.phone_number  || '—';
-  const reason       = analysis?.reason?.value         || data?.reason        || '—';
-  const duration     = data?.metadata?.call_duration_secs
-    ? `${Math.round(data.metadata.call_duration_secs / 60)}m ${data.metadata.call_duration_secs % 60}s`
-    : '—';
-  const transcript   = data?.transcript?.map(t => `<b>${t.role === 'agent' ? 'Alex' : 'Caller'}:</b> ${t.message}`).join('<br>') || '—';
-  const callTime     = new Date().toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'full', timeStyle: 'short' });
+  const callerName  = analysis?.caller_name?.value  || data?.caller_name  || body?.caller_name  || '—';
+  const company     = analysis?.company?.value       || data?.company      || body?.company      || '—';
+  const phoneNumber = analysis?.phone_number?.value  || data?.phone_number || body?.phone_number || '—';
+  const reason      = analysis?.reason?.value        || data?.reason       || body?.reason       || '—';
+  const callTime    = new Date().toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'full', timeStyle: 'short' });
+
+  console.log('[CALL-SUMMARY]', callerName, '|', company, '|', phoneNumber, '|', reason);
 
   const html = `
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#06151e;color:#fff;border-radius:12px;overflow:hidden">
@@ -38,14 +45,8 @@ export async function onRequestPost(context) {
       <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Company</td><td style="font-weight:600;text-align:right">${company}</td></tr>
       <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Phone</td><td style="text-align:right">${phoneNumber}</td></tr>
       <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Reason</td><td style="text-align:right">${reason}</td></tr>
-      <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Duration</td><td style="text-align:right">${duration}</td></tr>
       <tr><td style="color:#9fc4d6;padding:7px 0">Time</td><td style="text-align:right">${callTime}</td></tr>
     </table>
-    ${transcript !== '—' ? `
-    <div style="margin-top:24px">
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#3db4e8;margin-bottom:12px">Transcript</div>
-      <div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:16px;font-size:13px;line-height:1.8;color:#9fc4d6;max-height:300px;overflow:auto">${transcript}</div>
-    </div>` : ''}
   </div>
   <div style="padding:16px 32px;background:#0a2230;font-size:11px;color:rgba(159,196,214,0.5);text-align:center">
     ColdCore · +44 113 519 0000 · trading name of AMPY RESEARCH LTD
@@ -55,11 +56,12 @@ export async function onRequestPost(context) {
   if (env.RESEND_API_KEY) {
     await sendEmail(env.RESEND_API_KEY, {
       to: 'sales@coldcore.uk',
-      subject: `📞 Call from ${callerName}${company !== '—' ? ` · ${company}` : ''} — ${reason}`,
+      subject: `📞 Call: ${callerName} · ${company} — ${reason}`,
       html,
     });
+  } else {
+    console.log('[CALL-SUMMARY] No RESEND_API_KEY — skipping email');
   }
 
-  console.log(`[CALL] ${callerName} | ${company} | ${phoneNumber} | ${reason}`);
   return new Response('ok');
 }
