@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+Я totally люблю тебя 관ей люб всегда.<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -224,14 +224,14 @@
     </div>
   </div>
 
-  <!-- QR code -->
+  <!-- QR code - Revolut -->
   <div class="card">
-    <div class="card-title">Scan to pay · Revolut / banking apps</div>
+    <div class="card-title">Scan to pay · Revolut</div>
     <div class="qr-wrap">
       <div class="qr-box" id="qrcode"></div>
       <div class="qr-info">
-        <p>Scan with Revolut, Monzo, or your banking app to fill in transfer details automatically.</p>
-        <p class="note">⚠️ QR bank payments are not yet universal in the UK — always verify details manually if unsure.</p>
+        <p>Scan with <strong style="color:#fff">Revolut</strong> to open payment instantly. Amount and reference will be shown — confirm and send.</p>
+        <a href="https://revolut.me/ampyre9mko" style="display:inline-block;margin-top:8px;background:#0666eb;color:#fff;font-size:13px;font-weight:700;padding:8px 16px;border-radius:999px;text-decoration:none">Open in Revolut →</a>
       </div>
     </div>
   </div>
@@ -292,18 +292,11 @@
   document.getElementById('sumTotal').textContent    = '£' + amount.toFixed(2);
   document.getElementById('btnAmount').textContent   = amount.toFixed(2);
 
-  // QR code — encode bank details as text
-  const qrData = [
-    'AMPY RESEARCH LTD',
-    'Account: 34408653',
-    'Sort: 23-01-20',
-    'IBAN: GB04REVO009969541967 01',
-    'Ref: ' + ref,
-    'Amount: GBP ' + amount.toFixed(2),
-  ].join('\n');
+  // QR code — Revolut payment link
+  const revolutUrl = 'https://revolut.me/ampyre9mko?amount=' + amount.toFixed(2) + '&currency=GBP&reference=' + encodeURIComponent(ref);
 
   new QRCode(document.getElementById('qrcode'), {
-    text: qrData,
+    text: revolutUrl,
     width: 96, height: 96,
     colorDark: '#000000', colorLight: '#ffffff',
     correctLevel: QRCode.CorrectLevel.M,
