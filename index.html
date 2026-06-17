@@ -889,6 +889,20 @@ async function startCartCheckout(){
   let totalSub=0,totalShip=0;
   const lines=cart.map(item=>{const se=item.pallets*80+item.parcelCount*rate;totalSub+=item.sub;totalShip+=se;return item.name+': '+item.detail;});
   const grand=(totalSub+totalShip)*1.20;
+
+  // Orders £100+ → bank transfer / invoice page
+  if(grand >= 100){
+    const params=new URLSearchParams({
+      amount:grand.toFixed(2),
+      contact, postcode, addr,
+      desc:lines.join(' | ').substring(0,250),
+      ship:shipMethod==='exp'?'Express · Special Delivery':shipMethod==='pal'?'Pallet delivery':'Standard · Royal Mail 48',
+    });
+    window.location.href='/pay?'+params.toString();
+    btn.disabled=false;btn.textContent='Order & Pay';
+    return;
+  }
+
   const payload={contact,postcode,addr,shipping_method:shipMethod,multi_size:true,line_count:cart.length,
     description:lines.join(' | ').substring(0,500),amount_pence:Math.round(grand*100)};
   try{
