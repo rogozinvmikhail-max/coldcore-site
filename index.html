@@ -349,6 +349,16 @@
         <input type="text" id="coAddr" class="co-input" placeholder="Delivery address — street, city">
         <input type="text" id="coPost" class="co-input co-post" placeholder="Post code">
       </div>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:8px">
+        <input type="checkbox" id="coBillSame" checked onchange="toggleBilling('co')" style="width:16px;height:16px;cursor:pointer;accent-color:#3db4e8">
+        <label for="coBillSame" style="font-size:13px;color:#9fc4d6;cursor:pointer">Billing address same as delivery</label>
+      </div>
+      <div id="coBillingBlock" style="display:none;margin-top:6px">
+        <div class="co-row">
+          <input type="text" id="coBillingAddr" class="co-input" placeholder="Billing address — street, city">
+          <input type="text" id="coBillingPost" class="co-input co-post" placeholder="Billing post code">
+        </div>
+      </div>
       <div class="ship-opts">
         <div class="ship-opt on" id="shipStd" onclick="selectShipping('std')">
           <div class="sn">Standard</div>
@@ -387,6 +397,16 @@
     <div class="co-row" style="margin-top:6px">
       <input type="text" id="cartAddr" class="co-input" placeholder="Delivery address — street, city">
       <input type="text" id="cartPost" class="co-input co-post" placeholder="Post code">
+    </div>
+    <div style="margin-top:8px;display:flex;align-items:center;gap:8px">
+      <input type="checkbox" id="cartBillSame" checked onchange="toggleBilling('cart')" style="width:16px;height:16px;cursor:pointer;accent-color:#3db4e8">
+      <label for="cartBillSame" style="font-size:13px;color:#9fc4d6;cursor:pointer">Billing address same as delivery</label>
+    </div>
+    <div id="cartBillingBlock" style="display:none;margin-top:6px">
+      <div class="co-row">
+        <input type="text" id="cartBillingAddr" class="co-input" placeholder="Billing address — street, city">
+        <input type="text" id="cartBillingPost" class="co-input co-post" placeholder="Billing post code">
+      </div>
     </div>
     <button class="btn co-btn" id="cartOrderBtn" onclick="startCartCheckout()">Order &amp; Pay</button>
     <p class="co-note">Secure checkout · Powered by Stripe</p>
@@ -749,11 +769,19 @@ function submitLead(){
   document.getElementById('step1').classList.add('hide'); document.getElementById('step2').classList.remove('hide');
 }
 /* ---- Stripe checkout ---- */
+function toggleBilling(prefix){
+  const same=document.getElementById(prefix+'BillSame').checked;
+  document.getElementById(prefix+'BillingBlock').style.display=same?'none':'block';
+}
+
 async function startCheckout(){
   const name=document.getElementById('coName').value.trim();
   const contact=document.getElementById('coContact').value.trim();
   const postcode=document.getElementById('coPost').value.trim();
   const addr=document.getElementById('coAddr').value.trim();
+  const billSame=document.getElementById('coBillSame').checked;
+  const billingAddr=billSame?addr:(document.getElementById('coBillingAddr').value.trim()||addr);
+  const billingPost=billSame?postcode:(document.getElementById('coBillingPost').value.trim()||postcode);
   if(!name){alert('Please enter your name');return;}
   if(!contact){alert('Please enter your email or phone');return;}
   if(!addr){alert('Please enter your delivery address');return;}
@@ -771,6 +799,7 @@ async function startCheckout(){
     const params=new URLSearchParams({
       amount:grand.toFixed(2),
       name, contact, postcode, addr,
+      billingAddr, billingPost,
       desc:description,
       ship:shipLabel,
     });
@@ -781,7 +810,7 @@ async function startCheckout(){
 
   // Under £100 → Stripe card checkout
   const payload={
-    name, contact, postcode, addr,
+    name, contact, postcode, addr, billingAddr, billingPost,
     size:v.name, qty:q,
     shipping_method:shipMethod,
     shipping_label:shipLabel,
@@ -884,6 +913,9 @@ async function startCartCheckout(){
   const contact=document.getElementById('cartContact').value.trim();
   const postcode=document.getElementById('cartPost').value.trim();
   const addr=document.getElementById('cartAddr').value.trim();
+  const billSame=document.getElementById('cartBillSame').checked;
+  const billingAddr=billSame?addr:(document.getElementById('cartBillingAddr').value.trim()||addr);
+  const billingPost=billSame?postcode:(document.getElementById('cartBillingPost').value.trim()||postcode);
   if(!name){alert('Please enter your name');return;}
   if(!contact){alert('Please enter your email or phone');return;}
   if(!addr){alert('Please enter your delivery address');return;}
@@ -900,7 +932,7 @@ async function startCartCheckout(){
   if(grand >= 0.01){
     const params=new URLSearchParams({
       amount:grand.toFixed(2),
-      name, contact, postcode, addr,
+      name, contact, postcode, addr, billingAddr, billingPost,
       desc:lines.join(' | ').substring(0,250),
       ship:shipMethod==='exp'?'Express · Special Delivery':shipMethod==='pal'?'Pallet delivery':'Standard · Royal Mail 48',
     });
@@ -909,7 +941,7 @@ async function startCartCheckout(){
     return;
   }
 
-  const payload={name,contact,postcode,addr,shipping_method:shipMethod,multi_size:true,line_count:cart.length,
+  const payload={name,contact,postcode,addr,billingAddr,billingPost,shipping_method:shipMethod,multi_size:true,line_count:cart.length,
     description:lines.join(' | ').substring(0,500),amount_pence:Math.round(grand*100)};
   try{
     const r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});

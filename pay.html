@@ -177,6 +177,7 @@
     <div class="order-row"><span class="lbl">Contact</span><span class="val" id="sumContact">—</span></div>
     <div class="order-row"><span class="lbl">Post code</span><span class="val" id="sumPost">—</span></div>
     <div class="order-row"><span class="lbl">Delivery address</span><span class="val" id="sumAddr" style="text-align:right;max-width:200px">—</span></div>
+    <div class="order-row" id="billingRow" style="display:none"><span class="lbl">Billing address</span><span class="val" id="sumBilling" style="text-align:right;max-width:200px">—</span></div>
     <div class="order-total">
       <span class="lbl">Total inc. VAT</span>
       <span class="val" id="sumTotal">£0.00</span>
@@ -282,6 +283,8 @@
   const ship     = p.get('ship') || 'Standard delivery';
   const addr     = p.get('addr') || '';
   const name     = p.get('name') || '';
+  const billingAddr = p.get('billingAddr') || addr;
+  const billingPost = p.get('billingPost') || postcode;
   const pence    = Math.round(amount * 100);
 
   // Generate order ref
@@ -294,8 +297,12 @@
   document.getElementById('sumShip').textContent     = ship;
   document.getElementById('sumName').textContent     = name || '—';
   document.getElementById('sumContact').textContent  = contact || '—';
-  document.getElementById('sumPost').textContent     = postcode || '—';
-  document.getElementById('sumAddr').textContent    = addr || '—';
+  // postcode combined with addr above
+  document.getElementById('sumAddr').textContent    = addr ? addr + ', ' + postcode : '—';
+  if (billingAddr && billingAddr !== addr) {
+    document.getElementById('billingRow').style.display = 'flex';
+    document.getElementById('sumBilling').textContent = billingAddr + ', ' + billingPost;
+  }
   document.getElementById('sumTotal').textContent    = '£' + amount.toFixed(2);
   document.getElementById('btnAmount').textContent   = amount.toFixed(2);
 
@@ -319,7 +326,7 @@
       const r = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, contact, postcode, addr, amount_pence: pence, description: desc, shipping_label: ship }),
+        body: JSON.stringify({ name, contact, postcode, addr, billingAddr, billingPost, amount_pence: pence, description: desc, shipping_label: ship }),
       });
       const { url, error } = await r.json();
       if (url) { window.location.href = url; }
@@ -339,7 +346,7 @@
       await fetch('/api/send-invoice', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, ref, amount, desc, ship, name, contact, postcode, addr }),
+        body: JSON.stringify({ email, ref, amount, desc, ship, name, contact, postcode, addr, billingAddr, billingPost }),
       });
     } catch(e) {}
     document.getElementById('invoiceSent').style.display = 'block';
