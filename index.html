@@ -342,11 +342,12 @@
       <div class="divider"></div>
       <div class="sec" style="margin-top:.2rem">Contact &amp; delivery</div>
       <div class="co-row">
+        <input type="text" id="coName" class="co-input" placeholder="Your name">
         <input type="text" id="coContact" class="co-input" placeholder="Email or phone">
-        <input type="text" id="coPost" class="co-input co-post" placeholder="Post code">
       </div>
       <div class="co-row" style="margin-top:6px">
-        <input type="text" id="coAddr" class="co-input" placeholder="Delivery address (street, city)">
+        <input type="text" id="coAddr" class="co-input" placeholder="Delivery address — street, city">
+        <input type="text" id="coPost" class="co-input co-post" placeholder="Post code">
       </div>
       <div class="ship-opts">
         <div class="ship-opt on" id="shipStd" onclick="selectShipping('std')">
@@ -380,11 +381,12 @@
     <div class="divider"></div>
     <div class="sec">Contact &amp; delivery</div>
     <div class="co-row">
+      <input type="text" id="cartName" class="co-input" placeholder="Your name">
       <input type="text" id="cartContact" class="co-input" placeholder="Email or phone">
-      <input type="text" id="cartPost" class="co-input co-post" placeholder="Post code">
     </div>
     <div class="co-row" style="margin-top:6px">
-      <input type="text" id="cartAddr" class="co-input" placeholder="Delivery address (street, city)">
+      <input type="text" id="cartAddr" class="co-input" placeholder="Delivery address — street, city">
+      <input type="text" id="cartPost" class="co-input co-post" placeholder="Post code">
     </div>
     <button class="btn co-btn" id="cartOrderBtn" onclick="startCartCheckout()">Order &amp; Pay</button>
     <p class="co-note">Secure checkout · Powered by Stripe</p>
@@ -748,12 +750,14 @@ function submitLead(){
 }
 /* ---- Stripe checkout ---- */
 async function startCheckout(){
+  const name=document.getElementById('coName').value.trim();
   const contact=document.getElementById('coContact').value.trim();
   const postcode=document.getElementById('coPost').value.trim();
   const addr=document.getElementById('coAddr').value.trim();
+  if(!name){alert('Please enter your name');return;}
   if(!contact){alert('Please enter your email or phone');return;}
-  if(!postcode){alert('Please enter your post code');return;}
   if(!addr){alert('Please enter your delivery address');return;}
+  if(!postcode){alert('Please enter your post code');return;}
   const btn=document.getElementById('orderBtn');
   btn.disabled=true;btn.textContent='Processing…';
   const v=SIZES[sz], q=chosenQty;
@@ -766,7 +770,7 @@ async function startCheckout(){
   if(grand >= 0.01){
     const params=new URLSearchParams({
       amount:grand.toFixed(2),
-      contact, postcode, addr,
+      name, contact, postcode, addr,
       desc:description,
       ship:shipLabel,
     });
@@ -777,7 +781,7 @@ async function startCheckout(){
 
   // Under £100 → Stripe card checkout
   const payload={
-    contact, postcode, addr,
+    name, contact, postcode, addr,
     size:v.name, qty:q,
     shipping_method:shipMethod,
     shipping_label:shipLabel,
@@ -876,12 +880,14 @@ function renderCart(){
     `<div class="cs-total"><span>Total inc-VAT</span><span>${f(grand)}</span></div>`;
 }
 async function startCartCheckout(){
+  const name=document.getElementById('cartName').value.trim();
   const contact=document.getElementById('cartContact').value.trim();
   const postcode=document.getElementById('cartPost').value.trim();
   const addr=document.getElementById('cartAddr').value.trim();
+  if(!name){alert('Please enter your name');return;}
   if(!contact){alert('Please enter your email or phone');return;}
-  if(!postcode){alert('Please enter your post code');return;}
   if(!addr){alert('Please enter your delivery address');return;}
+  if(!postcode){alert('Please enter your post code');return;}
   if(!cart.length){alert('No items in order');return;}
   const btn=document.getElementById('cartOrderBtn');
   btn.disabled=true;btn.textContent='Processing…';
@@ -894,7 +900,7 @@ async function startCartCheckout(){
   if(grand >= 0.01){
     const params=new URLSearchParams({
       amount:grand.toFixed(2),
-      contact, postcode, addr,
+      name, contact, postcode, addr,
       desc:lines.join(' | ').substring(0,250),
       ship:shipMethod==='exp'?'Express · Special Delivery':shipMethod==='pal'?'Pallet delivery':'Standard · Royal Mail 48',
     });
@@ -903,7 +909,7 @@ async function startCartCheckout(){
     return;
   }
 
-  const payload={contact,postcode,addr,shipping_method:shipMethod,multi_size:true,line_count:cart.length,
+  const payload={name,contact,postcode,addr,shipping_method:shipMethod,multi_size:true,line_count:cart.length,
     description:lines.join(' | ').substring(0,500),amount_pence:Math.round(grand*100)};
   try{
     const r=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
