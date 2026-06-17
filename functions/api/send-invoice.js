@@ -11,7 +11,7 @@ export async function onRequestPost(context) {
   let body;
   try { body = await request.json(); } catch { return Response.json({ error: 'Bad JSON' }, { status: 400 }); }
 
-  const { email, ref, amount, desc, ship, contact, postcode } = body;
+  const { email, ref, amount, desc, ship, contact, postcode, addr = '' } = body;
   if (!email) return Response.json({ error: 'No email' }, { status: 400 });
 
   const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -36,7 +36,19 @@ export async function onRequestPost(context) {
           <div style="font-size:13px;color:#6b7280">85 Great Portland Street<br>W1W 7LT, London, UK</div>
         </td>
         <td style="vertical-align:top;text-align:right">
+          <div style="font-size:12px;color:#6b7280;margin-bottom:4px">Bill to</div>
+          <div style="font-weight:700">${contact || '—'}</div>
+          <div style="font-size:13px;color:#6b7280">${addr ? addr + '<br>' : ''}Post code: ${postcode || '—'}</div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding-top:12px">
           <div style="font-size:12px;color:#6b7280;margin-bottom:4px">Invoice details</div>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="vertical-align:top;text-align:right">
           <div style="font-weight:700;font-size:16px;color:#3db4e8">${ref}</div>
           <div style="font-size:13px;color:#6b7280">Date: ${date}</div>
           <div style="font-size:13px;color:#6b7280">Due: ${dueDate}</div>
