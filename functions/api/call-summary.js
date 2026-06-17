@@ -1,4 +1,4 @@
-ayoasync function sendEmail(apiKey, { to, subject, html }) {
+sync function sendEmail(apiKey, { to, subject, html }) {
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
