@@ -1,5 +1,3 @@
-import Stripe from 'stripe';
-
 export async function onRequestPost(context) {
   const { env, request } = context;
 
@@ -27,55 +25,52 @@ export async function onRequestPost(context) {
     return Response.json({ error: 'Invalid order amount' }, { status: 400 });
   }
 
-  const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-    apiVersion: '2024-06-20',
-    httpClient: Stripe.createFetchHttpClient(),
-  });
-
   const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
 
   const productDesc = [
     shipping_label || '',
     postcode ? `Post code: ${postcode}` : '',
     !isEmail && contact ? `Contact: ${contact}` : '',
-  ].filter(Boolean).join(' · ') || undefined;
+  ].filter(Boolean).join(' · ');
 
-  try {
-    const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
-      payment_method_types: ['card'],
-      ...(isEmail ? { customer_email: contact } : {}),
-      line_items: [
-        {
-          price_data: {
-            currency: 'gbp',
-            product_data: {
-              name: description || 'ColdCore Order',
-              ...(productDesc ? { description: productDesc } : {}),
-            },
-            unit_amount: Math.round(amount_pence),
-          },
-          quantity: 1,
-        },
-      ],
-      shipping_address_collection: {
-        allowed_countries: ['GB'],
-      },
-      metadata: {
-        contact,
-        postcode,
-        shipping_method: shipping_method || 'std',
-      },
-      success_url: 'https://coldcore.uk/?paid=1',
-      cancel_url: 'https://coldcore.uk/#try',
-    });
-
-    return Response.json({ url: session.url });
-
-  } catch (err) {
-    console.error('Stripe error:', err.message);
-    return Response.json({ error: err.message }, { status: 500 });
+  // Build form-encoded body for Stripe API (no npm needed)
+  const params = new URLSearchParams();
+  params.append('mode', 'payment');
+  params.append('payment_method_types[]', 'card');
+  params.append('line_items[0][price_data][currency]', 'gbp');
+  params.append('line_items[0][price_data][product_data][name]', description || 'ColdCore Order');
+  if (productDesc) {
+    params.append('line_items[0][price_data][product_data][description]', productDesc);
   }
+  params.append('line_items[0][price_data][unit_amount]', String(Math.round(amount_pence)));
+  params.append('line_items[0][quantity]', '1');
+  params.append('shipping_address_collection[allowed_countries][]', 'GB');
+  params.append('metadata[contact]', contact);
+  params.append('metadata[postcode]', postcode);
+  params.append('metadata[shipping_method]', shipping_method || 'std');
+  params.append('success_url', 'https://coldcore.uk/?paid=1');
+  params.append('cancel_url', 'https://coldcore.uk/#try');
+  if (isEmail) {
+    params.append('customer_email', contact);
+  }
+
+  const stripeRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${env.STRIPE_SECRET_KEY}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: params.toString(),
+  });
+
+  const session = await stripeRes.json();
+
+  if (!stripeRes.ok) {
+    console.error('Stripe error:', session.error?.message);
+    return Response.json({ error: session.error?.message || 'Stripe error' }, { status: 500 });
+  }
+
+  return Response.json({ url: session.url });
 }
 
 export async function onRequestOptions() {
