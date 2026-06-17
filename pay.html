@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment · ColdCore</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='1' y='27' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='28' fill='white' stroke='%233db4e8' stroke-width='0.6' paint-order='stroke'%3EC%3C/text%3E%3Ctext x='16' y='27' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='28' fill='%233db4e8'%3EC%3C/text%3E%3C/svg%3E">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --deep: #06151e; --deep2: #0a2230; --deep3: #0d2d42;
+      --glacier: #3db4e8; --steel: #9fc4d6; --ice: #eef7fc;
+    }
+    body {
+      background: var(--deep);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      padding: 32px 16px 60px;
+    }
+    body::before {
+      content: '';
+      position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(circle, rgba(61,180,232,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .wrap { max-width: 640px; margin: 0 auto; }
+
+    /* Header */
+    .logo { text-align: center; margin-bottom: 32px; font-size: 15px; font-weight: 900; letter-spacing: 1px; }
+    .logo span { color: var(--glacier); }
+    h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 4px; }
+    .ref { color: var(--steel); font-size: 13px; margin-bottom: 28px; }
+    .ref strong { color: var(--glacier); }
+
+    /* Card */
+    .card {
+      background: var(--deep2);
+      border: 1px solid rgba(61,180,232,0.15);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; color: var(--glacier); margin-bottom: 16px;
+    }
+
+    /* Order summary */
+    .order-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px; }
+    .order-row:last-child { border-bottom: none; }
+    .order-row .lbl { color: var(--steel); }
+    .order-row .val { font-weight: 600; }
+    .order-total { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0 0; margin-top: 8px; border-top: 1px solid rgba(61,180,232,0.2); }
+    .order-total .lbl { font-size: 15px; font-weight: 700; }
+    .order-total .val { font-size: 22px; font-weight: 800; color: var(--glacier); }
+
+    /* Bank details */
+    .bank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .bank-field { background: var(--deep3); border-radius: 12px; padding: 12px 14px; }
+    .bank-field .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--steel); margin-bottom: 4px; }
+    .bank-field .val { font-size: 15px; font-weight: 700; font-family: 'SF Mono', 'Fira Code', monospace; cursor: pointer; }
+    .bank-field.wide { grid-column: 1 / -1; }
+    .bank-field .copy-hint { font-size: 10px; color: var(--steel); margin-top: 3px; opacity: 0.6; }
+    .copied { color: #4ade80 !important; }
+
+    /* Reference */
+    .ref-box {
+      background: rgba(61,180,232,0.08);
+      border: 1px solid rgba(61,180,232,0.25);
+      border-radius: 12px; padding: 14px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 12px;
+    }
+    .ref-box .lbl { font-size: 12px; color: var(--steel); margin-bottom: 2px; }
+    .ref-box .val { font-size: 16px; font-weight: 800; font-family: monospace; color: var(--glacier); }
+    .ref-box button {
+      background: rgba(61,180,232,0.15); border: 1px solid rgba(61,180,232,0.3);
+      color: var(--glacier); font-size: 12px; font-weight: 600; padding: 6px 14px;
+      border-radius: 999px; cursor: pointer; transition: background 0.15s;
+    }
+    .ref-box button:hover { background: rgba(61,180,232,0.25); }
+
+    /* QR */
+    .qr-wrap { display: flex; gap: 20px; align-items: flex-start; }
+    .qr-box {
+      background: #fff; border-radius: 12px; padding: 12px;
+      flex-shrink: 0; width: 120px; height: 120px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qr-box canvas, .qr-box img { width: 96px !important; height: 96px !important; }
+    .qr-info { flex: 1; }
+    .qr-info p { font-size: 13px; color: var(--steel); line-height: 1.6; margin-bottom: 8px; }
+    .qr-info .note { font-size: 11px; color: rgba(159,196,214,0.6); }
+
+    /* Divider */
+    .or-divider {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 12px; color: var(--steel); margin: 4px 0;
+    }
+    .or-divider::before, .or-divider::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    /* Invoice section */
+    .invoice-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .invoice-row input[type="email"] {
+      flex: 1; background: var(--deep3); border: 1px solid rgba(61,180,232,0.2);
+      border-radius: 10px; padding: 11px 14px; color: #fff; font-size: 14px;
+      outline: none; transition: border-color 0.15s;
+    }
+    .invoice-row input[type="email"]:focus { border-color: rgba(61,180,232,0.5); }
+    .invoice-row input[type="email"]::placeholder { color: rgba(159,196,214,0.5); }
+    .btn-invoice {
+      background: rgba(61,180,232,0.12); border: 1px solid rgba(61,180,232,0.3);
+      color: var(--glacier); font-size: 13px; font-weight: 700; padding: 11px 18px;
+      border-radius: 10px; cursor: pointer; white-space: nowrap; transition: background 0.15s;
+    }
+    .btn-invoice:hover { background: rgba(61,180,232,0.22); }
+    .btn-pdf {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 11px; border-radius: 10px;
+      background: transparent; border: 1px solid rgba(61,180,232,0.15);
+      color: var(--steel); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-pdf:hover { border-color: rgba(61,180,232,0.35); color: #fff; }
+    .invoice-sent { font-size: 12px; color: #4ade80; margin-top: 8px; display: none; }
+
+    /* Buttons */
+    .btn-stripe {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 12px; border-radius: 12px;
+      background: transparent; color: var(--steel);
+      font-size: 14px; font-weight: 600; text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.12); cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-stripe:hover { border-color: rgba(255,255,255,0.25); color: #fff; }
+    .btn-stripe svg { width: 16px; height: 16px; opacity: 0.6; }
+    .btn-back {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 13px; border-radius: 14px;
+      background: transparent; border: 1px solid rgba(61,180,232,0.15);
+      color: var(--steel); font-size: 14px; font-weight: 600;
+      text-decoration: none; cursor: pointer; margin-top: 10px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-back:hover { border-color: rgba(61,180,232,0.4); color: #fff; }
+
+    .stripe-note { text-align: center; font-size: 11px; color: var(--steel); margin-top: 6px; opacity: 0.5; }
+    .footer-note { text-align: center; font-size: 11px; color: rgba(159,196,214,0.4); margin-top: 32px; line-height: 1.6; }
+
+    @media (max-width: 480px) {
+      .bank-grid { grid-template-columns: 1fr; }
+      .bank-field.wide { grid-column: 1; }
+      .qr-wrap { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">COLD<span>CORE</span></div>
+
+  <h1>Complete your order</h1>
+  <p class="ref">Order reference: <strong id="refNum">—</strong></p>
+
+  <!-- Order summary -->
+  <div class="card">
+    <div class="card-title">Order summary</div>
+    <div class="order-row"><span class="lbl">Items</span><span class="val" id="sumDesc">—</span></div>
+    <div class="order-row"><span class="lbl">Delivery</span><span class="val" id="sumShip">—</span></div>
+    <div class="order-row"><span class="lbl">Contact</span><span class="val" id="sumContact">—</span></div>
+    <div class="order-row"><span class="lbl">Post code</span><span class="val" id="sumPost">—</span></div>
+    <div class="order-total">
+      <span class="lbl">Total inc. VAT</span>
+      <span class="val" id="sumTotal">£0.00</span>
+    </div>
+  </div>
+
+  <!-- Bank transfer -->
+  <div class="card">
+    <div class="card-title">Pay by bank transfer · UK</div>
+    <div class="bank-grid">
+      <div class="bank-field wide">
+        <div class="lbl">Recipient</div>
+        <div class="val">AMPY RESEARCH LTD</div>
+      </div>
+      <div class="bank-field" onclick="copyText('34408653', this)">
+        <div class="lbl">Account number</div>
+        <div class="val">34408653</div>
+        <div class="copy-hint">Tap to copy</div>
+      </div>
+      <div class="bank-field" onclick="copyText('23-01-20', this)">
+        <div class="lbl">Sort code</div>
+        <div class="val">23-01-20</div>
+        <div class="copy-hint">Tap to copy</div>
+      </div>
+      <div class="bank-field wide" onclick="copyText('GB04 REVO 0099 6954 1967 01', this)">
+        <div class="lbl">IBAN (international)</div>
+        <div class="val" style="font-size:13px">GB04 REVO 0099 6954 1967 01</div>
+        <div class="copy-hint">Tap to copy</div>
+      </div>
+      <div class="bank-field" onclick="copyText('REVOGB21', this)">
+        <div class="lbl">BIC / SWIFT</div>
+        <div class="val">REVOGB21</div>
+        <div class="copy-hint">Tap to copy</div>
+      </div>
+      <div class="bank-field" onclick="copyText('CHASGB2L', this)">
+        <div class="lbl">Intermediary BIC</div>
+        <div class="val">CHASGB2L</div>
+        <div class="copy-hint">Tap to copy</div>
+      </div>
+    </div>
+    <div class="ref-box">
+      <div>
+        <div class="lbl">Payment reference — include this exactly</div>
+        <div class="val" id="refNumBank">—</div>
+      </div>
+      <button onclick="copyText(document.getElementById('refNumBank').textContent, this)">Copy</button>
+    </div>
+  </div>
+
+  <!-- QR code -->
+  <div class="card">
+    <div class="card-title">Scan to pay · Revolut / banking apps</div>
+    <div class="qr-wrap">
+      <div class="qr-box" id="qrcode"></div>
+      <div class="qr-info">
+        <p>Scan with Revolut, Monzo, or your banking app to fill in transfer details automatically.</p>
+        <p class="note">⚠️ QR bank payments are not yet universal in the UK — always verify details manually if unsure.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoice -->
+  <div class="card">
+    <div class="card-title">Get invoice</div>
+    <div class="invoice-row">
+      <input type="email" id="invoiceEmail" placeholder="your@email.com">
+      <button class="btn-invoice" onclick="sendInvoice()">Send invoice</button>
+    </div>
+    <p class="invoice-sent" id="invoiceSent">✓ Invoice sent — check your inbox</p>
+    <button class="btn-pdf" onclick="downloadPDF()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download PDF invoice
+    </button>
+  </div>
+
+  <!-- Or pay by card — secondary -->
+  <div class="or-divider">prefer to pay by card?</div>
+
+  <div style="padding: 0 0 4px;">
+    <button class="btn-stripe" id="stripeBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Pay £<span id="btnAmount">0.00</span> by card via Stripe
+    </button>
+    <p class="stripe-note">Visa · Mastercard · Amex · 1.4% + 20p fee applies</p>
+  </div>
+
+  <a class="btn-back" href="https://coldcore.uk/#try">← Back to order</a>
+
+  <p class="footer-note">
+    This website is operated by ColdCore, trading name of AMPY RESEARCH LTD.<br>
+    85 Great Portland Street, W1W 7LT, London, United Kingdom.
+  </p>
+</div>
+
+<script>
+  // Parse URL params
+  const p = new URLSearchParams(location.search);
+  const amount   = parseFloat(p.get('amount') || '0');
+  const contact  = p.get('contact') || '';
+  const postcode = p.get('postcode') || '';
+  const desc     = p.get('desc') || 'ColdCore Order';
+  const ship     = p.get('ship') || 'Standard delivery';
+  const pence    = Math.round(amount * 100);
+
+  // Generate order ref
+  const ref = 'CC-' + Date.now().toString(36).toUpperCase().slice(-6);
+
+  // Fill summary
+  document.getElementById('refNum').textContent     = ref;
+  document.getElementById('refNumBank').textContent  = ref;
+  document.getElementById('sumDesc').textContent     = desc;
+  document.getElementById('sumShip').textContent     = ship;
+  document.getElementById('sumContact').textContent  = contact || '—';
+  document.getElementById('sumPost').textContent     = postcode || '—';
+  document.getElementById('sumTotal').textContent    = '£' + amount.toFixed(2);
+  document.getElementById('btnAmount').textContent   = amount.toFixed(2);
+
+  // QR code — encode bank details as text
+  const qrData = [
+    'AMPY RESEARCH LTD',
+    'Account: 34408653',
+    'Sort: 23-01-20',
+    'IBAN: GB04REVO009969541967 01',
+    'Ref: ' + ref,
+    'Amount: GBP ' + amount.toFixed(2),
+  ].join('\n');
+
+  new QRCode(document.getElementById('qrcode'), {
+    text: qrData,
+    width: 96, height: 96,
+    colorDark: '#000000', colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M,
+  });
+
+  // Stripe button
+  document.getElementById('stripeBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('stripeBtn');
+    btn.textContent = 'Opening Stripe…';
+    btn.disabled = true;
+    try {
+      const r = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contact, postcode, amount_pence: pence, description: desc, shipping_label: ship }),
+      });
+      const { url, error } = await r.json();
+      if (url) { window.location.href = url; }
+      else { alert(error || 'Something went wrong'); btn.disabled = false; btn.textContent = 'Pay by card'; }
+    } catch(e) { alert('Network error'); btn.disabled = false; }
+  });
+
+  // Send invoice by email
+  async function sendInvoice() {
+    const email = document.getElementById('invoiceEmail').value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert('Please enter a valid email address'); return;
+    }
+    const btn = document.querySelector('.btn-invoice');
+    btn.textContent = 'Sending…'; btn.disabled = true;
+    try {
+      await fetch('/api/send-invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, ref, amount, desc, ship, contact, postcode }),
+      });
+    } catch(e) {}
+    document.getElementById('invoiceSent').style.display = 'block';
+    btn.textContent = 'Sent ✓';
+  }
+
+  // Download PDF invoice
+  function downloadPDF() {
+    const lines = [
+      'INVOICE',
+      '=====================================',
+      'ColdCore — trading name of AMPY RESEARCH LTD',
+      '85 Great Portland Street, W1W 7LT, London, UK',
+      '',
+      'Reference: ' + ref,
+      'Date: ' + new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'}),
+      '',
+      '-------------------------------------',
+      'Order: ' + desc,
+      'Delivery: ' + ship,
+      'Contact: ' + (contact || '—'),
+      'Post code: ' + (postcode || '—'),
+      '-------------------------------------',
+      'TOTAL INC. VAT: £' + amount.toFixed(2),
+      '',
+      'PAYMENT DETAILS',
+      '-------------------------------------',
+      'Recipient: AMPY RESEARCH LTD',
+      'Account: 34408653',
+      'Sort code: 23-01-20',
+      'IBAN: GB04 REVO 0099 6954 1967 01',
+      'BIC: REVOGB21',
+      'Reference: ' + ref,
+      '',
+      'Please include the reference exactly as shown above.',
+      'Questions? hello@coldcore.uk · coldcore.uk',
+    ].join('\n');
+
+    const blob = new Blob([lines], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ColdCore-Invoice-' + ref + '.txt';
+    a.click();
+  }
+
+
+  function copyText(text, el) {
+    navigator.clipboard.writeText(text).then(() => {
+      const valEl = el.querySelector ? el.querySelector('.val') : el;
+      const orig = valEl ? valEl.textContent : '';
+      if (valEl) { valEl.classList.add('copied'); valEl.textContent = 'Copied ✓'; }
+      else if (el.textContent !== undefined) { el.textContent = 'Copied ✓'; }
+      setTimeout(() => {
+        if (valEl) { valEl.classList.remove('copied'); valEl.textContent = orig; }
+      }, 1500);
+    });
+  }
+</script>
+</body>
+</html>
