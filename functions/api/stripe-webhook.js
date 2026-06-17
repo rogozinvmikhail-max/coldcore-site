@@ -49,6 +49,8 @@ export async function onRequestPost(context) {
     const description = s.metadata?.contact ? `Contact: ${s.metadata.contact}` : '';
     const postcode = s.metadata?.postcode || addr.postal_code || '—';
     const deliveryAddr = s.metadata?.addr || addrStr || '—';
+    const billingAddrMeta = s.metadata?.billingAddr || '';
+    const billingSame = !billingAddrMeta || billingAddrMeta === s.metadata?.addr;
     const shipMethod = s.metadata?.shipping_method || 'std';
     const sessionId = s.id;
 
@@ -67,7 +69,9 @@ export async function onRequestPost(context) {
       <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Phone</td><td style="text-align:right">${phone}</td></tr>
       <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Post code</td><td style="text-align:right">${postcode}</td></tr>
       <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Ship to</td><td style="text-align:right">${deliveryAddr}</td></tr>
-      <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Delivery</td><td style="text-align:right">${shipMethod === 'exp' ? 'Express · Special Delivery' : shipMethod === 'pal' ? 'Pallet delivery' : 'Standard · Royal Mail 48'}</td></tr>
+      <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Delivery address</td><td style="text-align:right">${deliveryAddr}</td></tr>
+      <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Billing address</td><td style="text-align:right">${billingSame ? 'Same as delivery' : billingAddrMeta}</td></tr>
+      <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Delivery method</td><td style="text-align:right">${shipMethod === 'exp' ? 'Express · Special Delivery' : shipMethod === 'pal' ? 'Pallet delivery' : 'Standard · Royal Mail 48'}</td></tr>
       <tr><td style="color:#9fc4d6;padding:7px 0">${description ? 'Note' : 'Session'}</td><td style="text-align:right;font-size:12px;color:#9fc4d6">${description || sessionId}</td></tr>
     </table>
     <div style="margin-top:24px;padding:16px;background:rgba(61,180,232,0.08);border-radius:10px;font-size:13px;color:#9fc4d6">

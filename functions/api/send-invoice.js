@@ -11,7 +11,7 @@ export async function onRequestPost(context) {
   let body;
   try { body = await request.json(); } catch { return Response.json({ error: 'Bad JSON' }, { status: 400 }); }
 
-  const { email, ref, amount, desc, ship, name = '', contact, postcode, addr = '' } = body;
+  const { email, ref, amount, desc, ship, name = '', contact, postcode, addr = '', billingAddr = '', billingPost = '' } = body;
   if (!email) return Response.json({ error: 'No email' }, { status: 400 });
 
   const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
