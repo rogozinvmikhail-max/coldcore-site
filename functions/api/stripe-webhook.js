@@ -21,7 +21,7 @@ async function sendEmail(apiKey, { to, subject, html }) {
   return fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: 'ColdCore <hello@coldcore.uk>', to, subject, html }),
+    body: JSON.stringify({ from: 'ColdCore Orders <orders@coldcore.uk>', to, subject, html }),
   });
 }
 
@@ -48,6 +48,7 @@ export async function onRequestPost(context) {
     const addrStr = [addr.line1, addr.line2, addr.city, addr.postal_code, addr.country].filter(Boolean).join(', ') || '—';
     const description = s.metadata?.contact ? `Contact: ${s.metadata.contact}` : '';
     const postcode = s.metadata?.postcode || addr.postal_code || '—';
+    const deliveryAddr = s.metadata?.addr || addrStr || '—';
     const shipMethod = s.metadata?.shipping_method || 'std';
     const sessionId = s.id;
 
@@ -65,7 +66,7 @@ export async function onRequestPost(context) {
       <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Email</td><td style="text-align:right">${email}</td></tr>
       <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Phone</td><td style="text-align:right">${phone}</td></tr>
       <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Post code</td><td style="text-align:right">${postcode}</td></tr>
-      <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Ship to</td><td style="text-align:right">${addrStr}</td></tr>
+      <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Ship to</td><td style="text-align:right">${deliveryAddr}</td></tr>
       <tr><td style="color:#9fc4d6;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.06)">Delivery</td><td style="text-align:right">${shipMethod === 'exp' ? 'Express · Special Delivery' : shipMethod === 'pal' ? 'Pallet delivery' : 'Standard · Royal Mail 48'}</td></tr>
       <tr><td style="color:#9fc4d6;padding:7px 0">${description ? 'Note' : 'Session'}</td><td style="text-align:right;font-size:12px;color:#9fc4d6">${description || sessionId}</td></tr>
     </table>
