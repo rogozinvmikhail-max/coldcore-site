@@ -2,7 +2,7 @@ async function sendEmail(apiKey, { to, subject, html }) {
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: 'ColdCore <hello@coldcore.uk>', to, subject, html }),
+    body: JSON.stringify({ from: 'ColdCore <sales@coldcore.uk>', to, subject, html }),
   });
   const body = await res.json().catch(() => ({}));
   console.log('[RESEND]', res.status, JSON.stringify(body));
