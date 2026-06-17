@@ -63,7 +63,7 @@ export async function onRequestPost(context) {
   params.append('metadata[postcode]', postcode);
   params.append('metadata[shipping_method]', shipping_method || 'std');
 
-  params.append('success_url', 'https://coldcore.uk/?paid=1');
+  params.append('success_url', 'https://coldcore.uk/success');
   params.append('cancel_url', 'https://coldcore.uk/#try');
 
   if (isEmail) {
