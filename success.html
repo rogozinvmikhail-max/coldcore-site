@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order confirmed · ColdCore</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext x='1' y='27' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='28' fill='white' stroke='%233db4e8' stroke-width='0.6' paint-order='stroke'%3EC%3C/text%3E%3Ctext x='16' y='27' font-family='Arial Black,Impact,sans-serif' font-weight='900' font-size='28' fill='%233db4e8'%3EC%3C/text%3E%3C/svg%3E">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --deep:    #06151e;
+      --deep2:   #0a2230;
+      --glacier: #3db4e8;
+      --steel:   #9fc4d6;
+      --ice:     #eef7fc;
+    }
+
+    body {
+      background: var(--deep);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* Ambient glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(61,180,232,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card {
+      background: var(--deep2);
+      border: 1px solid rgba(61,180,232,0.18);
+      border-radius: 24px;
+      max-width: 480px;
+      width: 100%;
+      padding: 52px 44px 44px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Animated checkmark */
+    .check-wrap {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 32px;
+      position: relative;
+    }
+    .check-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(61,180,232,0.12);
+      border: 2px solid var(--glacier);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+    .check-circle svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--glacier);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .check-path {
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      animation: drawCheck 0.4s ease 0.35s forwards;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.6); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .eyebrow {
+      color: var(--glacier);
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .sub {
+      color: var(--steel);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+    .sub strong {
+      color: var(--ice);
+      font-weight: 600;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(61,180,232,0.12);
+      margin-bottom: 28px;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+      margin-bottom: 36px;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(61,180,232,0.10);
+      border: 1px solid rgba(61,180,232,0.25);
+      color: var(--glacier);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .step-text {
+      font-size: 14px;
+      color: var(--steel);
+      line-height: 1.5;
+    }
+    .step-text strong {
+      color: #fff;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--glacier);
+      color: var(--deep);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-back:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+    .btn-back svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--deep);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .logo {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+    .logo span { color: var(--glacier); }
+
+    @media (max-width: 480px) {
+      .card { padding: 48px 24px 32px; }
+      h1 { font-size: 24px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .check-circle, .check-path { animation: none; }
+      .check-path { stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">COLD<span>CORE</span></div>
+
+    <div class="check-wrap">
+      <div class="check-circle">
+        <svg viewBox="0 0 24 24">
+          <polyline class="check-path" points="4,13 9,18 20,7"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="eyebrow">Order confirmed</div>
+    <h1>Payment received.<br>You're all set.</h1>
+    <p class="sub">
+      Your order has been placed successfully.<br>
+      <strong>Our team will be in touch within one business day</strong> to confirm dispatch details and send your invoice.
+    </p>
+
+    <hr class="divider">
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <strong>Confirmation email on its way</strong>
+          Check your inbox — a receipt from Stripe will arrive shortly.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <strong>We'll contact you within 1 business day</strong>
+          To confirm your delivery window and any special requirements.
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <strong>Dispatched cold, tracked door to door</strong>
+          Royal Mail 48 Tracked or Special Delivery depending on your chosen option.
+        </div>
+      </div>
+    </div>
+
+    <a class="btn-back" href="https://coldcore.uk">
+      <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to ColdCore
+    </a>
+  </div>
+</body>
+</html>
