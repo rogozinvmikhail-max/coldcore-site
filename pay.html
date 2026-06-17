@@ -175,6 +175,7 @@
     <div class="order-row"><span class="lbl">Delivery</span><span class="val" id="sumShip">—</span></div>
     <div class="order-row"><span class="lbl">Contact</span><span class="val" id="sumContact">—</span></div>
     <div class="order-row"><span class="lbl">Post code</span><span class="val" id="sumPost">—</span></div>
+    <div class="order-row"><span class="lbl">Delivery address</span><span class="val" id="sumAddr" style="text-align:right;max-width:200px">—</span></div>
     <div class="order-total">
       <span class="lbl">Total inc. VAT</span>
       <span class="val" id="sumTotal">£0.00</span>
@@ -224,14 +225,15 @@
     </div>
   </div>
 
-  <!-- QR code -->
+  <!-- QR code - Revolut -->
   <div class="card">
-    <div class="card-title">Scan to pay · Revolut / banking apps</div>
+    <div class="card-title">Scan to pay · Revolut</div>
     <div class="qr-wrap">
       <div class="qr-box" id="qrcode"></div>
       <div class="qr-info">
-        <p>Scan with Revolut, Monzo, or your banking app to fill in transfer details automatically.</p>
-        <p class="note">⚠️ QR bank payments are not yet universal in the UK — always verify details manually if unsure.</p>
+        <p>Scan with <strong style="color:#fff">Revolut</strong> to open payment instantly.</p>
+        <p style="font-size:13px;color:#9fc4d6;margin-top:6px">Amount and reference pre-filled — just confirm and send.</p>
+        <a href="https://revolut.me/ampyre9mko" id="revolutLink" style="display:inline-block;margin-top:12px;background:#0666eb;color:#fff;font-size:13px;font-weight:700;padding:9px 18px;border-radius:999px;text-decoration:none">Open in Revolut →</a>
       </div>
     </div>
   </div>
@@ -277,6 +279,7 @@
   const postcode = p.get('postcode') || '';
   const desc     = p.get('desc') || 'ColdCore Order';
   const ship     = p.get('ship') || 'Standard delivery';
+  const addr     = p.get('addr') || '';
   const pence    = Math.round(amount * 100);
 
   // Generate order ref
@@ -289,21 +292,16 @@
   document.getElementById('sumShip').textContent     = ship;
   document.getElementById('sumContact').textContent  = contact || '—';
   document.getElementById('sumPost').textContent     = postcode || '—';
+  document.getElementById('sumAddr').textContent    = addr || '—';
   document.getElementById('sumTotal').textContent    = '£' + amount.toFixed(2);
   document.getElementById('btnAmount').textContent   = amount.toFixed(2);
 
-  // QR code — encode bank details as text
-  const qrData = [
-    'AMPY RESEARCH LTD',
-    'Account: 34408653',
-    'Sort: 23-01-20',
-    'IBAN: GB04REVO009969541967 01',
-    'Ref: ' + ref,
-    'Amount: GBP ' + amount.toFixed(2),
-  ].join('\n');
+  // QR code — Revolut payment link
+  const revolutUrl = 'https://revolut.me/ampyre9mko?amount=' + amount.toFixed(2) + '&currency=GBP';
+  document.getElementById('revolutLink').href = revolutUrl;
 
   new QRCode(document.getElementById('qrcode'), {
-    text: qrData,
+    text: revolutUrl,
     width: 96, height: 96,
     colorDark: '#000000', colorLight: '#ffffff',
     correctLevel: QRCode.CorrectLevel.M,
@@ -318,7 +316,7 @@
       const r = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contact, postcode, amount_pence: pence, description: desc, shipping_label: ship }),
+        body: JSON.stringify({ contact, postcode, addr, amount_pence: pence, description: desc, shipping_label: ship }),
       });
       const { url, error } = await r.json();
       if (url) { window.location.href = url; }
@@ -338,7 +336,7 @@
       await fetch('/api/send-invoice', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, ref, amount, desc, ship, contact, postcode }),
+        body: JSON.stringify({ email, ref, amount, desc, ship, contact, postcode, addr }),
       });
     } catch(e) {}
     document.getElementById('invoiceSent').style.display = 'block';
@@ -412,7 +410,7 @@
   <div class="party" style="text-align:right">
     <h3>Bill to</h3>
     <div class="name">${contact || '—'}</div>
-    <p>Post code: ${postcode || '—'}</p>
+    <p>${addr || '—'}<br>Post code: ${postcode || '—'}</p>
   </div>
 </div>
 <table>
