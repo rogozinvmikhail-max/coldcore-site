@@ -19,6 +19,7 @@ export async function onRequestPost(context) {
     description,
     shipping_label,
     shipping_method,
+    name = '',
     addr = '',
   } = body;
 
@@ -64,6 +65,7 @@ export async function onRequestPost(context) {
   params.append('metadata[postcode]', postcode);
   params.append('metadata[shipping_method]', shipping_method || 'std');
   params.append('metadata[addr]', addr);
+  params.append('metadata[name]', name);
 
   params.append('success_url', 'https://coldcore.uk/success');
   params.append('cancel_url', 'https://coldcore.uk/#try');
