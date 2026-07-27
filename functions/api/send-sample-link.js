@@ -13,16 +13,19 @@
 // call-summary.js.
 //
 // В переменных окружения Cloudflare Pages для этого проекта нужно завести:
-//   SAMPLE_LINK_UPSTREAM  - текущий публичный адрес Python-сервера, сейчас:
-//                            https://acquired-grants-creation-string.trycloudflare.com
-//                            (адрес может смениться, если туннель на сервере
-//                            перезапустится - см. cf_sample_link_state.log)
+//   SAMPLE_LINK_UPSTREAM  - текущий публичный адрес Python-сервера. Он меняется
+//                            при перезапуске cloudflared-туннеля на сервере -
+//                            ПЕРЕД деплоем проверьте свежее значение в
+//                            /home/alex/dana/cf_sample_link_state.log (там же
+//                            пишет себя update_tool_url.py - тот же скрипт
+//                            держит актуальным url у инструмента send_sample_link
+//                            в ElevenLabs, но эту JS-заглушку он не трогает).
 //   SAMPLE_LINK_TOKEN      - секретный токен, см. отчёт по задаче
-// Если переменные не заданы, ниже есть safe-фолбэк на те же значения (чтобы
-// эндпоинт заработал сразу после деплоя без лишней ручной настройки), но
-// правильный вариант - вынести токен в env Cloudflare Pages, а не в код.
+// Если переменные не заданы, ниже есть safe-фолбэк (значение на момент
+// написания файла, 27.07.2026 17:55 BST), но правильный вариант - вынести оба
+// значения в env Cloudflare Pages и держать их свежими, а не полагаться на код.
 
-const FALLBACK_UPSTREAM = 'https://acquired-grants-creation-string.trycloudflare.com';
+const FALLBACK_UPSTREAM = 'https://legitimate-teens-beatles-ticket.trycloudflare.com';
 const FALLBACK_TOKEN = '8b6bc61debc8623bb6ac8f10c237770cae285877b89d493b';
 
 export async function onRequestPost(context) {
